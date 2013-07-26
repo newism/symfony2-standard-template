@@ -1,0 +1,35 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Project</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ entity.title }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('projects_index') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('projects_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+            <li>
+                <a href="{{ path('projects_remove', { 'id': entity.id }) }}">
+                    Remove
+                </a>
+            </li></ul>
+{% endblock %}
