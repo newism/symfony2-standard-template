@@ -3,23 +3,13 @@
 {% block body -%}
     <h1>Project edit</h1>
 
-    {{ form_start(form) }}
-    {{ form_end(form) }}
+    {{ form(form) }}
 
-
-    {#<form action="{{ path('projects_edit', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>#}
-        {#<input type="hidden" name="_method" value="PUT" />#}
-        {#{{ form_widget(form) }}#}
-        {#<p>#}
-            {#<button type="submit">Edit</button>#}
-        {#</p>#}
-    {#</form>#}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('projects_index') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('projects_index') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
 {% endblock %}

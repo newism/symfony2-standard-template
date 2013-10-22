@@ -1,0 +1,21 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Task remove</h1>
+
+    <form action="{{ path('tasks_delete', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
+        <input type="hidden" name="_method" value="DELETE" />
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit">Remove</button>
+        </p>
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('tasks_index') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}

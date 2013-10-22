@@ -1,12 +1,12 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\Form;
+namespace Nsm\Bundle\ApiBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ProjectType extends AbstractType
+class TaskFilterType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -14,21 +14,28 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', 'text', array(
-                'description' => 'The project title',
+            ->add('id', 'text', array(
+                'required' => false
             ))
+            ->add('title', 'text', array(
+                'required' => false
+            ))
+            ->add('project', 'text', array(
+                'required' => false
+            ))
+            ->add('search', 'submit');
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Nsm\Bundle\ApiBundle\Entity\Project'
+            'csrf_protection' => false
         ));
     }
 
     public function getName()
     {
-        return 'project';
+        return 'filter';
     }
 }

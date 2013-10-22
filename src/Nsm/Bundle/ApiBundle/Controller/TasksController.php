@@ -5,9 +5,8 @@ namespace Nsm\Bundle\ApiBundle\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\FOSRestController;
-use JMS\Serializer\SerializationContext;
-use Nsm\Bundle\ApiBundle\Entity\ProjectQueryBuilder;
-use Nsm\Bundle\ApiBundle\Form\Type\ProjectFilterType;
+use Nsm\Bundle\ApiBundle\Entity\TaskQueryBuilder;
+use Nsm\Bundle\ApiBundle\Form\Type\TaskFilterType;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,9 +17,9 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
 
-use Nsm\Bundle\ApiBundle\Entity\Project;
-use Nsm\Bundle\ApiBundle\Form\Type\ProjectType;
-use Nsm\Bundle\ApiBundle\Entity\ProjectRepository;
+use Nsm\Bundle\ApiBundle\Entity\Task;
+use Nsm\Bundle\ApiBundle\Form\Type\TaskType;
+use Nsm\Bundle\ApiBundle\Entity\TaskRepository;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\Rest\Util\Codes;
@@ -34,80 +33,81 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Delete;
 
 /**
- * Project controller.
+ * Task controller.
  */
-class ProjectsController extends AbstractController
+class TasksController extends AbstractController
 {
-
     /**
-     * Lists all Project entities.
+     * Lists all Task entities.
      *
-     * @Get("/projects", name="projects_index")
+     * @Get("/tasks", name="tasks_index")
      *
-     * @View("NsmApiBundle:Project:index.html.twig", templateVar="entities", serializerGroups={"project_list"})
+     * @View("NsmApiBundle:Task:index.html.twig", templateVar="entities", serializerGroups={"task_list"})
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
-     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Project count limit")
+     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Task count limit")
      * @ApiDoc(
      *  resource=true,
      *  filters={
      *      {"name"="title", "dataType"="string"},
+     *      {"name"="project", "dataType"="integer"},
+     *      {"name"="page", "dataType"="integer"},
+     *      {"name"="perPage", "dataType"="integer"},
      *      {"name"="orderBy", "dataType"="string", "pattern"="(title|createdAt) ASC|DESC"}
      *  })
      */
     public function indexAction(Request $request, $page, $perPage)
     {
         $em = $this->getDoctrine()->getManager();
-        /** @var ProjectRepository $repo */
-        $repo = $em->getRepository('NsmApiBundle:Project');
+        /** @var TaskRepository $repo */
+        $repo = $em->getRepository('NsmApiBundle:Task');
 
         /** @var Form $form */
-        $projectSearchForm = $this->createForm(
-            new ProjectFilterType(),
+        $taskSearchForm = $this->createForm(
+            new TaskFilterType(),
             null,
             array(
-                'action' => $this->generateUrl('projects_index'),
+                'action' => $this->generateUrl('tasks_index'),
                 'method' => 'GET'
             )
         );
 
-        $projectSearchForm->submit($request);
-        $criteria = $repo->sanatiseCriteria($projectSearchForm->getData());
+        $taskSearchForm->submit($request);
+        $criteria = $repo->sanatiseCriteria($taskSearchForm->getData());
 
         $qb = $repo->filter($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
+
         $this->get('fsc_hateoas.metadata.relations_manager')->addBasicRelations($pager);
 
-        $responseData = array(
-            "search_form" => $projectSearchForm->createView(),
+        return array(
+            'search_form' => $taskSearchForm->createView(),
             "pager" => $pager
         );
-        
-        return $responseData;
     }
 
     /**
-     * Creates a new Project entity.
+     * Creates a new Task entity.
      *
-     * @Post("/projects", name="projects_post")
-     * @Get("/projects/new", name="projects_new")
+     * @Post("/tasks", name="tasks_post")
+     * @Get("/tasks/new", name="tasks_new")
      *
-     * @View("NsmApiBundle:Project:new.html.twig")
+     * @View("NsmApiBundle:Task:new.html.twig")
      * @ApiDoc(
-     *  input="Nsm\Bundle\ApiBundle\Form\Type\ProjectType",
-     *  output="Nsm\Bundle\ApiBundle\Entity\Project"
+     *  input="Nsm\Bundle\ApiBundle\Form\Type\TaskType",
+     *  output="Nsm\Bundle\ApiBundle\Entity\Task"
      * )
      */
     public function newAction(Request $request)
     {
-        $entity = new Project();
+        $entity = new Task();
 
         /** @var Form $form */
         $form = $this->createForm(
-            new ProjectType(),
+            new TaskType(),
             $entity,
             array(
-                'action' => $this->generateUrl('projects_post'),
+                'action' => $this->generateUrl('tasks_post'),
                 'method' => 'POST'
             )
         );
@@ -119,7 +119,7 @@ class ProjectsController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->routeRedirectView('projects_show', array('id' => $entity->getId()), Codes::HTTP_CREATED);
+            return $this->routeRedirectView('tasks_show', array('id' => $entity->getId()), Codes::HTTP_CREATED);
         }
 
         return array(
@@ -129,45 +129,45 @@ class ProjectsController extends AbstractController
     }
 
     /**
-     * Finds and displays a Project entity.
+     * Finds and displays a Task entity.
      *
-     * @Get("/projects/{id}", name="projects_show")
+     * @Get("/tasks/{id}", name="tasks_show")
      *
-     * @View("NsmApiBundle:Project:show.html.twig", templateVar="entity", serializerGroups={"project_details"})
+     * @View("NsmApiBundle:Task:show.html.twig", templateVar="entity", serializerGroups={"task_details"})
      * @ApiDoc(
-     *  output="Nsm\Bundle\ApiBundle\Entity\Project"
+     *  output="Nsm\Bundle\ApiBundle\Entity\Task"
      * )
      */
     public function showAction($id)
     {
-        $entity = $this->findEntityOr404('Project', $id);
+        $entity = $this->findEntityOr404('Task', $id);
 
         return $entity;
     }
 
     /**
-     * Edits an existing Project entity.
+     * Edits an existing Task entity.
      *
-     * @Patch("/projects/{id}", name="projects_patch")
-     * @Get("/projects/{id}/edit", name="projects_edit")
+     * @Patch("/tasks/{id}", name="tasks_patch")
+     * @Get("/tasks/{id}/edit", name="tasks_edit")
      *
-     * @View("NsmApiBundle:Project:edit.html.twig")
+     * @View("NsmApiBundle:Task:edit.html.twig")
      * @ApiDoc(
-     *  route="projects_patch",
-     *  input="Nsm\Bundle\ApiBundle\Form\Type\ProjectType",
-     *  output="Nsm\Bundle\ApiBundle\Entity\Project"
+     *  route="tasks_patch",
+     *  input="Nsm\Bundle\ApiBundle\Form\Type\TaskType",
+     *  output="Nsm\Bundle\ApiBundle\Entity\Task"
      * )
      */
     public function editAction(Request $request, $id)
     {
-        $entity = $this->findEntityOr404('Project', $id);
+        $entity = $this->findEntityOr404('Task', $id);
 
         /** @var Form $form */
         $form = $this->createForm(
-            new ProjectType(),
+            new TaskType(),
             $entity,
             array(
-                'action' => $this->generateUrl('projects_patch', array('id' => $entity->getId())),
+                'action' => $this->generateUrl('tasks_patch', array('id' => $entity->getId())),
                 'method' => 'PATCH'
             )
         );
@@ -179,7 +179,7 @@ class ProjectsController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            return $this->routeRedirectView('projects_index', array(), Codes::HTTP_NO_CONTENT);
+            return $this->routeRedirectView('tasks_index', array(), Codes::HTTP_NO_CONTENT);
         }
 
         return array(
@@ -189,22 +189,22 @@ class ProjectsController extends AbstractController
     }
 
     /**
-     * Deletes a Project entity.
+     * Deletes a Task entity.
      *
-     * @Delete("/projects/{id}", name="projects_delete")
-     * @Get("/projects/{id}/remove", name="projects_remove")
+     * @Delete("/tasks/{id}", name="tasks_delete")
+     * @Get("/tasks/{id}/remove", name="tasks_remove")
      *
-     * @View("NsmApiBundle:Project:remove.html.twig")
+     * @View("NsmApiBundle:Task:remove.html.twig")
      * @ApiDoc()
      */
     public function removeAction(Request $request, $id)
     {
-        $entity = $this->findEntityOr404('Project', $id);
+        $entity = $this->findEntityOr404('Task', $id);
 
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->setAction($this->generateUrl('projects_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('tasks_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->getForm();
 
@@ -217,7 +217,7 @@ class ProjectsController extends AbstractController
             $em->flush();
 
             if ($this->get('fos_rest.view_handler')->isFormatTemplating($request->getRequestFormat())) {
-                return $this->routeRedirectView('projects_index', array(), Codes::HTTP_OK);
+                return $this->routeRedirectView('tasks_index', array(), Codes::HTTP_OK);
             } else {
                 return $this->view(null, Codes::HTTP_NO_CONTENT);
             }

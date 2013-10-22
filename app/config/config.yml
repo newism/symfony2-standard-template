@@ -76,20 +76,25 @@ nelmio_api_doc: ~
 
 fos_rest:
     routing_loader:
-        include_format:       false
+        include_format: true
     body_converter:
         enabled: true
     param_fetcher_listener: force
     body_listener: true
-#    format_listener:
-#            default_priorities: ['json', html, '*/*']
-#            fallback_format: json
-#            prefer_extension: true
+    format_listener:
+        default_priorities: ['json', html, '*/*']
+        fallback_format: json
+        prefer_extension: true
     view:
         view_response_listener: force
         serialize_null: true
     serializer:
         serialize_null: true
+
+fsc_hateoas:
+    json:
+        links_key: _links         # default: links
+        relations_key: _embedded  # default: relations
 
 nelmio_cors:
     defaults:

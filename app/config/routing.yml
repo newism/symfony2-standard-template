@@ -2,6 +2,10 @@ projects:
     resource: "@NsmApiBundle/Controller/ProjectsController.php"
     type:     annotation
 
+tasks: 
+    resource: "@NsmApiBundle/Controller/TasksController.php"
+    type:     annotation
+
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
