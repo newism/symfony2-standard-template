@@ -32,7 +32,6 @@ framework:
     fragments:       ~
     http_method_override: true
 
-
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
@@ -54,10 +53,10 @@ doctrine:
         password: %database_password%
         charset:  UTF8
         types:
-            timeZone: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\TimeZoneType
+            timezone: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\TimeZoneType
             datetime: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\UTCDateTimeType
         mapping_types:
-            timeZone: string
+            timezone: string
 #            utcdatetime: string
     orm:
         auto_generate_proxy_classes: %kernel.debug%
