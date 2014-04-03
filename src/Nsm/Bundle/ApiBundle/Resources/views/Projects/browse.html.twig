@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends 'NsmApiBundle::layout.html.twig' %}
 
 {% set entities = pager.getCurrentPageResults %}
 
@@ -35,7 +35,7 @@
             <tr>
                 <td><a href="{{ path('projects_read', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.title }}</td>
-                <td>{{ entity.createdAt|localizeddate('full', 'long', 'en_AU' ) }}</td>
+                <td>{{ entity.createdAt|localizeddate('full', 'long') }}</td>
                 <td>
                 <ul>
                     <li>
