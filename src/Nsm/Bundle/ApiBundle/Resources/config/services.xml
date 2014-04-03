@@ -11,10 +11,15 @@
     </imports>
 
     <services>
-        <service id="nsm_api.event_listener.timezone" class="Nsm\Bundle\ApiBundle\EventListener\TimezoneSubscriber" public="false">
-            <argument type="service" id="service_container"/>
-            <!--<argument type="service" id="security.context" on-invalid="null" />-->
-            <tag name="doctrine.event_subscriber" connection="default" priority="255" />
+        <!--<service id="nsm_api.event_listener.timezone" class="Nsm\Bundle\ApiBundle\EventListener\TimeZoneSubscriber" public="false">-->
+            <!--<argument type="service" id="service_container"/>-->
+            <!--&lt;!&ndash;<argument type="service" id="security.context" on-invalid="null" />&ndash;&gt;-->
+            <!--<tag name="doctrine.event_subscriber" connection="default" priority="255" />-->
+        <!--</service>-->
+        <service id="nsm_api.event_listener.timezonelistener" class="Nsm\Bundle\ApiBundle\EventListener\TimeZoneListener">
+            <argument type="service" id="security.context"/>
+            <argument type="service" id="database_connection"/>
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
         </service>
     </services>
 

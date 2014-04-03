@@ -1,6 +1,6 @@
 parameters:
     knp.doctrine_behaviors.blameable_listener.user_entity: Nsm\Bundle\UserBundle\Entity\User
-    knp.doctrine_behaviors.timezoneable_listener.user_entity: Nsm\Bundle\UserBundle\Entity\User
+#    knp.doctrine_behaviors.timezoneable_listener.user_entity: Nsm\Bundle\UserBundle\Entity\User
 
 imports:
     - { resource: parameters.yml }
@@ -54,11 +54,11 @@ doctrine:
         password: %database_password%
         charset:  UTF8
         types:
-            timezone: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\TimezoneType
-            utcdatetime: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\UTCDateTimeType
+            timeZone: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\TimeZoneType
+            datetime: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\UTCDateTimeType
         mapping_types:
-            timezone: string
-            utcdatetime: string
+            timeZone: string
+#            utcdatetime: string
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         entity_managers:

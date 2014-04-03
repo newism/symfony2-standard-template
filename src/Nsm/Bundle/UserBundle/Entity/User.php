@@ -50,17 +50,17 @@ class User extends BaseUser
     protected $lastName;
 
     /**
-     * @Assert\NotBlank(message="Please enter your timezone.", groups={"Registration", "Profile"})
-     * @ORM\Column(type="timezone", nullable=true)
+     * @Assert\NotBlank(message="Please enter your time zone.", groups={"Registration", "Profile"})
+     * @ORM\Column(type="timeZone", nullable=true)
      */
-    protected $timezone;
+    protected $timeZone;
 
     /**
      * @ORM\OneToOne(targetEntity="Invitation", mappedBy="claimedBy")
      * @Assert\NotNull(message="Your invitation is wrong")
      */
     protected $invitation;
-    
+
     /**
      * Constructor
      */
@@ -170,27 +170,27 @@ class User extends BaseUser
     }
 
     /**
-     * Set timezone
+     * Set time zone
      *
-     * @param string $timezone
+     * @param string $timeZone
      *
      * @return User
      */
-    public function setTimezone($timezone)
+    public function setTimeZone($timeZone)
     {
-        $this->timezone = $timezone;
+        $this->timeZone = $timeZone;
 
         return $this;
     }
 
     /**
-     * Get timezone
+     * Get time zone
      *
      * @return string 
      */
-    public function getTimezone()
+    public function getTimeZone()
     {
-        return $this->timezone;
+        return $this->timeZone;
     }
 
     /**
