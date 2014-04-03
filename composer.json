@@ -10,35 +10,38 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.3.*",
-        "doctrine/orm": ">=2.2.3,<2.4-dev",
-        "doctrine/doctrine-bundle": "1.2.*",
-        "twig/extensions": "1.0.*",
-        "symfony/assetic-bundle": "2.3.*",
-        "symfony/swiftmailer-bundle": "2.3.*",
-        "symfony/monolog-bundle": "2.3.*",
-        "sensio/distribution-bundle": "2.3.*",
-        "sensio/framework-extra-bundle": "2.3.*",
-        "sensio/generator-bundle": "2.3.*",
+        "symfony/symfony": "2.5.x-dev",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "~1.2",
+        "twig/extensions": "~1.0",
+        "symfony/assetic-bundle": "~2.3",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
+        "sensio/distribution-bundle": "~2.3",
+        "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
 
-        "nelmio/api-doc-bundle": "2.3.*@dev",
+        "nelmio/api-doc-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "dev-master",
         "jms/serializer-bundle": "0.13.*@dev",
-        "fsc/hateoas-bundle": "0.4.x-dev",
-        "nelmio/cors-bundle": "~1.0",
-        "white-october/pagerfanta-bundle": "*",
 
-        "behat/behat": "2.4.*@stable",
-        "behat/mink": "1.4.*@stable",
-        "behat/symfony2-extension": "*",
-        "behat/mink-extension": "*",
-        "behat/mink-browserkit-driver": "*",
-        "behat/mink-selenium2-driver": "*",
-        "behat/mink-goutte-driver": "*",
-        "behat/mink-selenium-driver": "*",
-        "behat/mink-sahi-driver": "*",
-        "behat/mink-zombie-driver": "*"
+        "nelmio/cors-bundle": "dev-master",
+        "white-october/pagerfanta-bundle": "dev-master",
+        "willdurand/hateoas-bundle": "1.0.*@dev",
+        "stof/doctrine-extensions-bundle": "1.1.*@dev",
+
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "knplabs/doctrine-behaviors": "dev-master",
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
+
+        "ocramius/proxy-manager": "0.4.*",
+
+        "fp/jsformvalidator-bundle": "dev-master",
+
+        "knplabs/knp-markdown-bundle": "1.2.*@dev"
+    },
+    "require-dev": {
+        "sensio/generator-bundle": "~2.3"
     },
     "scripts": {
         "post-install-cmd": [
@@ -67,7 +70,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "2.3-dev"
+            "dev-master": "2.4-dev"
         }
     }
 }

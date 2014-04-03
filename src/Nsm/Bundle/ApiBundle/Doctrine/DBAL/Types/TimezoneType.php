@@ -1,0 +1,29 @@
+<?php
+
+namespace Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types;
+
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Type;
+
+class TimezoneType extends Type
+{
+    public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    {
+        return $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
+    }
+
+    public function convertToPHPValue($value, AbstractPlatform $platform)
+    {
+        return ($value === null) ? null : new \DateTimeZone($value);
+    }
+
+    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    {
+        return ($value === null) ? null : $value->getName();
+    }
+
+    public function getName()
+    {
+        return 'timezone';
+    }
+}

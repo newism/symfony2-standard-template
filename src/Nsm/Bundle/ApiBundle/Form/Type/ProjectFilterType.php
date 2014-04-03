@@ -27,30 +27,14 @@ class ProjectFilterType extends AbstractType
                 array(
                     'required' => false
                 )
-            )
-            ->add(
-                'createdAtRange',
-                'date_range',
-                array(
-                    'mapped' => false,
-                    'cascade_validation' => true,
-//                    'required' => false,
-                    'start_options' => array(
-                        'required' => false
-                    ),
-                    'end_options' => array(
-                        'required' => false
-                    )
-                )
-            )
-            ->add('search', 'submit')
-        ;
+            );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
+                'data_class'      => null,
                 'csrf_protection' => false
             )
         );

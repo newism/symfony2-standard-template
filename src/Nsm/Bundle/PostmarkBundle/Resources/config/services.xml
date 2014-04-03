@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="nsm_postmark.api_key" />
+        <parameter key="nsm_postmark.swiftmailer.default.transport.postmark.class">Mlf\AppBundle\Swift\Transport\PostmarkTransport</parameter>
+    </parameters>
+
+    <services>
+        <service id="nsm_postmark.swiftmailer.default.transport.postmark" class="%nsm_postmark.swiftmailer.default.transport.postmark.class%">
+            <argument>@swiftmailer.mailer.default.transport.eventdispatcher</argument>
+            <argument>%nsm_postmark.api_key%</argument>
+        </service>
+    </services>
+
+</container>

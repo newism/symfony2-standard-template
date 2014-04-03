@@ -4,9 +4,17 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <imports>
+        <import resource="services/entities/Project.xml"/>
+        <import resource="services/entities/Task.xml"/>
+        <import resource="services/entities/Activity.xml"/>
+    </imports>
+
     <services>
-        <service id="nsm_api.form.type.dateRange" class="Nsm\Bundle\ApiBundle\Form\Type\DateRangeType">
-            <tag name="form.type" alias="date_range"/>
+        <service id="nsm_api.event_listener.timezone" class="Nsm\Bundle\ApiBundle\EventListener\TimezoneSubscriber" public="false">
+            <argument type="service" id="service_container"/>
+            <!--<argument type="service" id="security.context" on-invalid="null" />-->
+            <tag name="doctrine.event_subscriber" connection="default" priority="255" />
         </service>
     </services>
 

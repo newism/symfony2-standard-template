@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="nsm_postmark.spool_item_manager.default"
+                 class="Nsm\Bundle\PostmarkBundle\Doctrine\ORM\SpoolItemManager" public="false">
+            <argument>%nsm_postmark.spool_item.spool_item_class%</argument>
+        </service>
+
+        <service id="nsm_postmark.log_item_manager.default"
+                 class="Nsm\Bundle\PostmarkBundle\Doctrine\ORM\LogItemManager" public="false">
+            <argument>%nsm_postmark.log_item.logm_class%</argument>
+        </service>
+
+        <service id="nsm_postmark.entity_manager" factory-service="doctrine" factory-method="getManager"
+                 class="Doctrine\ORM\EntityManager" public="false">
+            <argument>%nsm_postmark.model_manager_name%</argument>
+        </service>
+
+    </services>
+
+</container>
+er>

@@ -13,6 +13,7 @@
     syntaxCheck                 = "false"
     bootstrap                   = "bootstrap.php.cache" >
 
+
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>../src/*/*Bundle/Tests</directory>

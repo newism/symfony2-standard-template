@@ -16,15 +16,23 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+
             new Nsm\Bundle\ApiBundle\NsmApiBundle(),
+            new Nsm\Bundle\FormBundle\NsmFormBundle(),
 
             // API
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            new FSC\HateoasBundle\FSCHateoasBundle(),
+            new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+
+            new FOS\UserBundle\FOSUserBundle(),
+
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new Nsm\Bundle\PostmarkBundle\NsmPostmarkBundle(),
+            new Nsm\Bundle\UserBundle\NsmUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -33,7 +41,12 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
 
-        return $bundles;
+        if (in_array($this->getEnvironment(), array('test'))) {
+            $bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
+            $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
+        }
+
+            return $bundles;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

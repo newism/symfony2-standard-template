@@ -1,16 +1,21 @@
+parameters:
+    knp.doctrine_behaviors.blameable_listener.user_entity: Nsm\Bundle\UserBundle\Entity\User
+    knp.doctrine_behaviors.timezoneable_listener.user_entity: Nsm\Bundle\UserBundle\Entity\User
+
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: ../../vendor/knplabs/doctrine-behaviors/config/orm-services.yml }
 
 framework:
     #esi:             ~
-    #translator:      { fallback: %locale% }
+    translator:      { fallback: %locale% }
     secret:          %secret%
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
     form:            ~
-    csrf_protection: { enabled: false }
+    csrf_protection: ~
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
@@ -19,24 +24,18 @@ framework:
     trusted_proxies: ~
     session:         ~
     fragments:       ~
+    http_method_override: true
+
 
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
-
-# Assetic Configuration
-assetic:
-    debug:          %kernel.debug%
-    use_controller: false
-    bundles:        [ ]
-    #java: /usr/bin/java
-    filters:
-        cssrewrite: ~
-        #closure:
-        #    jar: %kernel.root_dir%/Resources/java/compiler.jar
-        #yui_css:
-        #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
+    form:
+        resources:
+#            - form_table_layout.html.twig
+#            - NsmFormBundle:Form:form_div_layout.html.twig
+            - NsmFormBundle:Form:form_table_layout.html.twig
 
 # Doctrine Configuration
 doctrine:
@@ -48,13 +47,28 @@ doctrine:
         user:     %database_user%
         password: %database_password%
         charset:  UTF8
-        # if using pdo_sqlite as your database driver, add the path in parameters.yml
-        # e.g. database_path: %kernel.root_dir%/data/data.db3
-        # path:     %database_path%
-
+        types:
+            timezone: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\TimezoneType
+            utcdatetime: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\UTCDateTimeType
+        mapping_types:
+            timezone: string
+            utcdatetime: string
     orm:
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
+        entity_managers:
+            default:
+                auto_mapping: true
+                filters:
+                    softdeleteable:
+                        class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                        enabled: true
+
+stof_doctrine_extensions:
+    default_locale: en_US
+    orm:
+        default:
+            timestampable: true
+            softdeleteable: true
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -82,19 +96,17 @@ fos_rest:
     param_fetcher_listener: force
     body_listener: true
     format_listener:
-        default_priorities: ['json', html, '*/*']
-        fallback_format: json
-        prefer_extension: true
+        rules:
+            - { path: '^/', priorities: ['json', html, '*/*'], fallback_format: json, prefer_extension: true }
     view:
         view_response_listener: force
         serialize_null: true
+        force_redirects:
+            html: true
     serializer:
         serialize_null: true
 
-fsc_hateoas:
-    json:
-        links_key: _links         # default: links
-        relations_key: _embedded  # default: relations
+bazinga_hateoas: ~
 
 nelmio_cors:
     defaults:
@@ -106,3 +118,15 @@ nelmio_cors:
         max_age: 0
     paths:
       '^/': ~
+
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: Nsm\Bundle\UserBundle\Entity\User
+    registration:
+        form:
+            type: nsm_user_user_registration
+
+nsm_postmark:
+    api_key: b2ad7cb0-a326-429b-b307-b794d4dfb458
+    inbound_reply_address: ba68058e7fec66b301f0542b3f1d1983@inbound.postmarkapp.com

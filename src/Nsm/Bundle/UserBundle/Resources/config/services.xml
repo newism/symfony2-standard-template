@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="nsm_user.registration.form.type" class="Nsm\Bundle\UserBundle\Form\Type\RegistrationType">
+            <argument>%fos_user.model.user.class%</argument>
+            <tag name="form.type" alias="nsm_user_user_registration"/>
+        </service>
+
+        <service id="nsm_user.invitation.form.type" class="Nsm\Bundle\UserBundle\Form\Type\InvitationType">
+            <argument type="service" id="nsm_user.invitation.form.data_transformer"/>
+            <tag name="form.type" alias="nsm_user_user_invitation"/>
+        </service>
+
+        <service id="nsm_user.invitation.form.data_transformer"
+                 class="Nsm\Bundle\UserBundle\Form\DataTransformer\InvitationToCodeTransformer">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+    </services>
+</container>

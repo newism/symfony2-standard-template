@@ -14,17 +14,27 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', 'text')
-            ->add('description', 'text')
-            ->add('Create Project', 'submit')
+            ->add(
+                'title',
+                'text'
+            )
+            ->add(
+                'description',
+                'text',
+                array(
+                    'required' => false
+                )
+            )
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Nsm\Bundle\ApiBundle\Entity\Project'
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Nsm\Bundle\ApiBundle\Entity\Project'
+            )
+        );
     }
 
     public function getName()
