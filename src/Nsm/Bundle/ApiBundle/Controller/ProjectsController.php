@@ -71,19 +71,6 @@ class ProjectsController extends AbstractController
             $responseData['search_form'] = $projectSearchForm->createView();
         } else {
 
-//            $paginatedCollection = new PaginatedRepresentation(
-//                new CollectionRepresentation(
-//                    (array)$pager->getCurrentPageResults(),
-//                    'projects', // embedded rel
-//                    'projects' // xml element name
-//                ),
-//                'projects_browse', // route
-//                array(), // route parameters
-//                $pager->getCurrentPage(),
-//                $pager->getMaxPerPage(),
-//                $pager->getNbPages()
-//            );
-
             $pagerfantaFactory   = new PagerfantaFactory();
             $paginatedCollection = $pagerfantaFactory->createRepresentation(
                 $pager,

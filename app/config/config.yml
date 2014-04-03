@@ -7,6 +7,12 @@ imports:
     - { resource: security.yml }
     - { resource: ../../vendor/knplabs/doctrine-behaviors/config/orm-services.yml }
 
+services:
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }
