@@ -3,7 +3,7 @@
 namespace Nsm\Bundle\ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FSC\HateoasBundle\Annotation as Hateoas;
+use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Nsm\Bundle\ApiBundle\Form\Model\DateRange;
@@ -24,8 +24,7 @@ class File extends AbstractEntity
 {
     use ORMBehaviors\Timestampable\Timestampable,
         ORMBehaviors\SoftDeletable\SoftDeletable,
-        ORMBehaviors\Blameable\Blameable,
-        ORMBehaviors\Timezoneable\Timezoneable;
+        ORMBehaviors\Blameable\Blameable;
 
     /**
      * @var integer

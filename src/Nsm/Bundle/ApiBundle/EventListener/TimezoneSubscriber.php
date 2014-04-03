@@ -11,7 +11,7 @@ use ReflectionObject;
 use ReflectionProperty;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class TimezoneSubscriber implements EventSubscriber
+class TimeZoneSubscriber implements EventSubscriber
 {
     protected $container;
 
@@ -52,11 +52,11 @@ class TimezoneSubscriber implements EventSubscriber
         foreach ($reflect->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED) as $prop) {
 
             $oldValue = $prop->getValue($entity);
-            if (!$oldValue instanceof DateTime || $oldValue->getTimezone()->getName() === 'UTC') {
+            if (!$oldValue instanceof DateTime || $oldValue->getTimeZone()->getName() === 'UTC') {
                 $prop->setAccessible(false);
                 continue;
             }
-            $oldValue->setTimezone($zone);
+            $oldValue->setTimeZone($zone);
             $prop->setValue($entity, $oldValue);
             $prop->setAccessible(false);
 
@@ -88,15 +88,15 @@ class TimezoneSubscriber implements EventSubscriber
 
     public function prePersist(LifecycleEventArgs $args)
     {
-        //$this->updateTimezone($args);
+        //$this->updateTimeZone($args);
     }
 
     public function preRemove(LifecycleEventArgs $args)
     {
-        // $this->updateTimezone($args);
+        // $this->updateTimeZone($args);
     }
 
-    public function updateTimezone(LifecycleEventArgs $args)
+    public function updateTimeZone(LifecycleEventArgs $args)
     {
         $zone = new \DateTimeZone('UTC');
 
@@ -110,11 +110,11 @@ class TimezoneSubscriber implements EventSubscriber
         foreach ($reflect->getProperties(ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED) as $prop) {
             $prop->setAccessible(true);
             $value = $prop->getValue($entity);
-            if (!$value instanceof DateTime || $value->getTimezone()->getName() === 'UTC') {
+            if (!$value instanceof DateTime || $value->getTimeZone()->getName() === 'UTC') {
                 $prop->setAccessible(false);
                 continue;
             }
-            $value->setTimezone($zone);
+            $value->setTimeZone($zone);
             $prop->setValue($entity, $value);
             $prop->setAccessible(false);
             $unitOfWork->recomputeSingleEntityChangeSet(

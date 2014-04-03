@@ -16,7 +16,7 @@ class RegistrationType extends BaseRegistrationFormType
 
         $builder->add('firstName', 'text');
         $builder->add('lastName', 'text');
-        $builder->add('timeZone', 'timezone');
+        $builder->add('timeZone', 'timeZone');
         $builder->add('invitation', 'nsm_user_user_invitation');
     }
 
