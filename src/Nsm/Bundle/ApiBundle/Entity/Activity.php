@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-use Nsm\Bundle\ApiBundle\Model\Timezonable;
 use Nsm\Bundle\FormBundle\Form\Model\DateRange;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -31,8 +30,7 @@ class Activity extends AbstractEntity
 {
     use ORMBehaviors\Timestampable\Timestampable,
         ORMBehaviors\SoftDeletable\SoftDeletable,
-        ORMBehaviors\Blameable\Blameable,
-        ORMBehaviors\Timezoneable\Timezoneable;
+        ORMBehaviors\Blameable\Blameable;
 
     /**
      * @var integer

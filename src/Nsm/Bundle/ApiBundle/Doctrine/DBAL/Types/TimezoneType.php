@@ -5,7 +5,7 @@ namespace Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-class TimezoneType extends Type
+class TimeZoneType extends Type
 {
     public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
@@ -24,6 +24,6 @@ class TimezoneType extends Type
 
     public function getName()
     {
-        return 'timezone';
+        return 'timeZone';
     }
 }

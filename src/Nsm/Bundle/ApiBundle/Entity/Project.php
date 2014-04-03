@@ -35,8 +35,7 @@ class Project extends AbstractEntity
 {
     use ORMBehaviors\Timestampable\Timestampable,
         ORMBehaviors\SoftDeletable\SoftDeletable,
-        ORMBehaviors\Blameable\Blameable,
-        ORMBehaviors\Timezoneable\Timezoneable;
+        ORMBehaviors\Blameable\Blameable;
 
     /**
      * @var integer
