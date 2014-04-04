@@ -22,7 +22,9 @@ class RegistrationType extends BaseRegistrationFormType
         $builder->add('locale', 'locale', array(
             'data' => 'en_AU'
         ));
-        $builder->add('invitation', 'nsm_user_user_invitation');
+        $builder->add('invitation', 'nsm_user_user_invitation', array(
+//            'mapped' => false
+        ));
     }
 
     /**

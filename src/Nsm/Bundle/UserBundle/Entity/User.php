@@ -61,10 +61,6 @@ class User extends BaseUser
      */
     protected $locale;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Invitation", mappedBy="claimedBy")
-     * @Assert\NotNull(message="Your invitation is wrong")
-     */
     protected $invitation;
 
     /**

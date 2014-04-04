@@ -21,11 +21,16 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
 
-        <service id="nsm_api.event_subscriber.user_subscriber" class="Nsm\Bundle\UserBundle\EventSubscriber\UserSubscriber">
+        <service id="nsm_user.event_subscriber.user_subscriber" class="Nsm\Bundle\UserBundle\EventSubscriber\UserSubscriber">
             <argument type="service" id="security.context"/>
             <argument type="service" id="database_connection"/>
             <argument>%locale%</argument>
             <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="nsm_user.event_subscriber.invitation" class="Nsm\Bundle\UserBundle\EventSubscriber\InvitationSubscriber">
+            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="router"/>
         </service>
 
     </services>
