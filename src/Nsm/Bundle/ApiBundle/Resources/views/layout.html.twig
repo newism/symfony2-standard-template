@@ -78,6 +78,7 @@
         }
 
     </style>
+
 </head>
 <body>
 <div>
@@ -101,13 +102,25 @@
         </a>
     {% endif %}
 </div>
+
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 <div>
     {% for item in ['projects', 'tasks', 'activities'] %}
         <a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a>
     {% endfor %}
 </div>
-{% block body %}{% endblock %}
-{% block javascripts %}{% endblock %}
+{% endif %}
+
+{% for type, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+        <div class="flash-{{ type }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% block content %}
+{% endblock content %}
 
 <script src="/bundles/nsmform/bower_components/jquery/jquery.js"></script>
 <script src="/bundles/nsmform/bower_components/selectize/dist/js/standalone/selectize.js"></script>
@@ -129,3 +142,4 @@
 
 </body>
 </html>
+

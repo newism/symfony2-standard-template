@@ -10,21 +10,8 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 /**
  * Transforms an Invitation to an invitation code.
  */
-class InvitationToCodeTransformer implements DataTransformerInterface
+class DateTimeZoneToStringTransformer implements DataTransformerInterface
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     /**
      * @param mixed $value
      *
@@ -37,11 +24,11 @@ class InvitationToCodeTransformer implements DataTransformerInterface
             return null;
         }
 
-        if (!$value instanceof Invitation) {
-            throw new UnexpectedTypeException($value, 'Nsm\Bundle\UserBundle\Entity\Invitation');
+        if (!$value instanceof \DateTimeZone) {
+            throw new UnexpectedTypeException($value, '\DateTimeZone');
         }
 
-        return $value->getCode();
+        return $value->getName();
     }
 
     /**
@@ -60,15 +47,6 @@ class InvitationToCodeTransformer implements DataTransformerInterface
             throw new UnexpectedTypeException($value, 'string');
         }
 
-        return new Invitation();
-
-//        return $this->entityManager
-//            ->getRepository('Nsm\Bundle\UserBundle\Entity\Invitation')
-//            ->findOneBy(
-//                array(
-//                    'code' => $value,
-//                    'claimedBy' => null,
-//                )
-//            );
+        return new \DateTimeZone($value);
     }
 }

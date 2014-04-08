@@ -64,6 +64,20 @@ class User extends BaseUser
     protected $invitation;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $githubId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $instagramId;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -234,5 +248,39 @@ class User extends BaseUser
     {
         return $this->locale;
     }
+
+    /**
+     * @param string $githubID
+     */
+    public function setGithubId($githubId)
+    {
+        $this->githubId = $githubId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGithubId()
+    {
+        return $this->githubId;
+    }
+
+    /**
+     * @param string $instagramId
+     */
+    public function setInstagramId($instagramId)
+    {
+        $this->instagramId = $instagramId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInstagramId()
+    {
+        return $this->instagramId;
+    }
+
+
 
 }
