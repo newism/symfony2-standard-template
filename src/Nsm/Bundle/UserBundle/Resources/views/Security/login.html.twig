@@ -22,9 +22,4 @@
     <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
 </form>
 
-<h4>Connect with </h4>
-{% for owner in hwi_oauth_resource_owners() %}
-    <a href="{{ hwi_oauth_login_url(owner) }}">{{ owner | trans({}, 'HWIOAuthBundle') }}</a> <br />
-{% endfor %}
-
 {% endblock fos_user_content %}

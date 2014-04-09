@@ -1,17 +1,17 @@
 <?php
 
-namespace Nsm\Bundle\UserBundle\Form\Type;
+namespace Nsm\Bundle\ApiBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
-use Nsm\Bundle\UserBundle\Form\DataTransformer\InvitationToCodeTransformer;
+use Nsm\Bundle\ApiBundle\Form\DataTransformer\InvitationToCodeTransformer;
 
 class InvitationType extends AbstractType
 {
     /**
-     * @var \Nsm\Bundle\UserBundle\Form\DataTransformer\InvitationToCodeTransformer
+     * @var \Nsm\Bundle\ApiBundle\Form\DataTransformer\InvitationToCodeTransformer
      */
     protected $invitationTransformer;
 

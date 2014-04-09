@@ -1,9 +1,9 @@
 <?php
 
-namespace Nsm\Bundle\UserBundle\Form\DataTransformer;
+namespace Nsm\Bundle\ApiBundle\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManager;
-use Nsm\Bundle\UserBundle\Entity\Invitation;
+use Nsm\Bundle\ApiBundle\Entity\Invitation;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 

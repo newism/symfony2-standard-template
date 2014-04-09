@@ -212,11 +212,11 @@ class User extends BaseUser
     /**
      * Set invitation
      *
-     * @param \Nsm\Bundle\UserBundle\Entity\Invitation $invitation
+     * @param \Nsm\Bundle\ApiBundle\Entity\Invitation $invitation
      *
      * @return User
      */
-    public function setInvitation(\Nsm\Bundle\UserBundle\Entity\Invitation $invitation = null)
+    public function setInvitation(\Nsm\Bundle\ApiBundle\Entity\Invitation $invitation = null)
     {
         $this->invitation = $invitation;
 
@@ -226,7 +226,7 @@ class User extends BaseUser
     /**
      * Get invitation
      *
-     * @return \Nsm\Bundle\UserBundle\Entity\Invitation 
+     * @return \Nsm\Bundle\ApiBundle\Entity\Invitation
      */
     public function getInvitation()
     {

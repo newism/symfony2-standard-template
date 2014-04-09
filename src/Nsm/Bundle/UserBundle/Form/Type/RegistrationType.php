@@ -3,7 +3,7 @@
 namespace Nsm\Bundle\UserBundle\Form\Type;
 
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseRegistrationFormType;
-use Nsm\Bundle\UserBundle\Form\DataTransformer\DateTimeZoneToStringTransformer;
+use Nsm\Bundle\FormBundle\DataTransformer\DateTimeZoneToStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\ReversedTransformer;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Nsm\Bundle\UserBundle\Form\DataTransformer;
+namespace Nsm\Bundle\FormBundle\DataTransformer;
 
 use Doctrine\ORM\EntityManager;
 use Nsm\Bundle\UserBundle\Entity\Invitation;
