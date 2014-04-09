@@ -7,7 +7,7 @@
         <parameter key="activity.entity.class">Nsm\Bundle\ApiBundle\Entity\Activity</parameter>
         <parameter key="activity.manager.class">Nsm\Bundle\ApiBundle\Entity\ActivityManager</parameter>
         <parameter key="activity.repository.class">Nsm\Bundle\ApiBundle\Entity\ActivityRepository</parameter>
-        <parameter key="activity.subscriber.class">Nsm\Bundle\ApiBundle\EventListener\ActivitySubscriber</parameter>
+        <parameter key="activity.subscriber.class">Nsm\Bundle\ApiBundle\EventSubscriber\ActivitySubscriber</parameter>
     </parameters>
 
     <services>

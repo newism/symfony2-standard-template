@@ -1,9 +1,10 @@
 <?php
 
-namespace Nsm\Bundle\UserBundle\Entity;
+namespace Nsm\Bundle\ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Nsm\Bundle\UserBundle\Entity\User;
 
 
 /**
@@ -12,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Invitation
+class Invitation extends AbstractEntity
 {
     /**
      * @var integer
@@ -21,21 +22,21 @@ class Invitation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=255)
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
      */
-    private $email;
+    protected $email;
 
     /**
      * @var boolean
@@ -61,7 +62,7 @@ class Invitation
     /**
      * @var User $claimedBy
      *
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\OneToOne(targetEntity="\Nsm\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="claimedBy", referencedColumnName="id", nullable=true)
      */
     protected $claimedBy;
