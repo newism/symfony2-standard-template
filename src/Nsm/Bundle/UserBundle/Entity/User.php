@@ -51,9 +51,15 @@ class User extends BaseUser
 
     /**
      * @Assert\NotBlank(message="Please enter your time zone.", groups={"Registration", "Profile"})
-     * @ORM\Column(type="timeZone", nullable=true)
+     * @ORM\Column(type="timezone", nullable=true)
      */
     protected $timeZone;
+
+    /**
+     * @Assert\NotBlank(message="Please enter your locale.", groups={"Registration", "Profile"})
+     * @ORM\Column(type="string", length=6, nullable=true)
+     */
+    protected $locale;
 
     /**
      * @ORM\OneToOne(targetEntity="Invitation", mappedBy="claimedBy")
@@ -216,4 +222,21 @@ class User extends BaseUser
     {
         return $this->invitation;
     }
+
+    /**
+     * @param mixed $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
 }

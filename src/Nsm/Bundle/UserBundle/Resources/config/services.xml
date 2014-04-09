@@ -20,5 +20,13 @@
                  class="Nsm\Bundle\UserBundle\Form\DataTransformer\InvitationToCodeTransformer">
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
+
+        <service id="nsm_api.event_subscriber.user_subscriber" class="Nsm\Bundle\UserBundle\EventSubscriber\UserSubscriber">
+            <argument type="service" id="security.context"/>
+            <argument type="service" id="database_connection"/>
+            <argument>%locale%</argument>
+            <tag name="kernel.event_subscriber" />
+        </service>
+
     </services>
 </container>

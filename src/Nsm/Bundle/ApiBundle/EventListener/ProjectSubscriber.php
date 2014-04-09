@@ -36,7 +36,7 @@ class ProjectSubscriber implements EventSubscriber
     }
 
     /**
-     * @param OnFlushEventArgs $eventArgs
+     * @param PreFlushEventArgs $eventArgs
      */
     public function preFlush(PreFlushEventArgs $eventArgs)
     {

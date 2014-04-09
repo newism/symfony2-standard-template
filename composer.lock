@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9735bf6b64c6278451edfbe2bf7f99f4",
+    "hash": "3a657ff8e71f515f0fc477d0ca318974",
     "packages": [
         {
             "name": "dflydev/markdown",
@@ -3378,6 +3378,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "symfony/symfony": 20,
+        "twig/extensions": 20,
         "nelmio/api-doc-bundle": 20,
         "friendsofsymfony/rest-bundle": 20,
         "jms/serializer-bundle": 20,

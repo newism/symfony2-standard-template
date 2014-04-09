@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <link rel="stylesheet" href="/bundles/nsmform/bower_components/selectize/dist/css/selectize.default.css"/>
+    <style>
+
+        html, body {
+            font-family: sans-serif;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+        }
+
+        form {
+            border: 1px solid red;
+            padding: 10px;
+        }
+
+        .ControlGroup {
+            border: 1px solid green;
+            padding: 10px;
+        }
+
+        .ControlGroup-controls {
+            border: 1px dotted green;
+            padding: 10px;
+        }
+
+        .Control {
+            border: 1px solid blue;
+            padding: 10px;
+        }
+
+        form table .ControlGroup-controls {
+            padding: 0
+        }
+
+        form table .Control--hasSiblings {
+            float: left;
+        }
+
+        form table tbody th {
+            padding: 10px;
+            text-align: right;
+            vertical-align: top
+        }
+
+        @media (max-width: 600px) {
+            form table,
+            form table thead,
+            form table tbody,
+            form table tfoot,
+            form table tr,
+            form table td,
+            form table th {
+                display: block;
+                text-align: left !important
+            }
+
+            form table tr {
+                margin-bottom: 20px;
+            }
+
+            form table .Control--hasSiblings {
+                float: none !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+
+        <a href="{{ path('fos_user_security_logout') }}">
+            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+        </a>
+
+        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+            <a href="{{ path('dashboard_browse', {'_switch_user': '_exit'}) }}">
+                Exit impersonation
+            </a>
+        {% endif %}
+
+    {% else %}
+        <a href="{{ path('fos_user_security_login') }}">
+            {{ 'layout.login'|trans({}, 'FOSUserBundle') }}
+        </a>
+    {% endif %}
+</div>
+<div>
+    {% for item in ['projects', 'tasks', 'activities'] %}
+        <a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a>
+    {% endfor %}
+</div>
+{% block body %}{% endblock %}
+{% block javascripts %}{% endblock %}
+
+<script src="/bundles/nsmform/bower_components/jquery/jquery.js"></script>
+<script src="/bundles/nsmform/bower_components/selectize/dist/js/standalone/selectize.js"></script>
+
+<script>
+    $('[data-widget=entitySearch]').each(function(){
+        var $this = $(this),
+                options = $this.data('entitySearchOptions') || {}
+                ;
+
+        options.selectizeOptions.render = options.selectizeOptions.render || {};
+        options.selectizeOptions.render.option = function(item, escape){
+            return '<div>' + item.id + ' ' + item.title + '</div>';
+        };
+
+        $(this).selectize(options.selectizeOptions);
+    });
+</script>
+
+</body>
+</html>
