@@ -7,7 +7,7 @@
         <parameter key="task.entity.class">Nsm\Bundle\ApiBundle\Entity\Task</parameter>
         <parameter key="task.manager.class">Nsm\Bundle\ApiBundle\Entity\TaskManager</parameter>
         <parameter key="task.repository.class">Nsm\Bundle\ApiBundle\Entity\TaskRepository</parameter>
-        <parameter key="task.subscriber.class">Nsm\Bundle\ApiBundle\EventListener\TaskSubscriber</parameter>
+        <parameter key="task.subscriber.class">Nsm\Bundle\ApiBundle\EventSubscriber\TaskSubscriber</parameter>
     </parameters>
 
     <services>

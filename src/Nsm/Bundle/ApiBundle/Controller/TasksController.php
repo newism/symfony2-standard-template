@@ -161,55 +161,55 @@ class TasksController extends AbstractController
     }
 
 
-    /**
-     * Creates a add Task entity.
-     *
-     * @Post("/tasks", name="tasks_post")
-     * @Get("/tasks/add", name="tasks_add")
-     *
-     * @QueryParam(name="projectId", requirements="\d+", strict=true, nullable=true, description="The tasks project")
-     *
-     * @View()
-     * @ApiDoc(
-     *  input="Nsm\Bundle\ApiBundle\Form\Type\TaskType",
-     *  output="Nsm\Bundle\ApiBundle\Entity\Task"
-     * )
-     */
-    public function addAction(Request $request, $projectId)
-    {
-        $entity = new Task();
+/**
+ * Creates a add Task entity.
+ *
+ * @Post("/tasks", name="tasks_post")
+ * @Get("/tasks/add", name="tasks_add")
+ *
+ * @QueryParam(name="projectId", requirements="\d+", strict=true, nullable=true, description="The tasks project")
+ *
+ * @View()
+ * @ApiDoc(
+ *  input="Nsm\Bundle\ApiBundle\Form\Type\TaskType",
+ *  output="Nsm\Bundle\ApiBundle\Entity\Task"
+ * )
+ */
+public function addAction(Request $request, $projectId)
+{
+    $entity = new Task();
 
-        $project = $this->find('Project', $projectId);
-        $entity->setProject($project);
+    $project = $this->find('Project', $projectId);
+    $entity->setProject($project);
 
-        /** @var Form $form */
-        $form = $this->createForm(
-            new TaskType(),
-            $entity,
-            array(
-                'action' => $this->generateUrl('tasks_post'),
-                'method' => 'POST'
-            )
-        )->add('Save', 'submit');
+    /** @var Form $form */
+    $form = $this->createForm(
+        new TaskType(),
+        $entity,
+        array(
+            'action' => $this->generateUrl('tasks_post'),
+            'method' => 'POST'
+        )
+    )->add('Save', 'submit');
 
-        $form->handleRequest($request);
+    $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+    if ($form->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
 
-            return $this->redirect(
-                $this->generateUrl('tasks_read', array('id' => $entity->getId())),
-                Codes::HTTP_CREATED
-            );
-        }
-
-        return array(
-            'entity' => $entity,
-            'form' => $form,
+        return $this->redirect(
+            $this->generateUrl('tasks_read', array('id' => $entity->getId())),
+            Codes::HTTP_CREATED
         );
     }
+
+    return array(
+        'entity' => $entity,
+        'form' => $form,
+    );
+}
 
     /**
      * Deletes a Task entity.

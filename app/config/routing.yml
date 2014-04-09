@@ -1,8 +1,8 @@
-NsmApiBundle:
-    resource: "@NsmApiBundle/Resources/config/routing.yml"
-
 NsmUserBundle:
     resource: "@NsmUserBundle/Resources/config/routing.yml"
+
+NsmApiBundle:
+    resource: "@NsmApiBundle/Resources/config/routing.yml"
 
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"

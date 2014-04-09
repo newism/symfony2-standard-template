@@ -1,6 +1,6 @@
 {% extends 'NsmApiBundle::layout.html.twig' %}
 
-{% block body -%}
+{% block content -%}
     <h1>Activity destroy</h1>
 
     <form action="{{ path('activities_delete', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
