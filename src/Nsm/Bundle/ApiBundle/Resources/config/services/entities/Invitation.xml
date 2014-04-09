@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="invitation.entity.class">Nsm\Bundle\ApiBundle\Entity\Invitation</parameter>
+        <parameter key="invitation.manager.class">Nsm\Bundle\ApiBundle\Entity\InvitationManager</parameter>
+        <parameter key="invitation.repository.class">Nsm\Bundle\ApiBundle\Entity\InvitationRepository</parameter>
+        <parameter key="invitation.subscriber.class">Nsm\Bundle\ApiBundle\EventSubscriber\InvitationSubscriber</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="invitation.repository" class="%invitation.repository.class%" factory-service="doctrine.orm.entity_manager" factory-method="getRepository">
+            <argument>%invitation.entity.class%</argument>
+        </service>
+
+        <service id="invitation.manager" class="%invitation.manager.class%">
+            <argument>%invitation.entity.class%</argument>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+
+        <service id="invitation.subscriber" class="%invitation.subscriber.class%">
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="router"/>
+        </service>
+
+        <service id="nsm_user.invitation.form.type" class="Nsm\Bundle\UserBundle\Form\Type\InvitationType">
+            <argument type="service" id="nsm_user.invitation.form.data_transformer"/>
+            <tag name="form.type" alias="nsm_user_user_invitation"/>
+        </service>
+
+        <service id="nsm_user.invitation.form.data_transformer"
+                 class="Nsm\Bundle\UserBundle\Form\DataTransformer\InvitationToCodeTransformer">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+
+    </services>
+</container>
+
+        

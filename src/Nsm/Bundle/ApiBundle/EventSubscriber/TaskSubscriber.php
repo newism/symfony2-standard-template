@@ -1,6 +1,6 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\EventListener;
+namespace Nsm\Bundle\ApiBundle\EventSubscriber;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\EventSubscriber;

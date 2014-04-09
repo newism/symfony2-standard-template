@@ -13,3 +13,7 @@ tasks:
 activities:
     resource: "@NsmApiBundle/Controller/ActivitiesController.php"
     type:     annotation
+
+invitations:
+    resource: "@NsmApiBundle/Controller/InvitationsController.php"
+    type:     annotation

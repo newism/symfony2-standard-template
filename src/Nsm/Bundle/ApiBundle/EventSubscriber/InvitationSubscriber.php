@@ -1,6 +1,6 @@
 <?php
 
-namespace Nsm\Bundle\UserBundle\EventSubscriber;
+namespace Nsm\Bundle\ApiBundle\EventSubscriber;
 
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
