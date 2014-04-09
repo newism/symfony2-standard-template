@@ -32,6 +32,7 @@ class InvitationsController extends AbstractController
                 'id' => $id,
             ));
             $view->setTemplate($this->getTemplate('claimNotFound'));
+
             return $view;
         }
 
