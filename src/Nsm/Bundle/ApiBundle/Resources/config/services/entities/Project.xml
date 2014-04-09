@@ -7,7 +7,7 @@
         <parameter key="project.entity.class">Nsm\Bundle\ApiBundle\Entity\Project</parameter>
         <parameter key="project.manager.class">Nsm\Bundle\ApiBundle\Entity\ProjectManager</parameter>
         <parameter key="project.repository.class">Nsm\Bundle\ApiBundle\Entity\ProjectRepository</parameter>
-        <parameter key="project.subscriber.class">Nsm\Bundle\ApiBundle\EventListener\ProjectSubscriber</parameter>
+        <parameter key="project.subscriber.class">Nsm\Bundle\ApiBundle\EventSubscriber\ProjectSubscriber</parameter>
     </parameters>
 
     <services>

@@ -64,6 +64,20 @@ class User extends BaseUser
     protected $invitation;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $githubId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $instagramId;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -198,11 +212,11 @@ class User extends BaseUser
     /**
      * Set invitation
      *
-     * @param \Nsm\Bundle\UserBundle\Entity\Invitation $invitation
+     * @param \Nsm\Bundle\ApiBundle\Entity\Invitation $invitation
      *
      * @return User
      */
-    public function setInvitation(\Nsm\Bundle\UserBundle\Entity\Invitation $invitation = null)
+    public function setInvitation(\Nsm\Bundle\ApiBundle\Entity\Invitation $invitation = null)
     {
         $this->invitation = $invitation;
 
@@ -212,7 +226,7 @@ class User extends BaseUser
     /**
      * Get invitation
      *
-     * @return \Nsm\Bundle\UserBundle\Entity\Invitation 
+     * @return \Nsm\Bundle\ApiBundle\Entity\Invitation
      */
     public function getInvitation()
     {
@@ -234,5 +248,39 @@ class User extends BaseUser
     {
         return $this->locale;
     }
+
+    /**
+     * @param string $githubID
+     */
+    public function setGithubId($githubId)
+    {
+        $this->githubId = $githubId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGithubId()
+    {
+        return $this->githubId;
+    }
+
+    /**
+     * @param string $instagramId
+     */
+    public function setInstagramId($instagramId)
+    {
+        $this->instagramId = $instagramId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInstagramId()
+    {
+        return $this->instagramId;
+    }
+
+
 
 }

@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Nsm\Bundle\UserBundle\Controller;
 
 use FOS\UserBundle\Controller\RegistrationController as BaseRegistrationController;
@@ -22,12 +13,42 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+
 /**
- * Controller managing the registration
- *
- * @author Thibault Duplessis <thibault.duplessis@gmail.com>
- * @author Christophe Coevoet <stof@notk.org>
+ * {@inhertidoc}
  */
 class RegistrationController extends BaseRegistrationController
 {
+
+    /**
+     * {@inhertidoc}
+     */
+    public function registerAction(Request $request)
+    {
+        return parent::registerAction($request);
+    }
+
+    /**
+     * {@inhertidoc}
+     */
+    public function checkEmailAction()
+    {
+        return parent::checkEmailAction();
+    }
+
+    /**
+     * {@inhertidoc}
+     */
+    public function confirmAction(Request $request, $token)
+    {
+        return parent::confirmAction($request, $token);
+    }
+
+    /**
+     * {@inhertidoc}
+     */
+    public function confirmedAction()
+    {
+        return parent::confirmedAction();
+    }
 }

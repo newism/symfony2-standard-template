@@ -24,7 +24,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Hateoas\Relation("self", href = @Hateoas\Route("activities_read", parameters = { "id" = "expr(object.getId())" }))
  * @Hateoas\Relation("task", href = @Hateoas\Route("tasks_read", parameters = { "id" = "expr(object.getTask().getId())" }))
  * @Hateoas\Relation("activities", href = @Hateoas\Route("activities_browse"))
- *
  */
 class Activity extends AbstractEntity
 {
