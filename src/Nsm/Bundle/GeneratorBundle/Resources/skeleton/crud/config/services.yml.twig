@@ -1,0 +1,24 @@
+parameters:
+
+    {{ variable_name }}.entity.class: {{ namespace }}\Entity\{{ entity }}
+    {{ variable_name }}.manager.class: {{ namespace }}\Entity\{{ entity }}Manager
+    {{ variable_name }}.repository.class: {{ namespace }}\Entity\{{ entity }}Repository
+    {{ variable_name }}.subscriber.class: {{ namespace }}\EventListener\{{ entity }}Subscriber
+
+services:
+
+    {{ variable_name }}.repository:
+        class: %{{ variable_name }}.repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments: [%{{ variable_name }}.entity.class%]
+
+    {{ variable_name }}.manager:
+        class: %{{ variable_name }}.manager.class%
+        arguments: [%{{ variable_name }}.entity.class%, @doctrine.orm.entity_manager]
+
+    {{ variable_name }}.subscriber:
+        class: %{{ variable_name }}.subscriber.class%
+        arguments: [@service_container]
+        tags:
+          - {name: "doctrine.event_subscriber", connection: "default"}

@@ -1,40 +1,30 @@
-{% if 'index' in actions %}
-{{ route_name_prefix }}:
+{% if 'browse' in actions %}
+{{ route_name_prefix }}_browse:
     pattern:  /
-    defaults: { _controller: "{{ bundle }}:{{ entity }}:index" }
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:browse" }
 {% endif %}
 
-{% if 'show' in actions %}
-{{ route_name_prefix }}_show:
-    pattern:  /{id}/show
-    defaults: { _controller: "{{ bundle }}:{{ entity }}:show" }
-{% endif %}
-
-{% if 'new' in actions %}
-{{ route_name_prefix }}_new:
-    pattern:  /new
-    defaults: { _controller: "{{ bundle }}:{{ entity }}:new" }
-
-{{ route_name_prefix }}_create:
-    pattern:  /create
-    defaults: { _controller: "{{ bundle }}:{{ entity }}:create" }
-    requirements: { _method: post }
+{% if 'read' in actions %}
+{{ route_name_prefix }}_read:
+    pattern:  /{id}/read
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:read" }
 {% endif %}
 
 {% if 'edit' in actions %}
 {{ route_name_prefix }}_edit:
     pattern:  /{id}/edit
     defaults: { _controller: "{{ bundle }}:{{ entity }}:edit" }
+{% endif %}
 
-{{ route_name_prefix }}_update:
-    pattern:  /{id}/update
-    defaults: { _controller: "{{ bundle }}:{{ entity }}:update" }
-    requirements: { _method: post|put }
+{% if 'add' in actions %}
+{{ route_name_prefix }}_add:
+    pattern:  /new
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:add" }
 {% endif %}
 
 {% if 'delete' in actions %}
-{{ route_name_prefix }}_delete:
-    pattern:  /{id}/delete
-    defaults: { _controller: "{{ bundle }}:{{ entity }}:delete" }
+{{ route_name_prefix }}_destroy:
+    pattern:  /{id}/destroy
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:destroy" }
     requirements: { _method: post|delete }
 {% endif %}

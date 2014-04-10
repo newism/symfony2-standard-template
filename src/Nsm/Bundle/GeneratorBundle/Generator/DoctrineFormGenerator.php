@@ -59,8 +59,10 @@ class DoctrineFormGenerator extends Generator
         $parts       = explode('\\', $entity);
         $entityClass = array_pop($parts);
 
+        // Generate FormType
+
         $this->className = $entityClass.'Type';
-        $dirPath         = $bundle->getPath().'/Form';
+        $dirPath         = $bundle->getPath().'/Form/Type';
         $this->classPath = $dirPath.'/'.str_replace('\\', '/', $entity).'Type.php';
 
         if (file_exists($this->classPath)) {
@@ -74,7 +76,7 @@ class DoctrineFormGenerator extends Generator
         $parts = explode('\\', $entity);
         array_pop($parts);
 
-        $this->renderFile('form/FormType.php.twig', $this->classPath, array(
+        $variables = array(
             'fields'           => $this->getFieldsFromMetadata($metadata),
             'namespace'        => $bundle->getNamespace(),
             'entity_namespace' => implode('\\', $parts),
@@ -82,14 +84,46 @@ class DoctrineFormGenerator extends Generator
             'bundle'           => $bundle->getName(),
             'form_class'       => $this->className,
             'form_type_name'   => strtolower(str_replace('\\', '_', $bundle->getNamespace()).($parts ? '_' : '').implode('_', $parts).'_'.substr($this->className, 0, -4)),
-        ));
+        );
+
+        $this->renderFile('form/FormType.php.twig', $this->classPath, $variables);
+
+        // Generate FilterType
+
+        $this->className = $entityClass.'FilterType';
+        $dirPath         = $bundle->getPath().'/Form/Type';
+        $this->classPath = $dirPath.'/'.str_replace('\\', '/', $entity).'FilterType.php';
+
+        if (file_exists($this->classPath)) {
+            throw new \RuntimeException(sprintf('Unable to generate the %s filter class as it already exists under the %s file', $this->className, $this->classPath));
+        }
+
+        if (count($metadata->identifier) > 1) {
+            throw new \RuntimeException('The form generator does not support entity classes with multiple primary keys.');
+        }
+
+        $parts = explode('\\', $entity);
+        array_pop($parts);
+
+        $variables = array(
+            'fields'           => $this->getFieldsFromMetadata($metadata),
+            'namespace'        => $bundle->getNamespace(),
+            'entity_namespace' => implode('\\', $parts),
+            'entity_class'     => $entityClass,
+            'bundle'           => $bundle->getName(),
+            'form_class'       => $this->className,
+            'form_type_name'   => strtolower(str_replace('\\', '_', $bundle->getNamespace()).($parts ? '_' : '').implode('_', $parts).'_'.substr($this->className, 0, -4)),
+        );
+
+        $this->renderFile('form/FormFilterType.php.twig', $this->classPath, $variables);
     }
 
     /**
      * Returns an array of fields. Fields can be both column fields and
      * association fields.
      *
-     * @param  ClassMetadataInfo $metadata
+     * @param ClassMetadataInfo $metadata
+     *
      * @return array             $fields
      */
     private function getFieldsFromMetadata(ClassMetadataInfo $metadata)

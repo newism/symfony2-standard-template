@@ -85,7 +85,9 @@ class DoctrineBreadGenerator extends Generator
         $this->generateEditView($dir);
         $this->generateDeleteView($dir);
 //        $this->generateTestClass();
-        $this->generateConfiguration();
+        $this->generateRouting();
+        $this->generateServices();
+        $this->generateValidations();
     }
 
     /**
@@ -112,7 +114,7 @@ class DoctrineBreadGenerator extends Generator
      * Generates the routing configuration.
      *
      */
-    protected function generateConfiguration()
+    protected function generateRouting()
     {
         if (!in_array($this->format, array('yml', 'xml', 'php'))) {
             return;
@@ -125,13 +127,76 @@ class DoctrineBreadGenerator extends Generator
             $this->format
         );
 
-        $this->renderFile('crud/config/routing.'.$this->format.'.twig', $target, array(
+        $variables = array(
             'actions'           => $this->actions,
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
             'bundle'            => $this->bundle->getName(),
             'entity'            => $this->entity,
-        ));
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/config/routing.'.$this->format.'.twig', $target, $variables);
+    }
+
+    /**
+     * Generates the service configuration.
+     *
+     */
+    protected function generateServices()
+    {
+        if (!in_array($this->format, array('yml', 'xml', 'php'))) {
+            return;
+        }
+
+        $target = sprintf(
+            '%s/Resources/config/services/entities/%s.%s',
+            $this->bundle->getPath(),
+            strtolower(str_replace('\\', '_', $this->entity)),
+            $this->format
+        );
+
+        $variables = array(
+            'actions'           => $this->actions,
+            'route_prefix'      => $this->routePrefix,
+            'route_name_prefix' => $this->routeNamePrefix,
+            'namespace'         => $this->bundle->getNamespace(),
+            'bundle'            => $this->bundle->getName(),
+            'entity'            => $this->entity,
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/config/services.'.$this->format.'.twig', $target, $variables);
+    }
+
+    /**
+     * Generates the validations configuration.
+     *
+     */
+    protected function generateValidations()
+    {
+        if (!in_array($this->format, array('yml', 'xml', 'php'))) {
+            return;
+        }
+
+        $target = sprintf(
+            '%s/Resources/config/validations/%s.%s',
+            $this->bundle->getPath(),
+            strtolower(str_replace('\\', '_', $this->entity)),
+            $this->format
+        );
+
+        $variables = array(
+            'actions'           => $this->actions,
+            'route_prefix'      => $this->routePrefix,
+            'route_name_prefix' => $this->routeNamePrefix,
+            'namespace'         => $this->bundle->getNamespace(),
+            'bundle'            => $this->bundle->getName(),
+            'entity'            => $this->entity,
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/config/validations.'.$this->format.'.twig', $target, $variables);
     }
 
     /**
@@ -159,7 +224,7 @@ class DoctrineBreadGenerator extends Generator
             throw new \RuntimeException('Unable to generate the controller as it already exists.');
         }
 
-        $this->renderFile('crud/controller.php.twig', $target, array(
+        $variables = array(
             'actions'           => $this->actions,
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
@@ -169,7 +234,10 @@ class DoctrineBreadGenerator extends Generator
             'namespace'         => $this->bundle->getNamespace(),
             'entity_namespace'  => $entityNamespace,
             'format'            => $this->format,
-        ));
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/controller.php.twig', $target, $variables);
     }
 
     /**
@@ -185,7 +253,7 @@ class DoctrineBreadGenerator extends Generator
         $dir    = $this->bundle->getPath() .'/Tests/Controller';
         $target = $dir .'/'. str_replace('\\', '/', $entityNamespace).'/'. $entityClass .'ControllerTest.php';
 
-        $this->renderFile('crud/tests/test.php.twig', $target, array(
+        $variables = array(
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
             'entity'            => $this->entity,
@@ -195,7 +263,10 @@ class DoctrineBreadGenerator extends Generator
             'entity_namespace'  => $entityNamespace,
             'actions'           => $this->actions,
             'form_type_name'    => strtolower(str_replace('\\', '_', $this->bundle->getNamespace()).($parts ? '_' : '').implode('_', $parts).'_'.$entityClass.'Type'),
-        ));
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/tests/test.php.twig', $target, $variables);
     }
 
     /**
@@ -205,7 +276,7 @@ class DoctrineBreadGenerator extends Generator
      */
     protected function generateBrowseView($dir)
     {
-        $this->renderFile('crud/views/browse.html.twig.twig', $dir.'/browse.html.twig', array(
+        $variables = array(
             'bundle'            => $this->bundle->getName(),
             'entity'            => $this->entity,
             'fields'            => $this->metadata->fieldMappings,
@@ -213,7 +284,10 @@ class DoctrineBreadGenerator extends Generator
             'record_actions'    => $this->getRecordActions(),
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-        ));
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/views/browse.html.twig.twig', $dir.'/browse.html.twig', $variables);
     }
 
     /**
@@ -223,14 +297,17 @@ class DoctrineBreadGenerator extends Generator
      */
     protected function generateReadView($dir)
     {
-        $this->renderFile('crud/views/read.html.twig.twig', $dir.'/read.html.twig', array(
+        $variables = array(
             'bundle'            => $this->bundle->getName(),
             'entity'            => $this->entity,
             'fields'            => $this->metadata->fieldMappings,
             'actions'           => $this->actions,
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-        ));
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/views/read.html.twig.twig', $dir.'/read.html.twig', $variables);
     }
 
     /**
@@ -240,13 +317,16 @@ class DoctrineBreadGenerator extends Generator
      */
     protected function generateAddView($dir)
     {
-        $this->renderFile('crud/views/add.html.twig.twig', $dir.'/add.html.twig', array(
+        $variables = array(
             'bundle'            => $this->bundle->getName(),
             'entity'            => $this->entity,
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
             'actions'           => $this->actions,
-        ));
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/views/add.html.twig.twig', $dir.'/add.html.twig', $variables);
     }
 
     /**
@@ -256,13 +336,16 @@ class DoctrineBreadGenerator extends Generator
      */
     protected function generateEditView($dir)
     {
-        $this->renderFile('crud/views/edit.html.twig.twig', $dir.'/edit.html.twig', array(
+        $variables = array(
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
             'entity'            => $this->entity,
             'bundle'            => $this->bundle->getName(),
             'actions'           => $this->actions,
-        ));
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/views/edit.html.twig.twig', $dir.'/edit.html.twig', $variables);
     }
 
     /**
@@ -272,13 +355,16 @@ class DoctrineBreadGenerator extends Generator
      */
     protected function generateDeleteView($dir)
     {
-        $this->renderFile('crud/views/delete.html.twig.twig', $dir.'/delete.html.twig', array(
+        $variables = array(
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
             'entity'            => $this->entity,
             'bundle'            => $this->bundle->getName(),
             'actions'           => $this->actions,
-        ));
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/views/delete.html.twig.twig', $dir.'/delete.html.twig', $variables);
     }
 
     /**

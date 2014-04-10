@@ -5,39 +5,29 @@
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
 {% block body %}
-    <route id="{{ route_name_prefix }}" pattern="/">
-        <default key="_controller">{{ bundle }}:{{ entity }}:index</default>
+    <route id="{{ route_name_prefix }}_browse" pattern="/">
+        <default key="_controller">{{ bundle }}:{{ entity }}:browse</default>
     </route>
 
-    <route id="{{ route_name_prefix }}_show" pattern="/{id}/show">
-        <default key="_controller">{{ bundle }}:{{ entity }}:show</default>
+    <route id="{{ route_name_prefix }}_read" pattern="/{id}/read">
+        <default key="_controller">{{ bundle }}:{{ entity }}:read</default>
     </route>
-
-{% if 'new' in actions %}
-    <route id="{{ route_name_prefix }}_new" pattern="/new">
-        <default key="_controller">{{ bundle }}:{{ entity }}:new</default>
-    </route>
-
-    <route id="{{ route_name_prefix }}_create" pattern="/create">
-        <default key="_controller">{{ bundle }}:{{ entity }}:create</default>
-        <requirement key="_method">post</requirement>
-    </route>
-{% endif %}
 
 {% if 'edit' in actions %}
     <route id="{{ route_name_prefix }}_edit" pattern="/{id}/edit">
         <default key="_controller">{{ bundle }}:{{ entity }}:edit</default>
     </route>
+{% endif %}
 
-    <route id="{{ route_name_prefix }}_update" pattern="/{id}/update">
-        <default key="_controller">{{ bundle }}:{{ entity }}:update</default>
-        <requirement key="_method">post|put</requirement>
+{% if 'add' in actions %}
+    <route id="{{ route_name_prefix }}_add" pattern="/add">
+        <default key="_controller">{{ bundle }}:{{ entity }}:add</default>
     </route>
 {% endif %}
 
-{% if 'delete' in actions %}
-    <route id="{{ route_name_prefix }}_delete" pattern="/{id}/delete">
-        <default key="_controller">{{ bundle }}:{{ entity }}:delete</default>
+{% if 'destroy' in actions %}
+    <route id="{{ route_name_prefix }}_destroy" pattern="/{id}/destroy">
+        <default key="_controller">{{ bundle }}:{{ entity }}:destroy</default>
         <requirement key="_method">post|delete</requirement>
     </route>
 {% endif %}

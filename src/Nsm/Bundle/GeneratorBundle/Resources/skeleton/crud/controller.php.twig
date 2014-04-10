@@ -8,16 +8,25 @@ use Symfony\Component\HttpFoundation\Request;
 {%- endif %}
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-{% if 'annotation' == format -%}
-use Nsm\FrameworkExtraBundle\Configuration\Method;
-use Nsm\FrameworkExtraBundle\Configuration\Route;
-use Nsm\FrameworkExtraBundle\Configuration\Template;
-{%- endif %}
+
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Patch;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations\View;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use {{ namespace }}\Entity\{{ entity }};
+use {{ namespace }}\Entity\{{ entity }}Manager;
+use {{ namespace }}\Entity\{{ entity }}Repository;
+use {{ namespace }}\Entity\{{ entity }}QueryBuilder;
 {% if 'new' in actions or 'edit' in actions %}
-use {{ namespace }}\Form\{{ entity }}Type;
+use {{ namespace }}\Form\Type\{{ entity }}Type;
 {% endif %}
+use {{ namespace }}\Form\Type\{{ entity }}FilterType;
+
+use Nsm\Bundle\FormBundle\Form\Model\DateRange;
 {% endblock use_statements %}
 
 /**
@@ -26,36 +35,31 @@ use {{ namespace }}\Form\{{ entity }}Type;
 {% endblock phpdoc_class_header %}
  *
 {% block phpdoc_class_annotations %}
-{% if 'annotation' == format %}
- * @Route("/{{ route_prefix }}")
-{% endif %}
 {% endblock phpdoc_class_annotations %}
  */
 {% block class_definition %}
-class {{ entity_class }}Controller extends Controller
+class {{ entity_class }}Controller extends AbstractController
 {% endblock class_definition %}
 {
 {% block class_body %}
-    {%- if 'index' in actions %}
-        {%- include 'crud/actions/index.php.twig' %}
+    {%- if 'browse' in actions %}
+        {%- include 'crud/actions/browse.php.twig' %}
     {%- endif %}
 
-    {%- if 'new' in actions %}
-        {%- include 'crud/actions/create.php.twig' %}
-        {%- include 'crud/actions/new.php.twig' %}
-    {%- endif %}
-
-    {%- if 'show' in actions %}
-        {%- include 'crud/actions/show.php.twig' %}
+    {%- if 'read' in actions %}
+        {%- include 'crud/actions/read.php.twig' %}
     {%- endif %}
 
     {%- if 'edit' in actions %}
         {%- include 'crud/actions/edit.php.twig' %}
-        {%- include 'crud/actions/update.php.twig' %}
     {%- endif %}
 
-    {%- if 'delete' in actions %}
-        {%- include 'crud/actions/delete.php.twig' %}
+    {%- if 'add' in actions %}
+        {%- include 'crud/actions/add.php.twig' %}
+    {%- endif %}
+
+    {%- if 'destroy' in actions %}
+        {%- include 'crud/actions/destroy.php.twig' %}
     {%- endif %}
 {% endblock class_body %}
 }

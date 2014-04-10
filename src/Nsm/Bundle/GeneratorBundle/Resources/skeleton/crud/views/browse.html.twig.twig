@@ -1,64 +1,62 @@
 {% block extends %}
-{{ "{% extends '::base.html.twig' %}" }}
+{{ "{% extends 'NsmApiBundle::layout.html.twig' %}" }}
 {% endblock extends %}
 
 {% block body %}
+{{ "{% set entities = pager.getCurrentPageResults %}" }}
+
 {{ "{% block body -%}" }}
-    <h1>{{ entity }} list</h1>
 
-    <table class="records_list">
+    <h1>Activity list</h1>
+
+    {{ "{{ form_start(search_form, {'attr': {'class': 'Form', 'novalidate': 'novalidate'}}) }}" }}
+    <table>
+        <tbody><td>Needs iteration</td></tbody>
+    </table>
+    <div class="Form-actions">
+        {{ "{{ form_row(search_form.search) }}" }}
+    </div>
+    {{ "{{ form_end(search_form) }}" }}
+
+    <table>
+        <caption>
+            {{ "Showing {{ pager.getCurrentPageOffsetStart }} - {{ pager.getCurrentPageOffsetEnd }} of {{ pager.getNbResults }} results" }}
+        </caption>
+
         <thead>
-            <tr>
-            {%- for field, metadata in fields %}
-
-                <th>{{ field|capitalize }}</th>
-
-            {%- endfor %}
-
-                <th>Actions</th>
-            </tr>
+        <tr><th>Needs iteration</th></tr>
         </thead>
         <tbody>
-        {{ '{% for entity in entities %}' }}
+        {{ "{% for entity in entities %}" }}
             <tr>
-
-        {%- for field, metadata in fields %}
-            {%- if loop.first and ('show' in actions) %}
-
-                <td><a href="{{ "{{ path('" ~ route_name_prefix ~ "_show', { 'id': entity.id }) }}" }}">{{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}</a></td>
-
-            {%- elseif metadata.type in ['date', 'datetime'] %}
-
-                <td>{{ '{% if entity.' ~ field|replace({'_': ''}) ~ ' %}{{ entity.' ~ field|replace({'_': ''}) ~ '|date(\'Y-m-d H:i:s\') }}{% endif %}' }}</td>
-
-            {%- else %}
-
-                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}</td>
-
-            {%- endif %}
-
-            {%- if loop.last %}
-
+                <td><a href="{{ "{{ path('activities_read', { 'id': entity.id }) }}" }}">{{ "{{ entity.id }}" }}</a></td>
+                <td>{{ "{{ entity.title }}" }}</td>
+                <td>{{ "{{ entity.dateRange.start ? entity.dateRange.start|date('r') }}" }}</td>
+                <td>{{ "{{ entity.dateRange.end ? entity.dateRange.end|date('r') }}" }}</td>
                 <td>
-                    {%- include "crud/views/others/actions.html.twig.twig" %}
+                    <ul>
+                        <li>
+                            <a href="{{ "{{ path('activities_read', { 'id': entity.id }) }}" }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ "{{ path('activities_edit', { 'id': entity.id }) }}" }}">edit</a>
+                        </li>
+                        <li>
+                            <a href="{{ "{{ path('activities_destroy', { 'id': entity.id }) }}" }}">destroy</a>
+                        </li>
+                    </ul>
                 </td>
-
-            {%- endif %}
-        {%- endfor %}
-
             </tr>
-        {{ '{% endfor %}' }}
+        {{ "{% endfor %}" }}
         </tbody>
     </table>
 
-    {% if 'new' in actions %}
     <ul>
         <li>
-            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_new') }}" }}">
+            <a href="{{ "{{ path('activities_add') }}" }}">
                 Create a new entry
             </a>
         </li>
     </ul>
-    {% endif %}
 {{ "{% endblock %}" }}
-{% endblock body %}
+{% endblock %}

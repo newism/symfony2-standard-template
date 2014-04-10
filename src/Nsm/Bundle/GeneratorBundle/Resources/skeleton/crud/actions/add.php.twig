@@ -1,19 +1,19 @@
 
     /**
 {% block phpdoc_method_header %}
-     * Displays a form to create a new {{ entity }} entity.
+     * Displays a form to add a new {{ entity }} entity.
 {% endblock phpdoc_method_header %}
      *
 {% block phpdoc_method_annotations %}
 {% if 'annotation' == format %}
-     * @Route("/new", name="{{ route_name_prefix }}_new")
+     * @Route("/add", name="{{ route_name_prefix }}_add")
      * @Method("GET")
      * @Template()
 {% endif %}
 {% endblock phpdoc_method_annotations %}
      */
 {% block method_definition %}
-    public function newAction()
+    public function addAction()
 {% endblock method_definition %}
     {
 {% block method_body %}
@@ -28,7 +28,7 @@
             'form'   => $form->createView(),
         );
 {% else %}
-        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:new.html.twig', array(
+        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:add.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
