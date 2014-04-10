@@ -16,6 +16,7 @@ use Nsm\Bundle\ApiBundle\Entity\ActivityRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\ActivityFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\ActivityType;
 use Nsm\Bundle\FormBundle\Form\Model\DateRange;
+use Nsm\Paginator\HateosPaginatorFactory;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,7 +32,7 @@ class ActivitiesController extends AbstractController
      *
      * @View(templateVar="entities", serializerGroups={"activity_browse"})
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
-     * @QueryParam(name="perPage", requirements="\d+", default="100", strict=true, description="Activity count limit")
+     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Activity count limit")
      * @ApiDoc(
      *  resource=true,
      *  filters={
@@ -83,21 +84,7 @@ class ActivitiesController extends AbstractController
             $responseData['search_form'] = $activitySearchForm->createView();
         } else {
 
-//            $paginatedCollection = new PaginatedRepresentation(
-//                new CollectionRepresentation(
-//                    (array)$pager->getCurrentPageResults(),
-//                    'actvities', // embedded rel
-//                    'actvities' // xml element name
-//                ),
-//                'activities_browse', // route
-//                array(), // route parameters
-//                $pager->getCurrentPage(),
-//                $pager->getMaxPerPage(),
-//                $pager->getNbPages()
-//            );
-
-            $pagerfantaFactory = new PagerfantaFactory();
-            $paginatedCollection = $pagerfantaFactory->createRepresentation(
+            $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
                 new Route('activities_browse', array())
             );
