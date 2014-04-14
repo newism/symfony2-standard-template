@@ -18,6 +18,8 @@ use Nsm\Bundle\ApiBundle\Entity\Project;
 use Nsm\Bundle\ApiBundle\Entity\ProjectRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\ProjectFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\ProjectType;
+use Nsm\Paginator\HateosPaginatorFactory;
+use Nsm\Paginator\Paginator;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -71,8 +73,7 @@ class ProjectsController extends AbstractController
             $responseData['search_form'] = $projectSearchForm->createView();
         } else {
 
-            $pagerfantaFactory   = new PagerfantaFactory();
-            $paginatedCollection = $pagerfantaFactory->createRepresentation(
+            $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
                 new Route('projects_browse', array())
             );

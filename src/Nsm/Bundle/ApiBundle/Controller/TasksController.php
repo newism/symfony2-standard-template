@@ -18,6 +18,7 @@ use Nsm\Bundle\ApiBundle\Entity\Task;
 use Nsm\Bundle\ApiBundle\Entity\TaskRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\TaskFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\TaskType;
+use Nsm\Paginator\HateosPaginatorFactory;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -78,8 +79,7 @@ class TasksController extends AbstractController
             $responseData['search_form'] = $taskSearchForm->createView();
         } else {
 
-            $pagerfantaFactory   = new PagerfantaFactory();
-            $paginatedCollection = $pagerfantaFactory->createRepresentation(
+            $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
                 new Route('tasks_browse', array())
             );
