@@ -5,7 +5,7 @@ namespace Nsm\Bundle\ApiBundle\EventSubscriber;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
-use Nsm\Bundle\UserBundle\Entity\Invitation;
+use Nsm\Bundle\ApiBundle\Entity\Invitation;
 use Nsm\Bundle\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;

@@ -3,8 +3,13 @@
 namespace Nsm\Bundle\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Nsm\Bundle\ApiBundle\Entity\Invitation;
+use Nsm\Bundle\ApiBundle\Form\Type\InvitationClaimType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Invitation controller.
@@ -12,83 +17,119 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 class InvitationsController extends AbstractController
 {
     /**
-     * Finds and displays a Invitation entity.
+     * Router for claiming an invitation
      *
-     * @Get("/invitations/{id}/claim", name="invitations_claim", requirements={"id" = "\d+"})
+     * @Get("/invitations/{code}/claim", name="invitations_claim")
+     * @View()
      *
-     * @View(templateVar="entity", serializerGroups={"invitation_details"})
-     * @ApiDoc(
-     *  output="Nsm\Bundle\ApiBundle\Entity\Invitation"
-     * )
+     * @param Request $request
+     * @param         $code
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
-    public function claimAction($id)
+    public function claimAction(Request $request, $code)
     {
-        $invitation = $entity = $this->find('Invitation', $id);
+        /** @var SecurityContext $securityContext */
+        $securityContext = $this->get('security.context');
 
-        // No invitation
-        // Redirect to invitation 404
+        /** @var Invitation $invitation */
+        $invitation = $this->getEntityManager()->getRepository()->findOneByCode($code);
+
+        // Invitation doesn't exist - Redirect to invitation 404
         if (null === $invitation) {
-            $view = $this->view(array(
-                'id' => $id,
-            ));
-            $view->setTemplate($this->getTemplate('claimNotFound'));
+            $view = $this->view(
+                array(
+                    'code' => $code,
+                )
+            );
 
-            return $view;
+            $view->setStatusCode('404');
+            $view->setTemplate($this->getTemplate('notFound'));
+
+            return $this->handleView($view);
         }
 
-        $securityContext = $this->get('security.context');
-        // User is not logged in
-        // Redirect to register screen
+        // User is not logged in - Redirect to register screen
         if (false === $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirect(
                 $this->generateUrl(
-                    'fos_user_security_login',
+                    'fos_user_registration_register',
                     array(
-                        'invitationId' => $invitation->getId()
+                        'invitationCode' => $invitation->getCode(),
+                        '_targetPath' => $request->getUri()
                     )
                 )
             );
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'invitations_claim_confirm',
-                array(
-                    'id' => $invitation->getId()
+        // User logged in - Send them to a confirm page
+        if (true === $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirect(
+                $this->generateUrl(
+                    'invitations_claim_confirm',
+                    array(
+                        'code' => $invitation->getCode(),
+//                        '_targetPath' => $request->getUri()
+                    )
                 )
+            );
+        }
+
+        // Catch all
+        throw new \Exception('Could not determine Invitation claim action');
+    }
+
+
+    /**
+     * Invitation Claim Confirmation
+     *
+     * @Get("/invitations/{code}/claim/confirm", name="invitations_claim_confirm")
+     * @Post("/invitations/{code}/claim/confirm", name="post_invitations_claim_confirm")
+     * @View()
+     */
+    public function claimConfirmAction(Request $request, $code)
+    {
+        /** @var Invitation $invitation */
+        $invitation = $this->getEntityManager()->getRepository()->findOneByCode($code);
+
+        $invitationClaimForm = $this->createForm(
+            new InvitationClaimType(),
+            array(
+                'invitation' => $invitation
+            ),
+            array(
+                'action' => $this->generateUrl(
+                        'post_invitations_claim_confirm',
+                        array(
+                            'code' => $invitation->getCode()
+                        )
+                    ),
+                'method' => 'POST'
             )
+        )->add('Claim', 'submit');;
+
+        $invitationClaimForm->handleRequest($request);
+
+        if ($invitationClaimForm->isValid()) {
+
+            // TODO: Claim invitation with manager
+
+            $this->container->get('session')->getFlashBag()->add(
+                'success',
+                'Invitation Claimed via login'
+            );
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'dashboard_browse'
+                )
+            );
+        }
+
+        return array(
+            "invitationClaimForm" => $invitationClaimForm->createView()
         );
-    }
-
-
-    /**
-     * Finds and displays a Invitation entity.
-     *
-     * @Get("/invitations/{id}/claim/confirm", name="invitations_claim_confirm", requirements={"id" = "\d+"})
-     *
-     * @View(templateVar="entity", serializerGroups={"invitation_details"})
-     * @ApiDoc(
-     *  output="Nsm\Bundle\ApiBundle\Entity\Invitation"
-     * )
-     */
-    public function claimConfirmAction($id)
-    {
-
-    }
-
-
-    /**
-     * Finds and displays a Invitation entity.
-     *
-     * @Get("/invitations/{id}/claim/confirm/404", name="invitations_claim_not_found", requirements={"id" = "\d+"})
-     *
-     * @View(templateVar="entity", serializerGroups={"invitation_details"})
-     * @ApiDoc(
-     *  output="Nsm\Bundle\ApiBundle\Entity\Invitation"
-     * )
-     */
-    public function claimConfirmNotFoundAction($id)
-    {
 
     }
 }
