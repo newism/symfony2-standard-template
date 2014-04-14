@@ -5,6 +5,7 @@ namespace Nsm\Bundle\ApiBundle\Form\DataTransformer;
 use Doctrine\ORM\EntityManager;
 use Nsm\Bundle\ApiBundle\Entity\Invitation;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
@@ -38,7 +39,7 @@ class InvitationToCodeTransformer implements DataTransformerInterface
         }
 
         if (!$value instanceof Invitation) {
-            throw new UnexpectedTypeException($value, 'Nsm\Bundle\UserBundle\Entity\Invitation');
+            throw new UnexpectedTypeException($value, 'Nsm\Bundle\ApiBundle\Entity\Invitation');
         }
 
         return $value->getCode();
@@ -47,8 +48,9 @@ class InvitationToCodeTransformer implements DataTransformerInterface
     /**
      * @param mixed $value
      *
-     * @return mixed|null|object
+     * @return mixed|Invitation|null
      * @throws \Symfony\Component\Form\Exception\UnexpectedTypeException
+     * @throws \Symfony\Component\Form\Exception\TransformationFailedException
      */
     public function reverseTransform($value)
     {
@@ -60,15 +62,22 @@ class InvitationToCodeTransformer implements DataTransformerInterface
             throw new UnexpectedTypeException($value, 'string');
         }
 
-        return new Invitation();
+        $invitation = $this->entityManager
+            ->getRepository('Nsm\Bundle\ApiBundle\Entity\Invitation')
+            ->findOneBy(
+                array(
+                    'code' => $value,
+                    'claimedBy' => null,
+                )
+            );
 
-//        return $this->entityManager
-//            ->getRepository('Nsm\Bundle\UserBundle\Entity\Invitation')
-//            ->findOneBy(
-//                array(
-//                    'code' => $value,
-//                    'claimedBy' => null,
-//                )
-//            );
+        if (null === $invitation) {
+            throw new TransformationFailedException(sprintf(
+                'An invitation with code "%s" could not be found',
+                $value
+            ));
+        }
+
+        return $invitation;
     }
 }

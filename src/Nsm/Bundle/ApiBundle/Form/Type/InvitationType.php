@@ -37,9 +37,9 @@ class InvitationType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-                'class' => 'Nsm\Bundle\UserBundle\Entity\Invitation',
-                'required' => true,
-            ));
+            'class' => 'Nsm\Bundle\ApiBundle\Entity\Invitation',
+            'required' => true,
+        ));
     }
 
     /**
@@ -55,6 +55,6 @@ class InvitationType extends AbstractType
      */
     public function getName()
     {
-        return 'nsm_user_user_invitation';
+        return 'invitation';
     }
 }

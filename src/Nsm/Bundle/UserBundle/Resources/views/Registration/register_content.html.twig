@@ -6,3 +6,5 @@
         <input type="submit" value="{{ 'registration.submit'|trans }}" />
     </div>
 </form>
+
+<a href="{{ path('fos_user_security_login', app.request.query.all ) }}">Login</a>

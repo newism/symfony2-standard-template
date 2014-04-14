@@ -5,7 +5,6 @@ namespace Nsm\Bundle\UserBundle\Form\Type;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseRegistrationFormType;
 use Nsm\Bundle\FormBundle\DataTransformer\DateTimeZoneToStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\ReversedTransformer;
 
 class RegistrationType extends BaseRegistrationFormType
 {
@@ -16,28 +15,33 @@ class RegistrationType extends BaseRegistrationFormType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('firstName', 'text');
-        $builder->add('lastName', 'text');
-
-        $builder->add(
-            $builder->create(
-                'timeZone',
-                'timezone',
+        $builder
+            ->add('firstName', 'text')
+            ->add('lastName', 'text')
+            ->add(
+                $builder->create(
+                    'timeZone',
+                    'timezone',
+                    array(
+                        'data' => new \DateTimeZone('Australia/Sydney')
+                    )
+                )->addModelTransformer(
+                        new DateTimeZoneToStringTransformer(),
+                        true
+                    )
+            )->add(
+                'locale',
+                'locale',
                 array(
-                    'data' => new \DateTimeZone('Australia/Sydney')
+                    'data' => 'en_AU'
                 )
-            )->addModelTransformer(
-                    new DateTimeZoneToStringTransformer(),
-                    true
+            )->add(
+                'invitation',
+                'invitation',
+                array(
+                    'mapped' => false
                 )
-        );
-
-        $builder->add('locale', 'locale', array(
-            'data' => 'en_AU'
-        ));
-        $builder->add('invitation', 'nsm_user_user_invitation', array(
-//            'mapped' => false
-        ));
+            );
     }
 
     /**
@@ -45,7 +49,7 @@ class RegistrationType extends BaseRegistrationFormType
      */
     public function getName()
     {
-        return 'nsm_user_user_registration';
+        return 'nsm_user_registration_form';
     }
 
 }

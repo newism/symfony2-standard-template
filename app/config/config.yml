@@ -130,7 +130,7 @@ fos_user:
     user_class: Nsm\Bundle\UserBundle\Entity\User
     registration:
         form:
-            type: nsm_user_user_registration
+            type: nsm_user_registration_form
 
 #nsm_postmark:
 #    api_key: b2ad7cb0-a326-429b-b307-b794d4dfb458
