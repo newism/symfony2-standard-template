@@ -1,0 +1,21 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% block content -%}
+    <h1>Invitation destroy</h1>
+
+    <form action="{{ path('invitation_delete', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
+        <input type="hidden" name="_method" value="DELETE" />
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit">Destroy</button>
+        </p>
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('invitation_browse') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}

@@ -8,23 +8,8 @@ use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Nsm\Bundle\FormBundle\Form\Model\DateRange;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * Activity
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Nsm\Bundle\ApiBundle\Entity\ActivityRepository")
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true)
- *
- * @Serializer\ExclusionPolicy("all")
- * @Serializer\AccessorOrder("custom", custom={"id"})
- *
- * @Hateoas\Relation("self", href = @Hateoas\Route("activities_read", parameters = { "id" = "expr(object.getId())" }))
- * @Hateoas\Relation("task", href = @Hateoas\Route("tasks_read", parameters = { "id" = "expr(object.getTask().getId())" }))
- * @Hateoas\Relation("activities", href = @Hateoas\Route("activities_browse"))
- */
+
 class Activity extends AbstractEntity
 {
     use ORMBehaviors\Timestampable\Timestampable,
@@ -33,29 +18,21 @@ class Activity extends AbstractEntity
 
     /**
      * @var integer
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @Serializer\Expose()
-     * @Serializer\Groups({"activity_list", "activity_details", "task_list", "task_details"})
      */
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     * @Serializer\Expose()
-     * @Serializer\Groups({"activity_list", "activity_details", "task_details"})
      */
     protected $title;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Task", inversedBy="activities")
-     * @Assert\NotNull()
-     * @Serializer\Expose()
-     * @Serializer\Groups({"activity_details", "activity_list"})
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * @var Task
      */
     protected $task;
 
@@ -68,8 +45,6 @@ class Activity extends AbstractEntity
      * @var \Datetime $startedAt
      *
      * The date time the timer was started. When a timer is stopped this time is used to calculate the duration.
-     *
-     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $startedAt;
 
@@ -77,20 +52,16 @@ class Activity extends AbstractEntity
      * @var \Datetime $endedAt
      *
      * The date time the timer was ended. When a timer is stopped this time is used to calculate the duration.
-     *
-     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $endedAt;
 
     /**
      * @var integer $duration
-     *
-     * @ORM\Column(type="integer", nullable=true)
      */
     protected $duration;
 
     /**
-     *
+     * @param bool $startTimer
      */
     public function __construct($startTimer = false)
     {
@@ -169,6 +140,30 @@ class Activity extends AbstractEntity
     }
 
     /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Project
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Construct the dateRange object from DB Data
      *w
      * @ORM\PostLoad
@@ -189,7 +184,7 @@ class Activity extends AbstractEntity
     {
         $this->dateRange = $dateRange;
         $this->startedAt = $dateRange->getStart();
-        $this->endedAt   = $dateRange->getEnd();
+        $this->endedAt = $dateRange->getEnd();
 
         return $this;
     }
@@ -262,11 +257,11 @@ class Activity extends AbstractEntity
     /**
      * Set task
      *
-     * @param \Nsm\Bundle\ApiBundle\Entity\Task $task
+     * @param Task $task
      *
      * @return Activity
      */
-    public function setTask(\Nsm\Bundle\ApiBundle\Entity\Task $task = null)
+    public function setTask(Task $task = null)
     {
         $this->task = $task;
 
@@ -276,7 +271,7 @@ class Activity extends AbstractEntity
     /**
      * Get task
      *
-     * @return \Nsm\Bundle\ApiBundle\Entity\Task
+     * @return Task
      */
     public function getTask()
     {

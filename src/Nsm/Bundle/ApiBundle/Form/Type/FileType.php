@@ -13,24 +13,24 @@ class FileType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add(
-                'title',
-                'text',
-                array()
-            )
-            ->add(
-                'uploadedFile',
-                'file',
-                array('required' => false)
-            );
+        $builder->add(
+            'title',
+            'text',
+            array()
+        );
+
+        $builder->add(
+            'uploadedFile',
+            'file',
+            array('required' => false)
+        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
-                'data_class'   => 'Nsm\Bundle\ApiBundle\Entity\File',
+                'data_class' => 'Nsm\Bundle\ApiBundle\Entity\File',
 //                'by_reference' => false
             )
         );

@@ -2,19 +2,14 @@
 
 namespace Nsm\Bundle\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Nsm\Bundle\ApiBundle\Entity\Invitation;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * User
- *
- * @ORM\Entity
- * @ORM\Table(name="NsmUser")
- * @ORM\HasLifecycleCallbacks
- */
 class User extends BaseUser
 {
     use ORMBehaviors\Timestampable\Timestampable,
@@ -23,57 +18,46 @@ class User extends BaseUser
 
     /**
      * @var integer
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @Serializer\Expose()
-     * @Serializer\Groups({"user_list", "user_details"})
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=40)
+     * @var string
      */
     protected $mailboxHash;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Please enter your first name.", groups={"Registration", "Profile"})
      */
     protected $firstName;
 
     /**
      * @Assert\NotBlank(message="Please enter your last name.", groups={"Registration", "Profile"})
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $lastName;
 
     /**
      * @Assert\NotBlank(message="Please enter your time zone.", groups={"Registration", "Profile"})
-     * @ORM\Column(type="timezone", nullable=true)
      */
     protected $timeZone;
 
     /**
      * @Assert\NotBlank(message="Please enter your locale.", groups={"Registration", "Profile"})
-     * @ORM\Column(type="string", length=6, nullable=true)
      */
     protected $locale;
 
-    protected $invitation;
+    /**
+     * @var Invitation
+     */
+    protected $invitations;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
      */
     private $githubId;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
      */
     private $instagramId;
 
@@ -83,29 +67,21 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->invitations = new ArrayCollection();
     }
 
     /**
-     * Reset the mailbox hash
+     * @return $this
      */
     public function resetMailboxHash()
     {
         $mailboxHash = md5(uniqid(rand(), true));
         $this->setMailboxHash($mailboxHash);
+
+        return $this;
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersistMailboxHash()
-    {
-        $this->resetMailboxHash();
-    }
-
-
-    /**
-     * Get id
-     *
      * @return integer
      */
     public function getId()
@@ -114,11 +90,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set mailboxHash
+     * @param $mailboxHash
      *
-     * @param string $mailboxHash
-     *
-     * @return User
+     * @return $this
      */
     public function setMailboxHash($mailboxHash)
     {
@@ -128,9 +102,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get mailboxHash
-     *
-     * @return string 
+     * @return mixed
      */
     public function getMailboxHash()
     {
@@ -138,11 +110,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set firstName
+     * @param $firstName
      *
-     * @param string $firstName
-     *
-     * @return User
+     * @return $this
      */
     public function setFirstName($firstName)
     {
@@ -152,9 +122,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get firstName
-     *
-     * @return string 
+     * @return mixed
      */
     public function getFirstName()
     {
@@ -162,11 +130,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set lastName
+     * @param $lastName
      *
-     * @param string $lastName
-     *
-     * @return User
+     * @return $this
      */
     public function setLastName($lastName)
     {
@@ -176,9 +142,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get lastName
-     *
-     * @return string 
+     * @return mixed
      */
     public function getLastName()
     {
@@ -186,11 +150,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set time zone
+     * @param $timeZone
      *
-     * @param string $timeZone
-     *
-     * @return User
+     * @return $this
      */
     public function setTimeZone($timeZone)
     {
@@ -200,9 +162,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get time zone
-     *
-     * @return string 
+     * @return mixed
      */
     public function getTimeZone()
     {
@@ -210,31 +170,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set invitation
-     *
-     * @param \Nsm\Bundle\ApiBundle\Entity\Invitation $invitation
-     *
-     * @return User
-     */
-    public function setInvitation(\Nsm\Bundle\ApiBundle\Entity\Invitation $invitation = null)
-    {
-        $this->invitation = $invitation;
-
-        return $this;
-    }
-
-    /**
-     * Get invitation
-     *
-     * @return \Nsm\Bundle\ApiBundle\Entity\Invitation
-     */
-    public function getInvitation()
-    {
-        return $this->invitation;
-    }
-
-    /**
-     * @param mixed $locale
+     * @param $locale
      */
     public function setLocale($locale)
     {
@@ -250,7 +186,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param string $githubID
+     * @param $githubId
      */
     public function setGithubId($githubId)
     {
@@ -266,7 +202,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param string $instagramId
+     * @param $instagramId
      */
     public function setInstagramId($instagramId)
     {
@@ -281,6 +217,37 @@ class User extends BaseUser
         return $this->instagramId;
     }
 
+    /**
+     * Add invitations
+     *
+     * @param Invitation $invitations
+     *
+     * @return User
+     */
+    public function addInvitation(Invitation $invitations)
+    {
+        $this->invitations[] = $invitations;
 
+        return $this;
+    }
 
+    /**
+     * Remove invitations
+     *
+     * @param Invitation $invitations
+     */
+    public function removeInvitation(Invitation $invitations)
+    {
+        $this->invitations->removeElement($invitations);
+    }
+
+    /**
+     * Get invitations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInvitations()
+    {
+        return $this->invitations;
+    }
 }

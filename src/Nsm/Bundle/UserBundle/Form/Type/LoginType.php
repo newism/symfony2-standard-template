@@ -42,7 +42,7 @@ class LoginType extends AbstractType
             )
             ->add(
                 'invitation',
-                'invitation',
+                'invitation_code',
                 array(
                     'required' => false
                 )

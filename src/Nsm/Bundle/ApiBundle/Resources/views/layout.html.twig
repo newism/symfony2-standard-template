@@ -99,7 +99,7 @@
 
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     <ul>
-    {% for item in ['projects', 'tasks', 'activities'] %}
+    {% for item in ['project', 'task', 'activity', 'invitation'] %}
         <li><a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a></li>
     {% endfor %}
     </ul>
@@ -113,7 +113,7 @@
     {% endfor %}
 {% endfor %}
 
-{% block body %}{% endblock %}
+{% block content %}{% endblock %}
 {% block fos_user_content %}{% endblock %}
 {% block hwi_oauth_content %}{% endblock %}
 

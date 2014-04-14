@@ -58,21 +58,21 @@ class TaskFilterType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, $projectFormEventHandler);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, $projectFormEventHandler);
 
-        $builder
-            ->add(
-                'id',
-                'text',
-                array(
-                    'required' => false
-                )
+        $builder->add(
+            'id',
+            'text',
+            array(
+                'required' => false
             )
-            ->add(
-                'title',
-                'text',
-                array(
-                    'required' => false
-                )
-            );
+        );
+
+        $builder->add(
+            'title',
+            'text',
+            array(
+                'required' => false
+            )
+        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

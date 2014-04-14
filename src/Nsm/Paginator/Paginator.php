@@ -62,7 +62,7 @@ class Paginator extends BasePaginator
         $this->currentPage = intval($page);
 
         // Zero based index
-        $this->getQuery()->setFirstResult($this->getCurrentPageFirstResultOffset() -1);
+        $this->getQuery()->setFirstResult($this->getCurrentPageFirstResultOffset() - 1);
 
         return $this;
     }
@@ -98,7 +98,8 @@ class Paginator extends BasePaginator
      */
     public function getPageCount()
     {
-        return intval(ceil($this->count() / $this->getQuery()->getMaxResults()));
+        // No results must have one page
+        return (0 === $this->count()) ? 1 : intval(ceil($this->count() / $this->getQuery()->getMaxResults()));
     }
 
     /**
@@ -152,7 +153,7 @@ class Paginator extends BasePaginator
      */
     public function getNextPage()
     {
-        if(false === $this->hasNextPage()) {
+        if (false === $this->hasNextPage()) {
             throw new \Exception('Out of bounds');
         }
 
@@ -162,7 +163,8 @@ class Paginator extends BasePaginator
     /**
      * @return bool
      */
-    public function hasNextPage() {
+    public function hasNextPage()
+    {
 
         return $this->currentPage < $this->getPageCount();
     }
@@ -173,7 +175,7 @@ class Paginator extends BasePaginator
      */
     public function getPreviousPage()
     {
-        if(false === $this->hasPreviousPage()) {
+        if (false === $this->hasPreviousPage()) {
             throw new \Exception('Out of bounds');
         }
 
@@ -222,14 +224,16 @@ class Paginator extends BasePaginator
     /**
      * @return int|number
      */
-    public function getTotalResultCount() {
+    public function getTotalResultCount()
+    {
         return $this->count();
     }
 
     /**
      * @return int
      */
-    public function getCurrentPageResultCount() {
+    public function getCurrentPageResultCount()
+    {
         return count($this->getCurrentPageResults());
     }
 }

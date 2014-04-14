@@ -1,35 +1,27 @@
 {% extends 'NsmApiBundle::layout.html.twig' %}
 
 {% block content -%}
+
     <h1>Project</h1>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ entity.title }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('project_browse') }}">
+                Back to the list
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('project_edit', { 'id': entity.id }) }}">
+                Edit
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('project_destroy', { 'id': entity.id }) }}">
+                Destroy
+            </a>
+        </li>
+    </ul>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('projects_browse') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('projects_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-            <li>
-                <a href="{{ path('projects_destroy', { 'id': entity.id }) }}">
-                    Destroy
-                </a>
-            </li></ul>
+    {{ dump(entity) }}
+
 {% endblock %}

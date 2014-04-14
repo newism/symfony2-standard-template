@@ -20,6 +20,7 @@ class AbstractController extends FOSRestController
 {
     public $entityDiscriminator;
     public $entityManager;
+    public $repository;
 
     /**
      * Get Entity Discriminator based on controller name
@@ -47,12 +48,12 @@ class AbstractController extends FOSRestController
 
         if (null === $this->entityManager) {
             $entityDiscriminator = $this->getEntityDiscriminator();
-            $this->entityManager = $this->get(sprintf('%s.manager', $entityDiscriminator));
+            $this->entityManager = $this->get(sprintf('nsm_api.entity.%s_manager', $entityDiscriminator));
         }
 
         return $this->entityManager;
     }
-    
+
     /**
      * Find an entity by ID or return null
      *

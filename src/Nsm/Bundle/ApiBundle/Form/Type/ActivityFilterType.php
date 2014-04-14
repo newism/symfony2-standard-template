@@ -25,8 +25,8 @@ class ActivityFilterType extends AbstractType
 
             // Base options
             $options = array(
-                'label'    => 'Task',
-                'class'    => 'NsmApiBundle:Task',
+                'label' => 'Task',
+                'class' => 'NsmApiBundle:Task',
                 'multiple' => false
             );
 
@@ -65,64 +65,64 @@ class ActivityFilterType extends AbstractType
                 'id',
                 'text',
                 array(
-                    'property_path'            => '[id]',
-                    'required'                 => false,
-                    'constraints'              => array(
+                    'property_path' => '[id]',
+                    'required' => false,
+                    'constraints' => array(
                         new NotBlank(),
                         new Length(array('min' => 3)),
                     ),
-                    'help'                     => 'Test Help',
-                    'control_input_attr'       => array(
+                    'help' => 'Test Help',
+                    'control_input_attr' => array(
                         'class' => 'xxx',
-                        'foo'   => 'bar'
+                        'foo' => 'bar'
                     ),
-                    'control_group_attr'       => array(
+                    'control_group_attr' => array(
                         'class' => 'cg',
-                        'pink'  => 'purple'
+                        'pink' => 'purple'
                     ),
                     'control_group_label_attr' => array(
                         'class' => 'cg',
-                        'pink'  => 'purple'
+                        'pink' => 'purple'
                     ),
-                    'control_attr'             => array(
+                    'control_attr' => array(
                         'class' => 'c',
-                        'pink'  => 'p'
+                        'pink' => 'p'
                     ),
-                    'control_label_attr'       => array(
+                    'control_label_attr' => array(
                         'class' => 'cg',
-                        'pink'  => 'purple'
+                        'pink' => 'purple'
                     )
-                )
-            )
-            ->add(
-                'title',
-                'text',
-                array(
-                    'property_path' => '[title]',
-                    'required'      => true
-                )
-            )
-            ->add(
-                'endedAt',
-                'choice',
-                array(
-                    'label'      => 'Ended At',
-                    'required'   => true,
-                    'empty_data' => null,
-                    'choices'    => array(
-                        'isNotNull' => 'Ended',
-                        'isNull'    => 'Not Ended'
-                    )
-                )
-            )
-            ->add(
-                'startedAtRange',
-                'date_range',
-                array(
-                    'required' => true,
-                    'help'     => 'Dates are inclusive'
                 )
             );
+        $builder->add(
+            'title',
+            'text',
+            array(
+                'property_path' => '[title]',
+                'required' => true
+            )
+        );
+        $builder->add(
+            'endedAt',
+            'choice',
+            array(
+                'label' => 'Ended At',
+                'required' => true,
+                'empty_data' => null,
+                'choices' => array(
+                    'isNotNull' => 'Ended',
+                    'isNull' => 'Not Ended'
+                )
+            )
+        );
+        $builder->add(
+            'startedAtRange',
+            'date_range',
+            array(
+                'required' => true,
+                'help' => 'Dates are inclusive'
+            )
+        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -130,7 +130,7 @@ class ActivityFilterType extends AbstractType
         $resolver->setDefaults(
             array(
                 'csrf_protection' => false,
-                'required'        => true
+                'required' => true
             )
         );
     }

@@ -1,6 +1,5 @@
 parameters:
     knp.doctrine_behaviors.blameable_listener.user_entity: Nsm\Bundle\UserBundle\Entity\User
-#    knp.doctrine_behaviors.timezoneable_listener.user_entity: Nsm\Bundle\UserBundle\Entity\User
 
 imports:
     - { resource: parameters.yml }
@@ -22,7 +21,7 @@ framework:
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
-    validation:      { enable_annotations: true }
+    validation:      { enabled: true, enable_annotations: false }
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme

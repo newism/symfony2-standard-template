@@ -4,7 +4,6 @@ namespace Nsm\Bundle\ApiBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class InvitationClaimType extends AbstractType
 {
@@ -15,10 +14,9 @@ class InvitationClaimType extends AbstractType
     {
         $builder
             ->add(
-                'invitation',
+                'invitation_code',
                 'invitation'
-            )
-        ;
+            );
     }
 
     public function getName()

@@ -1,0 +1,15 @@
+Nsm\Bundle\ApiBundle\Entity\Activity:
+    properties:
+        title:
+            - NotBlank: ~
+        task:
+            - NotNull: ~
+        duration:
+            - GreaterThanOrEqual:
+                value: 0
+        createdAt:
+            - Date: ~
+        updatedAt:
+            - Date: ~
+        deletedAt:
+            - Date: ~

@@ -37,7 +37,7 @@ class RegistrationType extends BaseRegistrationFormType
                 )
             )->add(
                 'invitation',
-                'invitation',
+                'invitation_code',
                 array(
                     'mapped' => false
                 )

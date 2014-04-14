@@ -14,31 +14,39 @@ class ActivityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add(
-                'title',
-                'text',
-                array(
-                    'description' => 'The task title',
-                )
+        $builder->add(
+            'task',
+            'entity',
+            array(
+                'class' => 'NsmApiBundle:Task'
             )
-            ->add(
-                'dateRange',
-                new DateRangeType(),
-                array(
-                    'required'   => false,
-                    'start_type' => 'datetime',
-                    'end_type'   => 'datetime',
-                )
+        );
+
+        $builder->add(
+            'title',
+            'text',
+            array(
+                'description' => 'The task title',
             )
-            ->add(
-                'task',
-                'entity',
-                array(
-                    'class' => 'NsmApiBundle:Task'
-                )
+        );
+
+        $builder->add(
+            'description',
+            'textarea',
+            array(
+                'required' => false
             )
-            ;
+        );
+
+//        $builder->add(
+//            'dateRange',
+//            new DateRangeType(),
+//            array(
+//                'required' => false,
+//                'start_type' => 'datetime',
+//                'end_type' => 'datetime',
+//            )
+//        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
