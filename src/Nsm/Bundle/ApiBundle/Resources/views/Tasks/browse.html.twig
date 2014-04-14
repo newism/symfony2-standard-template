@@ -18,10 +18,9 @@
     </div>
     {{ form_end(search_form) }}
 
-
     <table>
         <caption>
-            Showing {{ pager.getCurrentPageOffsetStart }} - {{ pager.getCurrentPageOffsetEnd }} of {{ pager.getNbResults }} results
+            Showing {{ pager.currentPageFirstResultOffset }} - {{ pager.currentPageLastResultOffset }} of {{ pager.totalResultCount }} results
         </caption>
         <thead>
             <tr>
