@@ -11,8 +11,6 @@
 
 namespace Nsm\Bundle\GeneratorBundle\Command;
 
-use Nsm\Bundle\GeneratorBundle\Manipulator\ServicesManipulator;
-use Nsm\Bundle\GeneratorBundle\Manipulator\ValidationsManipulator;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,6 +21,8 @@ use Nsm\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
 use Nsm\Bundle\GeneratorBundle\Generator\DoctrineBreadGenerator;
 use Nsm\Bundle\GeneratorBundle\Generator\DoctrineFormGenerator;
 use Nsm\Bundle\GeneratorBundle\Manipulator\RoutingManipulator;
+use Nsm\Bundle\GeneratorBundle\Manipulator\ServicesManipulator;
+use Nsm\Bundle\GeneratorBundle\Manipulator\ValidationsManipulator;
 
 
 /**
