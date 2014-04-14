@@ -2,11 +2,11 @@
     /**
      * Browse all {{ entity }} entities.
      *
-     * @Get("/{{ route_name_prefix }}.{_format}", name="{{ route_name_prefix }}_browse", defaults={"_format"="~"})
-     *
      * @View(templateVar="entities", serializerGroups={"{{ route_name_prefix }}_browse"})
+     *
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
      * @QueryParam(name="perPage", requirements="\d+", default="100", strict=true, description="{{ entity }} count limit")
+     *
      * @ApiDoc(
      *  resource=true,
      *  filters={
@@ -24,13 +24,13 @@
         $repo = $em->getRepository('NsmApiBundle:{{ entity }}');
 
         $dateRange = new DateRange(new \DateTime('first day of this month'), new \DateTime('last day of this month'));
-        $tasks = $this->get('task.repository')->findBy(
-            [
-                'id' => [1, 2, 3]
-            ]
-        );
+//        $tasks = $this->get('task.repository')->findBy(
+//            [
+//                'id' => [1, 2, 3]
+//            ]
+//        );
 
-        /** @var {{ entity }}FilterType ${{ variable_name }}SearchForm */
+        /** @var Form ${{ variable_name }}SearchForm */
         ${{ variable_name }}SearchForm = $this->createForm(
             new {{ entity }}FilterType(),
             array(

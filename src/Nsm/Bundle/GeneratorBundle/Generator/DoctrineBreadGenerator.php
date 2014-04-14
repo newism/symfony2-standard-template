@@ -10,7 +10,7 @@
  */
 
 namespace Nsm\Bundle\GeneratorBundle\Generator;
-
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -55,7 +55,7 @@ class DoctrineBreadGenerator extends Generator
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $format, $routePrefix, $needWriteActions, $forceOverwrite)
     {
         $this->routePrefix = $routePrefix;
-        $this->routeNamePrefix = str_replace('/', '_', $routePrefix);
+        $this->routeNamePrefix = str_replace('-', '_', str_replace('/', '_', $routePrefix));
         $this->actions = array('browse', 'read', 'edit', 'add', 'delete');
 
         if (count($metadata->identifier) > 1) {
@@ -72,10 +72,19 @@ class DoctrineBreadGenerator extends Generator
         $this->setFormat($format);
 
         $this->generateControllerClass($forceOverwrite);
+        $this->generateSubscriberClass($forceOverwrite);
 
+        $this->generateRouting();
+        $this->generateServices();
+        $this->generateValidations();
+        $this->generateSerializations();
+
+        // Check for view directories
         $dir = sprintf('%s/Resources/views/%s', $this->bundle->getPath(), str_replace('\\', '/', $this->entity));
-
         if (!file_exists($dir)) {
+            $this->filesystem->mkdir($dir, 0777);
+        }
+        if (!file_exists($dir."/_partials")) {
             $this->filesystem->mkdir($dir, 0777);
         }
 
@@ -84,10 +93,91 @@ class DoctrineBreadGenerator extends Generator
         $this->generateAddView($dir);
         $this->generateEditView($dir);
         $this->generateDeleteView($dir);
+        $this->generatePartialView($dir."/_partials");
 //        $this->generateTestClass();
-        $this->generateRouting();
-        $this->generateServices();
-        $this->generateValidations();
+
+    }
+
+    /**
+     * Generates the controller class only.
+     * @param $forceOverwrite
+     *
+     * @throws \RuntimeException
+     */
+    protected function generateControllerClass($forceOverwrite)
+    {
+        $dir = $this->bundle->getPath();
+
+        $parts = explode('\\', $this->entity);
+        $entityClass = array_pop($parts);
+        $entityNamespace = implode('\\', $parts);
+
+        $target = sprintf(
+            '%s/Controller/%s/%sController.php',
+            $dir,
+            str_replace('\\', '/', $entityNamespace),
+            $entityClass
+        );
+
+        if (!$forceOverwrite && file_exists($target)) {
+            throw new \RuntimeException('Unable to generate the controller as it already exists.');
+        }
+
+        $variables = array(
+            'actions'           => $this->actions,
+            'route_prefix'      => $this->routePrefix,
+            'route_name_prefix' => $this->routeNamePrefix,
+            'bundle'            => $this->bundle->getName(),
+            'entity'            => $this->entity,
+            'entity_class'      => $entityClass,
+            'namespace'         => $this->bundle->getNamespace(),
+            'entity_namespace'  => $entityNamespace,
+            'format'            => $this->format,
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/controller.php.twig', $target, $variables);
+    }
+
+    /**
+     * Generates the subscriber class only.
+     * @param $forceOverwrite
+     *
+     * @throws \RuntimeException
+     */
+    protected function generateSubscriberClass($forceOverwrite)
+    {
+        $dir = $this->bundle->getPath();
+
+        $parts = explode('\\', $this->entity);
+        $entityClass = array_pop($parts);
+        $entityNamespace = implode('\\', $parts);
+
+        $target = sprintf(
+            '%s/EventSubscriber/%s/%sSubscriber.php',
+            $dir,
+            str_replace('\\', '/', $entityNamespace),
+            $entityClass
+        );
+
+        if (!$forceOverwrite && file_exists($target)) {
+            throw new \RuntimeException('Unable to generate the subscriber as it already exists.');
+        }
+
+        $variables = array(
+            'actions'           => $this->actions,
+            'route_prefix'      => $this->routePrefix,
+            'route_name_prefix' => $this->routeNamePrefix,
+            'bundle'            => $this->bundle->getName(),
+            'entity'            => $this->entity,
+            'entity_class'      => $entityClass,
+            'namespace'         => $this->bundle->getNamespace(),
+            'entity_namespace'  => $entityNamespace,
+            'format'            => $this->format,
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/eventSubscriber.php.twig', $target, $variables);
     }
 
     /**
@@ -134,6 +224,7 @@ class DoctrineBreadGenerator extends Generator
             'bundle'            => $this->bundle->getName(),
             'entity'            => $this->entity,
             'variable_name'     => lcfirst($this->entity),
+            'bundle_config_namespace' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
         );
 
         $this->renderFile('crud/config/routing.'.$this->format.'.twig', $target, $variables);
@@ -164,6 +255,7 @@ class DoctrineBreadGenerator extends Generator
             'bundle'            => $this->bundle->getName(),
             'entity'            => $this->entity,
             'variable_name'     => lcfirst($this->entity),
+            'bundle_config_namespace' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
         );
 
         $this->renderFile('crud/config/services.'.$this->format.'.twig', $target, $variables);
@@ -194,50 +286,40 @@ class DoctrineBreadGenerator extends Generator
             'bundle'            => $this->bundle->getName(),
             'entity'            => $this->entity,
             'variable_name'     => lcfirst($this->entity),
+            'bundle_config_namespace' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
         );
 
         $this->renderFile('crud/config/validations.'.$this->format.'.twig', $target, $variables);
     }
 
     /**
-     * Generates the controller class only.
-     * @param $forceOverwrite
+     * Generates the serialization configuration.
      *
-     * @throws \RuntimeException
      */
-    protected function generateControllerClass($forceOverwrite)
+    protected function generateSerializations()
     {
-        $dir = $this->bundle->getPath();
-
-        $parts = explode('\\', $this->entity);
-        $entityClass = array_pop($parts);
-        $entityNamespace = implode('\\', $parts);
+        if (!in_array($this->format, array('yml', 'xml', 'php'))) {
+            return;
+        }
 
         $target = sprintf(
-            '%s/Controller/%s/%sController.php',
-            $dir,
-            str_replace('\\', '/', $entityNamespace),
-            $entityClass
+            '%s/Resources/config/serializations/Entity.%s.%s',
+            $this->bundle->getPath(),
+            str_replace('\\', '_', $this->entity),
+            $this->format
         );
-
-        if (!$forceOverwrite && file_exists($target)) {
-            throw new \RuntimeException('Unable to generate the controller as it already exists.');
-        }
 
         $variables = array(
             'actions'           => $this->actions,
             'route_prefix'      => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
+            'namespace'         => $this->bundle->getNamespace(),
             'bundle'            => $this->bundle->getName(),
             'entity'            => $this->entity,
-            'entity_class'      => $entityClass,
-            'namespace'         => $this->bundle->getNamespace(),
-            'entity_namespace'  => $entityNamespace,
-            'format'            => $this->format,
             'variable_name'     => lcfirst($this->entity),
         );
 
-        $this->renderFile('crud/controller.php.twig', $target, $variables);
+        $this->renderFile('crud/config/serializations.'.$this->format.'.twig', $target, $variables);
     }
 
     /**
@@ -365,6 +447,28 @@ class DoctrineBreadGenerator extends Generator
         );
 
         $this->renderFile('crud/views/delete.html.twig.twig', $dir.'/delete.html.twig', $variables);
+    }
+
+    /**
+     * Generates the _partial templates in the final bundle.
+     *
+     * @param string $dir The path to the folder that hosts templates in the bundle
+     */
+    protected function generatePartialView($dir)
+    {
+        $variables = array(
+            'bundle'            => $this->bundle->getName(),
+            'entity'            => $this->entity,
+            'fields'            => $this->metadata->fieldMappings,
+            'actions'           => $this->actions,
+            'record_actions'    => $this->getRecordActions(),
+            'route_prefix'      => $this->routePrefix,
+            'route_name_prefix' => $this->routeNamePrefix,
+            'variable_name'     => lcfirst($this->entity),
+        );
+
+        $this->renderFile('crud/views/_partials/collection.html.twig.twig', $dir.'/collection.html.twig', $variables);
+        $this->renderFile('crud/views/_partials/collectionItem.html.twig.twig', $dir.'/collectionItem.html.twig', $variables);
     }
 
     /**

@@ -51,7 +51,10 @@ class ValidationsManipulator extends Manipulator
             $current = "\nparameters:\n  validator.mapping.loader.yaml_files_loader.mapping_files:\n";
         }
 
-        $current .= "    - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/".$validation.".yml'\n";
+        $pattern = '/^  validator.mapping.loader.yaml_files_loader.mapping_files:$/m';
+        $replacement = "  validator.mapping.loader.yaml_files_loader.mapping_files:\n    - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/".$validation.".yml'";
+
+        $current = preg_replace($pattern, $replacement, $current, 1);
 
         if (false === file_put_contents($this->file, $current)) {
             return false;

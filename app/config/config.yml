@@ -111,6 +111,13 @@ fos_rest:
     serializer:
         serialize_null: true
 
+jms_serializer:
+    metadata:
+        directories:
+            NsmApiBundle:
+                namespace_prefix: "Nsm\\Bundle\\ApiBundle"
+                path: "@NsmApiBundle/Resources/config/serializations"
+
 bazinga_hateoas: ~
 
 nelmio_cors:

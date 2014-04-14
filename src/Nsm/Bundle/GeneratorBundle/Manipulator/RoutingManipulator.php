@@ -66,7 +66,7 @@ class RoutingManipulator extends Manipulator
         } else {
             $code .= sprintf("    resource: \"@%s/Resources/config/%s.%s\"\n", $bundle, $path, $format);
         }
-        $code .= sprintf("    prefix:   %s\n", $prefix);
+        $code .= sprintf("    prefix:   %s\n", "/");
         $code .= "\n";
         $code .= $current;
 

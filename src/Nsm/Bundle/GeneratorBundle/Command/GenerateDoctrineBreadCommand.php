@@ -24,6 +24,7 @@ use Nsm\Bundle\GeneratorBundle\Generator\DoctrineBreadGenerator;
 use Nsm\Bundle\GeneratorBundle\Generator\DoctrineFormGenerator;
 use Nsm\Bundle\GeneratorBundle\Manipulator\RoutingManipulator;
 
+
 /**
  * Generates a BREAD for a Doctrine entity.
  *
@@ -119,12 +120,10 @@ EOT
             $output->writeln('Generating the Form code: <info>OK</info>');
         }
 
-        // routing and services
-        if ('annotation' != $format) {
-            $runner($this->updateRouting($dialog, $input, $output, $bundle, $format, $entity, $prefix));
-            $runner($this->updateServices($dialog, $input, $output, $bundle, $format, $entity, $prefix));
-            $runner($this->updateValidations($dialog, $input, $output, $bundle, $format, $entity, $prefix));
-        }
+        // configurations
+        $runner($this->updateRouting($dialog, $input, $output, $bundle, $format, $entity, $prefix));
+        $runner($this->updateServices($dialog, $input, $output, $bundle, $format, $entity, $prefix));
+        $runner($this->updateValidations($dialog, $input, $output, $bundle, $format, $entity, $prefix));
 
         $dialog->writeGeneratorSummary($output, $errors);
     }
@@ -195,17 +194,16 @@ EOT
     }
 
     /**
-     * Tries to generate forms if they don't exist yet and if we need write operations on entities.
+     * @param DialogHelper    $dialog
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param BundleInterface $bundle
+     * @param                 $format
+     * @param                 $entity
+     * @param                 $prefix
+     *
+     * @return array
      */
-    protected function generateForm($bundle, $entity, $metadata)
-    {
-        try {
-            $this->getFormGenerator($bundle)->generate($bundle, $entity, $metadata[0]);
-        } catch (\RuntimeException $e ) {
-            // form already exists
-        }
-    }
-
     protected function updateRouting(DialogHelper $dialog, InputInterface $input, OutputInterface $output, BundleInterface $bundle, $format, $entity, $prefix)
     {
         $auto = true;
@@ -217,14 +215,14 @@ EOT
         $this->getContainer()->get('filesystem')->mkdir($bundle->getPath().'/Resources/config/');
         $routing = new RoutingManipulator($bundle->getPath().'/Resources/config/routing.yml');
         try {
-            $ret = $auto ? $routing->addResource($bundle->getName(), $format, '/'.$prefix, 'routing/'.strtolower(str_replace('\\', '_', $entity))) : false;
+            $ret = $auto ? $routing->addResource($bundle->getName(), $format, '/'.$prefix, 'routing/'.str_replace('\\', '_', $entity)) : false;
         } catch (\RuntimeException $exc) {
             $ret = false;
         }
 
         if (!$ret) {
-            $help = sprintf("        <comment>resource: \"@%s/Resources/config/routing/%s.%s\"</comment>\n", $bundle->getName(), strtolower(str_replace('\\', '_', $entity)), $format);
-            $help .= sprintf("        <comment>prefix:   /%s</comment>\n", $prefix);
+            $help = sprintf("        <comment>resource: \"@%s/Resources/config/routing/%s.%s\"</comment>\n", $bundle->getName(), str_replace('\\', '_', $entity), $format);
+            $help .= sprintf("        <comment>prefix:   /%s</comment>\n", "");
 
             return array(
                 '- Import the bundle\'s routing resource in the bundle routing file if it doesn\'t currently exist',
@@ -259,13 +257,13 @@ EOT
         $this->getContainer()->get('filesystem')->mkdir($bundle->getPath().'/Resources/config/');
         $services = new ServicesManipulator($bundle->getPath().'/Resources/config/services.yml');
         try {
-            $ret = $auto ? $services->addResource('services/entities/'.lcfirst($entity)) : false;
+            $ret = $auto ? $services->addResource('services/entities/'.str_replace('\\', '_', $entity)) : false;
         } catch (\RuntimeException $exc) {
             $ret = false;
         }
 
         if (!$ret) {
-            $help = sprintf("  - { resource: %s.yml }\n", 'services/entities/'.lcfirst($entity));
+            $help = sprintf("  - { resource: %s.yml }\n", 'services/entities/'.str_replace('\\', '_', $entity));
 
             return array(
                 '- Import the entities service resource in the bundle services file if it doesn\'t currently exist',
@@ -299,13 +297,13 @@ EOT
         $this->getContainer()->get('filesystem')->mkdir($bundle->getPath().'/Resources/config/');
         $validations = new ValidationsManipulator($bundle->getPath().'/Resources/config/validations.yml');
         try {
-            $ret = $auto ? $validations->addResource('validations/'.lcfirst($entity)) : false;
+            $ret = $auto ? $validations->addResource('config/validations/'.str_replace('\\', '_', $entity)) : false;
         } catch (\RuntimeException $exc) {
             $ret = false;
         }
 
         if (!$ret) {
-            $help = "    - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/".lcfirst($entity).".yml'\n";
+            $help = "    - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/".str_replace('\\', '_', $entity).".yml'\n";
 
             return array(
                 '- Import the entities validation resource in the bundle validations file if it doesn\'t currently exist',
@@ -319,13 +317,31 @@ EOT
 
     protected function getRoutePrefix(InputInterface $input, $entity)
     {
-        $prefix = $input->getOption('route-prefix') ?: strtolower(str_replace(array('\\', '/'), '_', $entity));
+        $prefix = $input->getOption('route-prefix') ?: strtolower(preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $entity));;
 
         if ($prefix && '/' === $prefix[0]) {
             $prefix = substr($prefix, 1);
         }
 
         return $prefix;
+    }
+
+    /**
+     * Tries to generate forms if they don't exist yet and if we need write operations on entities.
+     */
+    protected function generateForm($bundle, $entity, $metadata)
+    {
+        try {
+            $this->getFormGenerator($bundle)->generate($bundle, $entity, $metadata[0]);
+        } catch (\RuntimeException $e ) {
+            // form already exists
+        }
+
+        try {
+            $this->getFormGenerator($bundle)->generateFilter($bundle, $entity, $metadata[0]);
+        } catch (\RuntimeException $e ) {
+            // filter already exists
+        }
     }
 
     protected function createGenerator($bundle = null)

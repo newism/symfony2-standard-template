@@ -18,10 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true)
  *
- * @Serializer\ExclusionPolicy("all")
- * @Serializer\AccessorOrder("custom", custom={"id"})
- *
- * @Hateoas\Relation("self", href = @Hateoas\Route("activities_read", parameters = { "id" = "expr(object.getId())" }))
+ * @Hateoas\Relation("self", href = @Hateoas\Route("activity_read", parameters = { "id" = "expr(object.getId())" }))
  * @Hateoas\Relation("task", href = @Hateoas\Route("tasks_read", parameters = { "id" = "expr(object.getTask().getId())" }))
  * @Hateoas\Relation("activities", href = @Hateoas\Route("activities_browse"))
  *
@@ -38,8 +35,6 @@ class Activity extends AbstractEntity
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Serializer\Expose()
-     * @Serializer\Groups({"activity_list", "activity_details", "task_list", "task_details"})
      */
     protected $id;
 

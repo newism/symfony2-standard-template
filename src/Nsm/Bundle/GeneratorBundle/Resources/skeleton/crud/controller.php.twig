@@ -3,20 +3,22 @@
 namespace {{ namespace }}\Controller{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
 
 {% block use_statements %}
-{% if 'new' in actions or 'edit' in actions or 'delete' in actions %}
+// Core
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
-{%- endif %}
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+// Third Party
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Patch;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
+use Hateoas\Configuration\Route;
+use Hateoas\Representation\Factory\PagerfantaFactory;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+// Project
 use {{ namespace }}\Entity\{{ entity }};
 use {{ namespace }}\Entity\{{ entity }}Manager;
 use {{ namespace }}\Entity\{{ entity }}Repository;
