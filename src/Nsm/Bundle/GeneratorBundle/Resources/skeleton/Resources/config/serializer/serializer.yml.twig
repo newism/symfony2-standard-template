@@ -2,21 +2,8 @@
     exclusion_policy: ALL
     xml_root_name: {{ entity_service_name }}
     accessor_order: custom
-    custom_accessor_order: ["id"]
-#    exclude: true
-#    read_only: false
-#    access_type: public_method # defaults to property
-#    discriminator:
-#        field_name: type
-#        map:
-#            some-value: ClassName
-#    virtual_properties:
-#        getSomeProperty:
-#            serialized_name: foo
-#            type: integer
-#    xml_namespaces:
-#        "": http://your.default.namespace
-#        atom: http://www.w3.org/2005/Atom
+    custom_accessor_order:
+        - id
     properties:
         id:
             expose: true
@@ -52,6 +39,29 @@
 #                namespace: http://www.w3.org/2005/Atom
 #            max_depth: 2
 
+    relations:
+        -
+            rel: self
+            href:
+                route: {{ entity_service_name }}_read
+                parameters:
+                    id: expr(object.getId())
+
+
+#    exclude: true
+#    read_only: false
+#    access_type: public_method # defaults to property
+#    discriminator:
+#        field_name: type
+#        map:
+#            some-value: ClassName
+#    virtual_properties:
+#        getSomeProperty:
+#            serialized_name: foo
+#            type: integer
+#    xml_namespaces:
+#        "": http://your.default.namespace
+#        atom: http://www.w3.org/2005/Atom
 #    handler_callbacks:
 #        serialization:
 #            xml: serializeToXml

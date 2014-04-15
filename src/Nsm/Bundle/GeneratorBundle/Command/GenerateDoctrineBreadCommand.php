@@ -23,16 +23,12 @@ use Nsm\Bundle\GeneratorBundle\Manipulator\ValidationsManipulator;
 class GenerateDoctrineBreadCommand extends ContainerAwareCommand
 {
     protected $skeletonDirs;
-    protected $filesystem;
-    protected $formGenerator;
 
     protected $templateVariables;
 
-    protected $entity;
     /** @var ClassMetadata $bundle */
     protected $bundle;
     protected $metadata;
-    protected $actions;
 
     protected $forceOverwrite;
 
@@ -125,7 +121,7 @@ EOT
                 'Overwrite existing files?',
                 '',
             ));
-        $overwrite = $dialog->ask($output, $dialog->getQuestion('Overwrite:', $overwrite), $overwrite);
+        $overwrite = $dialog->ask($output, $dialog->getQuestion('Overwrite:', $overwrite ? "true": "false"), $overwrite);
         $input->setOption('overwrite', $overwrite);
 
         // summary
@@ -187,255 +183,294 @@ EOT
         );
 
         if (count($this->metadata->identifier) > 1) {
-            throw new \RuntimeException('The CRUD generator does not support entity classes with multiple primary keys.');
+            throw new \RuntimeException('The BREAD generator does not support entity classes with multiple primary keys.');
         }
 
         if (!in_array('id', $this->metadata->identifier)) {
-            throw new \RuntimeException('The CRUD generator expects the entity object has a primary key field named "id" with a getId() method.');
+            throw new \RuntimeException('The BREAD generator expects the entity object has a primary key field named "id" with a getId() method.');
         }
 
-        $output->write('Exporting Controller: ');
+
+        $this->renderFile(
+            'Entity/EntityManager.php.twig',
+            sprintf(
+                '%s/Entity/%sManager.php',
+                $this->bundle->getPath(),
+                $entity
+            ),
+            'Manager',
+            $input,
+            $output
+        );
+
+        $this->renderFile(
+            'Entity/EntityQueryBuilder.php.twig',
+            sprintf(
+                '%s/Entity/%sQueryBuilder.php',
+                $this->bundle->getPath(),
+                $entity
+            ),
+            'Query Builder',
+            $input,
+            $output
+        );
+
+        $this->renderFile(
+            'Entity/EntityRepository.php.twig',
+            sprintf(
+                '%s/Entity/%sRepository.php',
+                $this->bundle->getPath(),
+                $entity
+            ),
+            'Repository',
+            $input,
+            $output
+        );
+
         $this->renderFile(
             'Controller/Controller.php.twig',
             sprintf(
                 '%s/Controller/%sController.php',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Controller',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Subscriber: ');
         $this->renderFile(
             'EventSubscriber/EventSubscriber.php.twig',
             sprintf(
                 '%s/EventSubscriber/%sSubscriber.php',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Event Subscriber',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Routing: ');
         $this->renderFile(
             'Resources/config/routing/Routing.yml.twig',
             sprintf(
                 '%s/Resources/config/routing/%s.yml',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Routings',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Service: ');
         $this->renderFile(
             'Resources/config/services/entities/Service.yml.twig',
             sprintf(
                 '%s/Resources/config/services/entities/%s.yml',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Services',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Validation: ');
         $this->renderFile(
             'Resources/config/validations/Validation.yml.twig',
             sprintf(
                 '%s/Resources/config/validations/%s.yml',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Validations',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Serializer: ');
         $this->renderFile(
             'Resources/config/serializer/Serializer.yml.twig',
             sprintf(
-                '%s/Resources/config/serializer/%s.yml',
+                '%s/Resources/config/serializer/Entity.%s.yml',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Serializer',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Browse: ');
         $this->renderFile(
             'Resources/views/browse.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/browse.html.twig',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Browse Template',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Read: ');
         $this->renderFile(
             'Resources/views/read.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/read.html.twig',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Read Template',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Add: ');
         $this->renderFile(
             'Resources/views/add.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/add.html.twig',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Add Template',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Edit: ');
         $this->renderFile(
             'Resources/views/edit.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/edit.html.twig',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Edit Template',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting Destroy: ');
         $this->renderFile(
             'Resources/views/destroy.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/destroy.html.twig',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Destroy Template',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting collection: ');
         $this->renderFile(
             'Resources/views/_partials/collection.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/_partials/collection.html.twig',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Collection Template',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting collectionItem: ');
         $this->renderFile(
             'Resources/views/_partials/collectionItem.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/_partials/collectionItem.html.twig',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Collection Item Template',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting FormType: ');
         $this->renderFile(
             'Form/Type/FormType.php.twig',
             sprintf(
                 '%s/Form/Type/%sType.php',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Form Type',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-        $output->write('Exporting FormFilterType: ');
         $this->renderFile(
             'Form/Type/FormFilterType.php.twig',
             sprintf(
                 '%s/Form/Type/%sFilterType.php',
                 $this->bundle->getPath(),
                 $entity
-            )
+            ),
+            'Form Filter Type',
+            $input,
+            $output
         );
-        $output->write("<info>Ok</info>\n");
 
-
-        // configurations
+        // update configurations
         $this->getContainer()->get('filesystem')->mkdir($this->bundle->getPath().'/Resources/config/');
-        $this->updateRouting();
-        $this->updateServices();
-        $this->updateValidations();
 
-    }
+        if (
+            $input->isInteractive() && $dialog->askConfirmation($output, $dialog->getQuestion('Confirm update of routing', 'yes', '?'), true)
+            ||
+            !$input->isInteractive()
+        ) {
+            $output->write('Updating Routing File: ');
+            $routing = new RoutingManipulator($this->bundle->getPath().'/Resources/config/routing.yml');
+            try {
+                $ret = $routing->addResource(
+                    $this->templateVariables['bundle_service_name']."_".$this->templateVariables['entity_service_name'],
+                    $this->templateVariables['bundle_name']."/Resources/config/routing/".$this->templateVariables['entity_name'].".yml"
+                ) || false;
+            } catch (\RuntimeException $exc) {
+                $ret = false;
+            }
 
-    /**************************
-     *
-     * Config Update Methods
-     *
-     **************************/
-
-    /**
-     * @return array
-     */
-    protected function updateRouting()
-    {
-        $routing = new RoutingManipulator($this->bundle->getPath().'/Resources/config/routing.yml');
-        try {
-            $ret = $routing->addResource(
-                $this->templateVariables['bundle_service_name']."_".$this->templateVariables['entity_service_name'],
-                $this->templateVariables['bundle_name']."/Resources/config/routing/".$this->templateVariables['entity_name'].".yml"
-            ) || false;
-        } catch (\RuntimeException $exc) {
-            $ret = false;
+            if (!$ret) {
+                $output->write("<info>ROUTING NOT UPDATED: Import the bundle's routing resource in the bundle routing file if it doesn't currently exist</info>\n");
+            }
         }
 
-        if (!$ret) {
-            return array(
-                '- ROUTING NOT UPDATED: Import the bundle\'s routing resource in the bundle routing file if it doesn\'t currently exist'
-            );
-        }
-    }
+        if (
+            $input->isInteractive() && $dialog->askConfirmation($output, $dialog->getQuestion('Confirm update of services', 'yes', '?'), true)
+            ||
+            !$input->isInteractive()
+        ) {
+            $output->write('Updating Service File: ');
+            $services = new ServicesManipulator($this->bundle->getPath().'/Resources/config/services.yml');
+            try {
+                $ret = $services->addResource(
+                    'services/entities/'.$this->templateVariables['entity_name'].".yml"
+                ) || false;
+            } catch (\RuntimeException $exc) {
+                $ret = false;
+            }
 
-    /**
-     * @return array
-     */
-    protected function updateServices()
-    {
-        $services = new ServicesManipulator($this->bundle->getPath().'/Resources/config/services.yml');
-        try {
-            $ret = $services->addResource(
-                'services/entities/'.$this->templateVariables['entity_name'].".yml"
-            ) || false;
-        } catch (\RuntimeException $exc) {
-            $ret = false;
+            if (!$ret) {
+                $output->write("<info>SERVICES NOT UPDATED: Import the entities service resource in the bundle services file if it doesn't currently exist</info>\n");
+            }
         }
+        if (
+            $input->isInteractive() && $dialog->askConfirmation($output, $dialog->getQuestion('Confirm update of validations', 'yes', '?'), true)
+            ||
+            !$input->isInteractive()
+        ) {
+            $output->write('Updating Validation File: ');
+            $validations = new ValidationsManipulator($this->bundle->getPath().'/Resources/config/validations.yml');
+            try {
+                $ret = $validations->addResource(
+                    'config/validations/'.$this->templateVariables['entity_name'].".yml"
+                ) || false;
+            } catch (\RuntimeException $exc) {
+                $ret = false;
+            }
 
-        if (!$ret) {
-            return array(
-                '- SERVICES NOT UPDATED: Import the entities service resource in the bundle services file if it doesn\'t currently exist'
-            );
-        }
-    }
-
-    /**
-     * @return array
-     */
-    protected function updateValidations()
-    {
-        $validations = new ValidationsManipulator($this->bundle->getPath().'/Resources/config/validations.yml');
-        try {
-            $ret = $validations->addResource(
-                'config/validations/'.$this->templateVariables['entity_name'].".yml"
-            ) || false;
-        } catch (\RuntimeException $exc) {
-            $ret = false;
+            if (!$ret) {
+                $output->write("<info>VALIDATIONS NOT UPDATED: Import the entities validation resource in the bundle validations file if it doesn't currently exist</info>\n");
+            }
+            $output->write("<info>Ok</info>\n");
         }
 
-        if (!$ret) {
-            return array(
-                '- VALIDATIONS NOT UPDATED: Import the entities validation resource in the bundle validations file if it doesn\'t currently exist'
-            );
-        }
     }
 
 
@@ -445,17 +480,32 @@ EOT
      *
      **************************/
 
-    protected function renderFile($template, $target)
+    protected function renderFile($template, $target, $name, InputInterface $input, OutputInterface $output)
     {
-        if (!$this->forceOverwrite && file_exists($target)) {
-            throw new \RuntimeException(sprintf('Unable to generate %s as it already exists.', $target));
-        }
+        $dialog = $this->getDialogHelper();
 
-        if (!is_dir(dirname($target))) {
-            mkdir(dirname($target), 0777, true);
-        }
+        // If we're running an interactive session and the user wants to proceed, or we're not interactive.
+        if (
+            $input->isInteractive() && $dialog->askConfirmation($output, $dialog->getQuestion('Confirm generation of '.$name, 'yes', '?'), true)
+            ||
+            !$input->isInteractive()
+        ) {
+            $output->write('Exporting ' . $name . ': ');
 
-        return file_put_contents($target, $this->render($template, $this->templateVariables));
+            if (!$this->forceOverwrite && file_exists($target)) {
+                $output->write(sprintf('<info>Unable to generate %s as it already exists.</info>', $target));
+
+                return;
+            }
+
+            if (!is_dir(dirname($target))) {
+                mkdir(dirname($target), 0777, true);
+            }
+
+            file_put_contents($target, $this->render($template, $this->templateVariables));
+
+            $output->write("<info>Ok</info>\n");
+        }
     }
 
     protected function render($template, $parameters)

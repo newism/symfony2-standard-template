@@ -56,7 +56,7 @@ class RoutingManipulator extends Manipulator
             mkdir($dir, 0777, true);
         }
 
-        $code .= sprintf("    resource: \"%s\"\n", $resource);
+        $code .= sprintf("    resource: \"@%s\"\n", $resource);
         $code .= "    prefix:   /\n";
         $code .= "\n";
         $code .= $current;
