@@ -7,30 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * Project
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Nsm\Bundle\ApiBundle\Entity\ProjectRepository")
- *
- * @Serializer\ExclusionPolicy("all")
- * @Serializer\AccessorOrder("custom", custom={"id"})
- * @Serializer\XmlRoot("project")
- *
- * @Hateoas\Relation(
- *      "self",
- *      href = @Hateoas\Route("projects_read", parameters = { "id" = "expr(object.getId())" }),
- *      exclusion = @Hateoas\Exclusion(groups = {"project_index", "project_details"})
- * )
- * @Hateoas\Relation(
- *      "tasks",
- *      embedded = @Hateoas\Embedded("expr(object.getTasks())"),
- *      href = @Hateoas\Route("tasks_browse", parameters = { "project" = "expr(object.getId())" }),
- *      exclusion = @Hateoas\Exclusion(groups = {"project_details"})
- * )
- */
 class Project extends AbstractEntity
 {
     use ORMBehaviors\Timestampable\Timestampable,
@@ -39,55 +16,30 @@ class Project extends AbstractEntity
 
     /**
      * @var integer
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @Serializer\Expose()
-     * @Serializer\Groups({"project_list", "project_details", "task_list", "task_details"})
      */
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     * @Serializer\Expose()
-     * @Serializer\Groups({"project_list", "project_details", "task_list", "task_details"})
      */
     protected $title;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="text", length=255, nullable=true)
-     * @Serializer\Expose()
-     * @Serializer\Groups({"project_list", "project_details", "task_details"})
      */
     protected $description;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Task", mappedBy="project", cascade="remove");
      */
     protected $tasks;
 
     /**
      * @var integer $taskDurationSum
-     *
-     * @ORM\Column(type="integer", nullable=true)
      */
     protected $taskDurationSum;
 
     /**
-     * @ORM\OneToOne(targetEntity="File", orphanRemoval=true, cascade={"persist", "remove"})
-     */
-    private $avatar;
-    
-    /**
-     * @Serializer\VirtualProperty
-     * @Serializer\Groups({"project_list"})
-     * @Serializer\Groups({"project_details"})
      * @return int
      */
     public function getTaskCount()
@@ -96,8 +48,6 @@ class Project extends AbstractEntity
     }
 
     /**
-     * @Serializer\VirtualProperty
-     * @Serializer\Groups({"project_details"})
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getTaskIds()
@@ -123,7 +73,8 @@ class Project extends AbstractEntity
      */
     public function __construct()
     {
-        $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tasks = new ArrayCollection();
+        $this->taskDurationSum = 0;
     }
 
     /**
@@ -141,7 +92,7 @@ class Project extends AbstractEntity
      *
      * @param string $title
      *
-     * @return Project
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -165,7 +116,7 @@ class Project extends AbstractEntity
      *
      * @param string $description
      *
-     * @return Project
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -187,11 +138,11 @@ class Project extends AbstractEntity
     /**
      * Add tasks
      *
-     * @param \Nsm\Bundle\ApiBundle\Entity\Task $tasks
+     * @param Task $tasks
      *
-     * @return Project
+     * @return $this
      */
-    public function addTask(\Nsm\Bundle\ApiBundle\Entity\Task $tasks)
+    public function addTask(Task $tasks)
     {
         $this->tasks[] = $tasks;
 
@@ -201,9 +152,9 @@ class Project extends AbstractEntity
     /**
      * Remove tasks
      *
-     * @param \Nsm\Bundle\ApiBundle\Entity\Task $tasks
+     * @param Task $tasks
      */
-    public function removeTask(\Nsm\Bundle\ApiBundle\Entity\Task $tasks)
+    public function removeTask(Task $tasks)
     {
         $this->tasks->removeElement($tasks);
     }
@@ -223,7 +174,7 @@ class Project extends AbstractEntity
      *
      * @param integer $taskDurationSum
      *
-     * @return Project
+     * @return $this
      */
     public function setTaskDurationSum($taskDurationSum)
     {
@@ -254,27 +205,4 @@ class Project extends AbstractEntity
         return $this;
     }
 
-    /**
-     * Set avatar
-     *
-     * @param \Nsm\Bundle\ApiBundle\Entity\File $avatar
-     *
-     * @return Task
-     */
-    public function setAvatar(\Nsm\Bundle\ApiBundle\Entity\File $avatar = null)
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
-    /**
-     * Get avatar
-     *
-     * @return \Nsm\Bundle\ApiBundle\Entity\File
-     */
-    public function getAvatar()
-    {
-        return $this->avatar;
-    }
 }

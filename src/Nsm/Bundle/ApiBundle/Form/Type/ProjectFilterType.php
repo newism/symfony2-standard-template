@@ -13,28 +13,27 @@ class ProjectFilterType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add(
-                'id',
-                'text',
-                array(
-                    'required' => false
-                )
+        $builder->add(
+            'id',
+            'text',
+            array(
+                'required' => false
             )
-            ->add(
-                'title',
-                'text',
-                array(
-                    'required' => false
-                )
-            );
+        );
+        $builder->add(
+            'title',
+            'text',
+            array(
+                'required' => false
+            )
+        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
-                'data_class'      => null,
+                'data_class' => null,
                 'csrf_protection' => false
             )
         );

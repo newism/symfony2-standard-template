@@ -18,6 +18,8 @@ use Nsm\Bundle\ApiBundle\Entity\Project;
 use Nsm\Bundle\ApiBundle\Entity\ProjectRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\ProjectFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\ProjectType;
+use Nsm\Paginator\HateosPaginatorFactory;
+use Nsm\Paginator\Paginator;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,7 +32,7 @@ class ProjectsController extends AbstractController
     /**
      * Browse all Project entities.
      *
-     * @Get("/projects.{_format}", name="projects_browse", defaults={"_format"="~"})
+     * @Get("/projects.{_format}", name="project_browse", defaults={"_format"="~"})
      *
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
      * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Project count limit")
@@ -44,6 +46,7 @@ class ProjectsController extends AbstractController
     public function browseAction(Request $request, $page, $perPage)
     {
         $em = $this->getDoctrine()->getManager();
+
         /** @var ProjectRepository $repo */
         $repo = $em->getRepository('NsmApiBundle:Project');
 
@@ -52,7 +55,7 @@ class ProjectsController extends AbstractController
             new ProjectFilterType(),
             array(),
             array(
-                'action' => $this->generateUrl('projects_browse'),
+                'action' => $this->generateUrl('project_browse'),
                 'method' => 'GET'
             )
         )->add('search', 'submit');
@@ -71,10 +74,9 @@ class ProjectsController extends AbstractController
             $responseData['search_form'] = $projectSearchForm->createView();
         } else {
 
-            $pagerfantaFactory   = new PagerfantaFactory();
-            $paginatedCollection = $pagerfantaFactory->createRepresentation(
+            $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
-                new Route('projects_browse', array())
+                new Route('project_browse', array())
             );
 
             $responseData = $paginatedCollection;
@@ -89,7 +91,7 @@ class ProjectsController extends AbstractController
     /**
      * Finds and displays a Project entity.
      *
-     * @Get("/projects/{id}.{_format}", name="projects_read", requirements={"id" = "\d+"}, defaults={"_format"="~"})
+     * @Get("/projects/{id}.{_format}", name="project_read", requirements={"id" = "\d+"}, defaults={"_format"="~"})
      *
      * @View(templateVar="entity", serializerGroups={"project_details"})
      * @ApiDoc(
@@ -107,8 +109,8 @@ class ProjectsController extends AbstractController
     /**
      * Edits an existing Project entity.
      *
-     * @Patch("/projects/{id}", name="projects_patch")
-     * @Get("/projects/{id}/edit", name="projects_edit")
+     * @Patch("/projects/{id}", name="project_patch")
+     * @Get("/projects/{id}/edit", name="project_edit")
      *
      * @View()
      * @ApiDoc(
@@ -125,7 +127,7 @@ class ProjectsController extends AbstractController
             new ProjectType(),
             $entity,
             array(
-                'action' => $this->generateUrl('projects_patch', array('id' => $entity->getId())),
+                'action' => $this->generateUrl('project_patch', array('id' => $entity->getId())),
                 'method' => 'PATCH'
             )
         )->add('Update', 'submit');
@@ -139,7 +141,7 @@ class ProjectsController extends AbstractController
 
             return $this->redirect(
                 $this->generateUrl(
-                    'projects_read',
+                    'project_read',
                     array(
                         'id' => $entity->getId()
                     )
@@ -161,8 +163,8 @@ class ProjectsController extends AbstractController
     /**
      * Creates a add Project entity.
      *
-     * @Post("/projects", name="projects_post")
-     * @Get("/projects/add", name="projects_add")
+     * @Post("/projects", name="project_post")
+     * @Get("/projects/add", name="project_add")
      *
      * @View()
      * @ApiDoc(
@@ -179,7 +181,7 @@ class ProjectsController extends AbstractController
             new ProjectType(),
             $entity,
             array(
-                'action' => $this->generateUrl('projects_post'),
+                'action' => $this->generateUrl('project_post'),
                 'method' => 'POST'
             )
         )->add('Save', 'submit');
@@ -192,7 +194,7 @@ class ProjectsController extends AbstractController
             $em->flush();
 
             return $this->redirect(
-                $this->generateUrl('projects_read', array('id' => $entity->getId())),
+                $this->generateUrl('project_read', array('id' => $entity->getId())),
                 Codes::HTTP_CREATED
             );
         }
@@ -212,8 +214,8 @@ class ProjectsController extends AbstractController
     /**
      * Destroys a Project entity.
      *
-     * @Delete("/projects/{id}", name="projects_delete")
-     * @Get("/projects/{id}/destroy", name="projects_destroy")
+     * @Delete("/projects/{id}", name="project_delete")
+     * @Get("/projects/{id}/destroy", name="project_destroy")
      *
      * @View()
      * @ApiDoc()
@@ -225,7 +227,7 @@ class ProjectsController extends AbstractController
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->setAction($this->generateUrl('projects_destroy', array('id' => $id)))
+            ->setAction($this->generateUrl('project_destroy', array('id' => $id)))
             ->setMethod('DELETE')
             ->getForm();
 
@@ -238,7 +240,7 @@ class ProjectsController extends AbstractController
             $em->flush();
 
             if ($this->get('fos_rest.view_handler')->isFormatTemplating($request->getRequestFormat())) {
-                return $this->redirect($this->generateUrl('projects_browse', array()), Codes::HTTP_OK);
+                return $this->redirect($this->generateUrl('project_browse', array()), Codes::HTTP_OK);
             } else {
                 return $this->view(null, Codes::HTTP_NO_CONTENT);
             }

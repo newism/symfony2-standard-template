@@ -1,9 +1,9 @@
 {% extends 'NsmApiBundle::layout.html.twig' %}
 
-{% block body -%}
+{% block content -%}
     <h1>Activity destroy</h1>
 
-    <form action="{{ path('activities_delete', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('activity_delete', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
         <input type="hidden" name="_method" value="DELETE" />
         {{ form_widget(form) }}
         <p>
@@ -13,7 +13,7 @@
 
     <ul class="record_actions">
         <li>
-            <a href="{{ path('activities_browse') }}">
+            <a href="{{ path('activity_browse') }}">
                 Back to the list
             </a>
         </li>

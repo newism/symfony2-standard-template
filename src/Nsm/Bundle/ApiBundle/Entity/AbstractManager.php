@@ -108,4 +108,13 @@ abstract class AbstractManager implements ManagerInterface
 
         return $this;
     }
+
+    /**
+     * @return \Nsm\Bundle\ApiBundle\Entity\RepositoryInterface
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
 }

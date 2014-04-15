@@ -7,21 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * Task
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Nsm\Bundle\ApiBundle\Entity\TaskRepository")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true)
- *
- * @Serializer\ExclusionPolicy("all")
- *
- * @Hateoas\Relation("self", href = @Hateoas\Route("tasks_read", parameters = { "id" = "expr(object.getId())" }))
- * @Hateoas\Relation("project", href = @Hateoas\Route("projects_read", parameters = { "id" = "expr(object.getProject().getId())" }))
- * @Hateoas\Relation("activities", href = @Hateoas\Route("activities_browse", parameters = { "task" = "expr(object.getId())" }))
- */
 class Task extends AbstractEntity
 {
     use ORMBehaviors\Timestampable\Timestampable,
@@ -30,39 +16,31 @@ class Task extends AbstractEntity
 
     /**
      * @var integer
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @Serializer\Expose()
-     * @Serializer\Groups({"task_list", "task_details"})
      */
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=255)
-     * @Serializer\Expose()
-     * @Serializer\Groups({"task_list", "task_details"})
      */
     protected $title;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="tasks")
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * @var Project
      */
     protected $project;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Activity", mappedBy="task", cascade="remove");
      */
     protected $activities;
 
     /**
-     * @var integer $activityDurationSum
-     *
-     * @ORM\Column(type="integer", nullable=true)
+     * @var integer
      */
     protected $activityDurationSum;
 
@@ -72,8 +50,9 @@ class Task extends AbstractEntity
     public function __construct()
     {
         $this->activities = new ArrayCollection();
+        $this->activityDurationSum = 0;
     }
-    
+
     /**
      * Get id
      *
@@ -109,13 +88,37 @@ class Task extends AbstractEntity
     }
 
     /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Project
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Set project
      *
-     * @param \Nsm\Bundle\ApiBundle\Entity\Project $project
+     * @param Project $project
      *
      * @return Task
      */
-    public function setProject(\Nsm\Bundle\ApiBundle\Entity\Project $project = null)
+    public function setProject(Project $project = null)
     {
         $this->project = $project;
 
@@ -125,7 +128,7 @@ class Task extends AbstractEntity
     /**
      * Get project
      *
-     * @return \Nsm\Bundle\ApiBundle\Entity\Project
+     * @return Project
      */
     public function getProject()
     {
@@ -135,14 +138,14 @@ class Task extends AbstractEntity
     /**
      * Add activity
      *
-     * @param \Nsm\Bundle\ApiBundle\Entity\Activity $activity
+     * @param Activity $activity
      *
      * @return Task
      */
-    public function addActivity(\Nsm\Bundle\ApiBundle\Entity\Activity $activity)
+    public function addActivity(Activity $activity)
     {
         $this->activities[] = $activity;
-        $this->addActivityDuration($activity->getDuration());
+        $this->modifyActivityDurationSum($activity->getDuration());
 
         return $this;
     }
@@ -150,9 +153,9 @@ class Task extends AbstractEntity
     /**
      * Remove activity
      *
-     * @param \Nsm\Bundle\ApiBundle\Entity\Activity $activity
+     * @param Activity $activity
      */
-    public function removeActivity(\Nsm\Bundle\ApiBundle\Entity\Activity $activity)
+    public function removeActivity(Activity $activity)
     {
         $this->activities->removeElement($activity);
     }
@@ -184,7 +187,7 @@ class Task extends AbstractEntity
     /**
      * Get activityDurationSum
      *
-     * @return integer 
+     * @return integer
      */
     public function getActivityDurationSum()
     {

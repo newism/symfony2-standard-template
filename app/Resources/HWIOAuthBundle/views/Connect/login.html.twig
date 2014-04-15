@@ -1,0 +1,13 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% block hwi_oauth_content %}
+    <h3>Connect With:</h3>
+    {% if error is defined and error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+    <ul>
+    {% for owner in hwi_oauth_resource_owners() %}
+        <li><a href="{{ hwi_oauth_login_url(owner) }}">{{ owner | trans({}, 'HWIOAuthBundle') }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock hwi_oauth_content %}

@@ -78,35 +78,45 @@
         }
 
     </style>
+
 </head>
 <body>
-<div>
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-
-        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-
-        <a href="{{ path('fos_user_security_logout') }}">
-            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-        </a>
-
+    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+    <ul>
+        <li><a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
         {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-            <a href="{{ path('dashboard_browse', {'_switch_user': '_exit'}) }}">
-                Exit impersonation
-            </a>
+        <li><a href="{{ path('dashboard_browse', {'_switch_user': '_exit'}) }}">Exit impersonation</a></li>
         {% endif %}
-
+    </ul>
     {% else %}
-        <a href="{{ path('fos_user_security_login') }}">
-            {{ 'layout.login'|trans({}, 'FOSUserBundle') }}
-        </a>
+    <ul>
+        <li><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
+        <li><a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a></li>
+        <li><a href="{{ path('hwi_oauth_connect') }}">Connect</a></li>
+    </ul>
     {% endif %}
-</div>
-<div>
-    {% for item in ['projects', 'tasks', 'activities'] %}
-        <a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a>
+
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    <ul>
+    {% for item in ['project', 'task', 'activity', 'invitation'] %}
+        <li><a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a></li>
     {% endfor %}
-</div>
-{% block body %}{% endblock %}
+    </ul>
+{% endif %}
+
+{% for type, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+        <div class="flash-{{ type }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% block content %}{% endblock %}
+{% block fos_user_content %}{% endblock %}
+{% block hwi_oauth_content %}{% endblock %}
+
 {% block javascripts %}{% endblock %}
 
 <script src="/bundles/nsmform/bower_components/jquery/jquery.js"></script>
@@ -115,8 +125,8 @@
 <script>
     $('[data-widget=entitySearch]').each(function(){
         var $this = $(this),
-                options = $this.data('entitySearchOptions') || {}
-                ;
+            options = $this.data('entitySearchOptions') || {}
+            ;
 
         options.selectizeOptions.render = options.selectizeOptions.render || {};
         options.selectizeOptions.render.option = function(item, escape){
@@ -129,3 +139,4 @@
 
 </body>
 </html>
+

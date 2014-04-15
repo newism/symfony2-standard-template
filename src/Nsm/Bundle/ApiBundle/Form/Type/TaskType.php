@@ -13,22 +13,29 @@ class TaskType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add(
-                'title',
-                'text',
-                array(
-                    'description' => 'The task title',
-                )
+        $builder->add(
+            'project',
+            'entity',
+            array(
+                'class' => 'NsmApiBundle:Project'
             )
-            ->add(
-                'project',
-                'entity',
-                array(
-                    'class' => 'NsmApiBundle:Project'
-                )
+        );
+
+        $builder->add(
+            'title',
+            'text',
+            array(
+                'description' => 'The task title',
             )
-        ;
+        );
+
+        $builder->add(
+            'description',
+            'textarea',
+            array(
+                'required' => false
+            )
+        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

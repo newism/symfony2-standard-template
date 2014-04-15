@@ -5,10 +5,13 @@ namespace Nsm\Bundle\ApiBundle\Controller;
 use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\FOSRestController;
+use Nsm\Paginator\HateosPaginatorFactory;
+use Nsm\Paginator\Paginator;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Nsm\Bundle\ApiBundle\Entity\AbstractManager;
 
 /**
  * Abstract controller.
@@ -17,6 +20,7 @@ class AbstractController extends FOSRestController
 {
     public $entityDiscriminator;
     public $entityManager;
+    public $repository;
 
     /**
      * Get Entity Discriminator based on controller name
@@ -38,18 +42,18 @@ class AbstractController extends FOSRestController
     /**
      * Get the entity manager for the controller
      * 
-     * @return object
+     * @return AbstractManager
      */
     public function getEntityManager(){
 
         if (null === $this->entityManager) {
             $entityDiscriminator = $this->getEntityDiscriminator();
-            $this->entityManager = $this->get(sprintf('%s.manager', $entityDiscriminator));
+            $this->entityManager = $this->get(sprintf('nsm_api.entity.%s_manager', $entityDiscriminator));
         }
 
         return $this->entityManager;
     }
-    
+
     /**
      * Find an entity by ID or return null
      *
@@ -97,22 +101,21 @@ class AbstractController extends FOSRestController
      * @param null         $perPage
      * @param null         $page
      *
-     * @return Pagerfanta
+     * @return Paginator
      */
     public function paginateQuery(QueryBuilder $qb, $perPage = null, $page = null)
     {
-        $adaptor    = new DoctrineORMAdapter($qb);
-        $pagerfanta = new Pagerfanta($adaptor);
+        $paginator = new Paginator($qb, false);
 
         if (null !== $perPage) {
-            $pagerfanta->setMaxPerPage($perPage);
+            $paginator->setPerPage($perPage);
         }
 
         if (null !== $page) {
-            $pagerfanta->setCurrentPage($page);
+            $paginator->setCurrentPage($page);
         }
 
-        return $pagerfanta;
+        return $paginator;
     }
 
     
@@ -141,5 +144,22 @@ class AbstractController extends FOSRestController
     public function getViewHandler()
     {
         return $this->get('fos_rest.view_handler');
+    }
+
+    /**
+     * @param $pager
+     * @param $route
+     *
+     * @return \Hateoas\Representation\PaginatedRepresentation
+     */
+    public function createPaginatedCollection($pager, $route)
+    {
+        $pagerFactory   = new HateosPaginatorFactory();
+        $paginatedCollection = $pagerFactory->createRepresentation(
+            $pager,
+            $route
+        );
+
+        return $paginatedCollection;
     }
 }

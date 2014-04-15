@@ -1,0 +1,29 @@
+parameters:
+
+    nsm_api.entity.project.class: Nsm\Bundle\ApiBundle\Entity\Project
+    nsm_api.entity.project_manager.class: Nsm\Bundle\ApiBundle\Entity\ProjectManager
+    nsm_api.entity.project_repository.class: Nsm\Bundle\ApiBundle\Entity\ProjectRepository
+    nsm_api.event_subscriber.project_subscriber.class: Nsm\Bundle\ApiBundle\EventSubscriber\ProjectSubscriber
+
+services:
+
+    nsm_api.entity.project_repository:
+        class: %nsm_api.entity.project_repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments:
+            - %nsm_api.entity.project.class%
+
+    nsm_api.entity.project_manager:
+        class: %nsm_api.entity.project_manager.class%
+        arguments:
+            - %nsm_api.entity.project.class%
+            - @doctrine.orm.entity_manager
+
+    nsm_api.event_subscriber.project_subscriber:
+        class: %nsm_api.event_subscriber.project_subscriber.class%
+        arguments:
+            - @service_container
+        tags:
+            - {name: "doctrine.event_subscriber", connection: "default"}
+

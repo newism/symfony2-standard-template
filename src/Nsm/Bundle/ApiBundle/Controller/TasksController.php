@@ -18,6 +18,7 @@ use Nsm\Bundle\ApiBundle\Entity\Task;
 use Nsm\Bundle\ApiBundle\Entity\TaskRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\TaskFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\TaskType;
+use Nsm\Paginator\HateosPaginatorFactory;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,7 +30,7 @@ class TasksController extends AbstractController
     /**
      * Browse all Task entities.
      *
-     * @Get("/tasks.{_format}", name="tasks_browse", defaults={"_format"="~"})
+     * @Get("/tasks.{_format}", name="task_browse", defaults={"_format"="~"})
      *
      * @View(templateVar="entities", serializerGroups={"task_browse"})
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
@@ -50,16 +51,12 @@ class TasksController extends AbstractController
         /** @var TaskRepository $repo */
         $repo = $em->getRepository('NsmApiBundle:Task');
 
-        $projects = $this->get('project.repository')->findAll();
-
         /** @var Form $form */
         $taskSearchForm = $this->createForm(
             new TaskFilterType(),
+            array(),
             array(
-                'project' => $projects
-            ),
-            array(
-                'action' => $this->generateUrl('tasks_browse'),
+                'action' => $this->generateUrl('task_browse'),
                 'method' => 'GET'
             )
         )->add('search', 'submit');
@@ -78,10 +75,9 @@ class TasksController extends AbstractController
             $responseData['search_form'] = $taskSearchForm->createView();
         } else {
 
-            $pagerfantaFactory   = new PagerfantaFactory();
-            $paginatedCollection = $pagerfantaFactory->createRepresentation(
+            $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
-                new Route('tasks_browse', array())
+                new Route('task_browse', array())
             );
 
             $responseData = $paginatedCollection;
@@ -97,7 +93,7 @@ class TasksController extends AbstractController
     /**
      * Finds and displays a Task entity.
      *
-     * @Get("/tasks/{id}.{_format}", name="tasks_read", requirements={"id" = "\d+"}, defaults={"_format"="~"})
+     * @Get("/tasks/{id}.{_format}", name="task_read", requirements={"id" = "\d+"}, defaults={"_format"="~"})
      *
      * @View(templateVar="entity", serializerGroups={"task_details"})
      * @ApiDoc(
@@ -114,8 +110,8 @@ class TasksController extends AbstractController
     /**
      * Edits an existing Task entity.
      *
-     * @Patch("/tasks/{id}", name="tasks_patch")
-     * @Get("/tasks/{id}/edit", name="tasks_edit")
+     * @Patch("/tasks/{id}", name="task_patch")
+     * @Get("/tasks/{id}/edit", name="task_edit")
      *
      * @View()
      * @ApiDoc(
@@ -132,7 +128,7 @@ class TasksController extends AbstractController
             new TaskType(),
             $entity,
             array(
-                'action' => $this->generateUrl('tasks_patch', array('id' => $entity->getId())),
+                'action' => $this->generateUrl('task_patch', array('id' => $entity->getId())),
                 'method' => 'PATCH'
             )
         )->add('Update', 'submit');
@@ -146,7 +142,7 @@ class TasksController extends AbstractController
 
             return $this->redirect(
                 $this->generateUrl(
-                    'tasks_read',
+                    'task_read',
                     array(
                         'id' => $entity->getId()
                     )
@@ -161,61 +157,61 @@ class TasksController extends AbstractController
     }
 
 
-    /**
-     * Creates a add Task entity.
-     *
-     * @Post("/tasks", name="tasks_post")
-     * @Get("/tasks/add", name="tasks_add")
-     *
-     * @QueryParam(name="projectId", requirements="\d+", strict=true, nullable=true, description="The tasks project")
-     *
-     * @View()
-     * @ApiDoc(
-     *  input="Nsm\Bundle\ApiBundle\Form\Type\TaskType",
-     *  output="Nsm\Bundle\ApiBundle\Entity\Task"
-     * )
-     */
-    public function addAction(Request $request, $projectId)
-    {
-        $entity = new Task();
+/**
+ * Creates a add Task entity.
+ *
+ * @Post("/tasks", name="task_post")
+ * @Get("/tasks/add", name="task_add")
+ *
+ * @QueryParam(name="projectId", requirements="\d+", strict=true, nullable=true, description="The tasks project")
+ *
+ * @View()
+ * @ApiDoc(
+ *  input="Nsm\Bundle\ApiBundle\Form\Type\TaskType",
+ *  output="Nsm\Bundle\ApiBundle\Entity\Task"
+ * )
+ */
+public function addAction(Request $request, $projectId)
+{
+    $entity = new Task();
 
-        $project = $this->find('Project', $projectId);
-        $entity->setProject($project);
+    $project = $this->find('Project', $projectId);
+    $entity->setProject($project);
 
-        /** @var Form $form */
-        $form = $this->createForm(
-            new TaskType(),
-            $entity,
-            array(
-                'action' => $this->generateUrl('tasks_post'),
-                'method' => 'POST'
-            )
-        )->add('Save', 'submit');
+    /** @var Form $form */
+    $form = $this->createForm(
+        new TaskType(),
+        $entity,
+        array(
+            'action' => $this->generateUrl('task_post'),
+            'method' => 'POST'
+        )
+    )->add('Save', 'submit');
 
-        $form->handleRequest($request);
+    $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+    if ($form->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
 
-            return $this->redirect(
-                $this->generateUrl('tasks_read', array('id' => $entity->getId())),
-                Codes::HTTP_CREATED
-            );
-        }
-
-        return array(
-            'entity' => $entity,
-            'form' => $form,
+        return $this->redirect(
+            $this->generateUrl('task_read', array('id' => $entity->getId())),
+            Codes::HTTP_CREATED
         );
     }
+
+    return array(
+        'entity' => $entity,
+        'form' => $form,
+    );
+}
 
     /**
      * Deletes a Task entity.
      *
-     * @Delete("/tasks/{id}", name="tasks_delete")
-     * @Get("/tasks/{id}/destroy", name="tasks_destroy")
+     * @Delete("/tasks/{id}", name="task_delete")
+     * @Get("/tasks/{id}/destroy", name="task_destroy")
      *
      * @View()
      * @ApiDoc()
@@ -227,7 +223,7 @@ class TasksController extends AbstractController
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->setAction($this->generateUrl('tasks_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('task_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->getForm();
 
@@ -240,7 +236,7 @@ class TasksController extends AbstractController
             $em->flush();
 
             if ($this->get('fos_rest.view_handler')->isFormatTemplating($request->getRequestFormat())) {
-                return $this->redirect($this->generateUrl('tasks_browse', array()), Codes::HTTP_OK);
+                return $this->redirect($this->generateUrl('task_browse', array()), Codes::HTTP_OK);
             } else {
                 return $this->view(null, Codes::HTTP_NO_CONTENT);
             }

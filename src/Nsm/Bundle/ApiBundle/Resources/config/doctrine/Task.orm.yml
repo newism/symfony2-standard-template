@@ -1,0 +1,38 @@
+Nsm\Bundle\ApiBundle\Entity\Task:
+    type: entity
+    table: task
+    repositoryClass: Nsm\Bundle\ApiBundle\Entity\TaskRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        description:
+            type: text
+            nullable: true
+        activityDurationSum:
+            type: decimal
+            scale: 2
+        createdAt:
+            type: datetime
+            nullable: true
+        updatedAt:
+            type: datetime
+            nullable: true
+        deletedAt:
+            type: datetime
+            nullable: true
+    manyToOne:
+        project:
+            targetEntity: Project
+            inversedBy: tasks
+    oneToMany:
+        activities:
+            targetEntity: Activity
+            mappedBy: task
+            cascade:
+                - remove

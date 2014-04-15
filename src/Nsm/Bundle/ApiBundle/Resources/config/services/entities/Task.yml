@@ -1,0 +1,29 @@
+parameters:
+
+    nsm_api.entity.task.class: Nsm\Bundle\ApiBundle\Entity\Task
+    nsm_api.entity.task_manager.class: Nsm\Bundle\ApiBundle\Entity\TaskManager
+    nsm_api.entity.task_repository.class: Nsm\Bundle\ApiBundle\Entity\TaskRepository
+    nsm_api.event_subscriber.task_subscriber.class: Nsm\Bundle\ApiBundle\EventSubscriber\TaskSubscriber
+
+services:
+
+    nsm_api.entity.task_repository:
+        class: %nsm_api.entity.task_repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments:
+            - %nsm_api.entity.task.class%
+
+    nsm_api.entity.task_manager:
+        class: %nsm_api.entity.task_manager.class%
+        arguments:
+            - %nsm_api.entity.task.class%
+            - @doctrine.orm.entity_manager
+
+    nsm_api.event_subscriber.task_subscriber:
+        class: %nsm_api.event_subscriber.task_subscriber.class%
+        arguments:
+            - @service_container
+        tags:
+            - {name: "doctrine.event_subscriber", connection: "default"}
+

@@ -13,19 +13,18 @@ class ProjectType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add(
-                'title',
-                'text'
+        $builder->add(
+            'title',
+            'text'
+        );
+
+        $builder->add(
+            'description',
+            'textarea',
+            array(
+                'required' => false
             )
-            ->add(
-                'description',
-                'text',
-                array(
-                    'required' => false
-                )
-            )
-        ;
+        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

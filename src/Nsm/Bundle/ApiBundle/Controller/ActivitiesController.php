@@ -12,10 +12,12 @@ use FOS\RestBundle\Util\Codes;
 use Hateoas\Configuration\Route;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Nsm\Bundle\ApiBundle\Entity\Activity;
 use Nsm\Bundle\ApiBundle\Entity\ActivityRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\ActivityFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\ActivityType;
 use Nsm\Bundle\FormBundle\Form\Model\DateRange;
+use Nsm\Paginator\HateosPaginatorFactory;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -27,11 +29,11 @@ class ActivitiesController extends AbstractController
     /**
      * Browse all Activity entities.
      *
-     * @Get("/activities.{_format}", name="activities_browse", defaults={"_format"="~"})
+     * @Get("/activities.{_format}", name="activity_browse", defaults={"_format"="~"})
      *
      * @View(templateVar="entities", serializerGroups={"activity_browse"})
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
-     * @QueryParam(name="perPage", requirements="\d+", default="100", strict=true, description="Activity count limit")
+     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Activity count limit")
      * @ApiDoc(
      *  resource=true,
      *  filters={
@@ -48,23 +50,12 @@ class ActivitiesController extends AbstractController
         /** @var ActivityRepository $repo */
         $repo = $em->getRepository('NsmApiBundle:Activity');
 
-        $dateRange = new DateRange(new \DateTime('first day of this month'), new \DateTime('last day of this month'));
-        $tasks = $this->get('task.repository')->findBy(
-            [
-                'id' => [1, 2, 3]
-            ]
-        );
-
         /** @var Form $form */
         $activitySearchForm = $this->createForm(
             new ActivityFilterType(),
+            array(),
             array(
-//                'title' => 'foo',
-//                'task' => $tasks,
-//                'startedAtRange' => $dateRange
-            ),
-            array(
-                'action' => $this->generateUrl('activities_browse'),
+                'action' => $this->generateUrl('activity_browse'),
                 'method' => 'GET'
             )
         )->add('search', 'submit');
@@ -83,23 +74,9 @@ class ActivitiesController extends AbstractController
             $responseData['search_form'] = $activitySearchForm->createView();
         } else {
 
-//            $paginatedCollection = new PaginatedRepresentation(
-//                new CollectionRepresentation(
-//                    (array)$pager->getCurrentPageResults(),
-//                    'actvities', // embedded rel
-//                    'actvities' // xml element name
-//                ),
-//                'activities_browse', // route
-//                array(), // route parameters
-//                $pager->getCurrentPage(),
-//                $pager->getMaxPerPage(),
-//                $pager->getNbPages()
-//            );
-
-            $pagerfantaFactory = new PagerfantaFactory();
-            $paginatedCollection = $pagerfantaFactory->createRepresentation(
+            $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
-                new Route('activities_browse', array())
+                new Route('activity_browse', array())
             );
 
             $responseData = $paginatedCollection;
@@ -114,8 +91,8 @@ class ActivitiesController extends AbstractController
     /**
      * Edits an existing Activity entity.
      *
-     * @Patch("/activities/{id}", name="activities_patch")
-     * @Get("/activities/{id}/edit", name="activities_edit")
+     * @Patch("/activities/{id}", name="activity_patch")
+     * @Get("/activities/{id}/edit", name="activity_edit")
      *
      * @View()
      * @ApiDoc(
@@ -132,7 +109,7 @@ class ActivitiesController extends AbstractController
             new ActivityType(),
             $entity,
             array(
-                'action' => $this->generateUrl('activities_patch', array('id' => $entity->getId())),
+                'action' => $this->generateUrl('activity_patch', array('id' => $entity->getId())),
                 'method' => 'PATCH'
             )
         )->add('Update', 'submit');
@@ -146,7 +123,7 @@ class ActivitiesController extends AbstractController
 
             return $this->redirect(
                 $this->generateUrl(
-                    'activities_read',
+                    'activity_read',
                     array(
                         'id' => $entity->getId()
                     )
@@ -163,8 +140,8 @@ class ActivitiesController extends AbstractController
     /**
      * Creates a add Activity entity.
      *
-     * @Post("/activities", name="activities_post")
-     * @Get("/activities/add", name="activities_add")
+     * @Post("/activities", name="activity_post")
+     * @Get("/activities/add", name="activity_add")
      *
      * @View()
      * @QueryParam(name="taskId", requirements="\d+", strict=true, nullable=true, description="The activities task")
@@ -175,9 +152,8 @@ class ActivitiesController extends AbstractController
      */
     public function addAction(Request $request, $taskId)
     {
-        $activityManager = $this->get('activity.manager');
+        $entity = new Activity();
 
-        $entity = $activityManager->create();
         $task = $this->find('Task', $taskId);
         $entity->setTask($task);
         $entity->start();
@@ -187,7 +163,7 @@ class ActivitiesController extends AbstractController
             new ActivityType(),
             $entity,
             array(
-                'action' => $this->generateUrl('activities_post'),
+                'action' => $this->generateUrl('activity_post'),
                 'method' => 'POST'
             )
         )->add('Save', 'submit');
@@ -200,7 +176,7 @@ class ActivitiesController extends AbstractController
             $em->flush();
 
             return $this->redirect(
-                $this->generateUrl('activities_read', array('id' => $entity->getId())),
+                $this->generateUrl('activity_read', array('id' => $entity->getId())),
                 Codes::HTTP_CREATED
             );
         }
@@ -215,8 +191,8 @@ class ActivitiesController extends AbstractController
     /**
      * Deletes a Activity entity.
      *
-     * @Delete("/activities/{id}", name="activities_delete")
-     * @Get("/activities/{id}/destroy", name="activities_destroy")
+     * @Delete("/activities/{id}", name="activity_delete")
+     * @Get("/activities/{id}/destroy", name="activity_destroy")
      *
      * @View("NsmApiBundle:Activity:destroy.html.twig")
      * @ApiDoc()
@@ -228,7 +204,7 @@ class ActivitiesController extends AbstractController
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->setAction($this->generateUrl('activities_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('activity_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->getForm();
 
@@ -241,7 +217,7 @@ class ActivitiesController extends AbstractController
             $em->flush();
 
             if ($this->get('fos_rest.view_handler')->isFormatTemplating($request->getRequestFormat())) {
-                return $this->redirect($this->generateUrl('activities_browse', array()), Codes::HTTP_OK);
+                return $this->redirect($this->generateUrl('activity_browse', array()), Codes::HTTP_OK);
             }
         }
 
@@ -255,7 +231,7 @@ class ActivitiesController extends AbstractController
     /**
      * Finds and displays a Activity entity.
      *
-     * @Get("/activities/{id}", name="activities_read", requirements={"id" = "\d+"})
+     * @Get("/activities/{id}", name="activity_read", requirements={"id" = "\d+"})
      *
      * @View(templateVar="entity", serializerGroups={"activity_details"})
      * @ApiDoc(
@@ -272,7 +248,7 @@ class ActivitiesController extends AbstractController
     /**
      * Starts the Activity time.
      *
-     * @Get("/activities/{id}/start", name="activities_start")
+     * @Get("/activities/{id}/start", name="activity_start")
      *
      * @View("NsmApiBundle:Activity:read.html.twig", templateVar="entity", serializerGroups={"activity_details"})
      * @ApiDoc(
@@ -293,7 +269,7 @@ class ActivitiesController extends AbstractController
     /**
      * Stop the Activity time.
      *
-     * @Get("/activities/{id}/stop", name="activities_stop")
+     * @Get("/activities/{id}/stop", name="activity_stop")
      *
      * @View("NsmApiBundle:Activity:read.html.twig", templateVar="entity", serializerGroups={"activity_details"})
      * @ApiDoc(

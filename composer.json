@@ -17,7 +17,7 @@
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
-        "sensio/distribution-bundle": "~2.3",
+        "sensio/distribution-bundle": "3.0.*@dev",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
 
@@ -38,7 +38,8 @@
 
         "fp/jsformvalidator-bundle": "dev-master",
 
-        "knplabs/knp-markdown-bundle": "1.2.*@dev"
+        "knplabs/knp-markdown-bundle": "1.2.*@dev",
+        "hwi/oauth-bundle": "0.4.*@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

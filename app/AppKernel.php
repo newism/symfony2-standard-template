@@ -19,6 +19,7 @@ class AppKernel extends Kernel
 
             new Nsm\Bundle\ApiBundle\NsmApiBundle(),
             new Nsm\Bundle\FormBundle\NsmFormBundle(),
+            new Nsm\Bundle\UserBundle\NsmUserBundle(),
 
             // API
             new Nelmio\CorsBundle\NelmioCorsBundle(),
@@ -28,11 +29,10 @@ class AppKernel extends Kernel
             new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
 
-            new FOS\UserBundle\FOSUserBundle(),
-
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new Nsm\Bundle\PostmarkBundle\NsmPostmarkBundle(),
-            new Nsm\Bundle\UserBundle\NsmUserBundle(),
+
+            new FOS\UserBundle\FOSUserBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
