@@ -1,24 +1,20 @@
-{% block extends %}
 {{ "{% extends 'NsmApiBundle::layout.html.twig' %}" }}
-{% endblock extends %}
 
-{% block body %}
 {{ "{% set entities = pager.getCurrentPageResults %}" }}
 
 {{ "{% block body %}" }}
 
-    <h1>{{ entity }} list</h1>
+    <h1>{{ entity_english_name }} list</h1>
 
-    {{ "{% include '" ~ bundle ~ ":" ~ entity ~ ":_partials/collection.html.twig' with {" }}
+    {{ "{% include '" ~ bundle_name ~ ":" ~ entity_name ~ ":_partials/collection.html.twig' with {" }}
         "entities": entities
     {{ "} %}" }}
 
     <ul>
         <li>
-            <a href="{{ "{{ path('" ~ route_name_prefix ~ "_add') }}" }}">
+            <a href="{{ "{{ path('" ~ entity_service_name ~ "_add') }}" }}">
                 Create a new entry
             </a>
         </li>
     </ul>
 {{ "{% endblock %}" }}
-{% endblock %}

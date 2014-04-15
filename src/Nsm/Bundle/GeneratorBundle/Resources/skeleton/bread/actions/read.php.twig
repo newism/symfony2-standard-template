@@ -1,0 +1,14 @@
+    /**
+     * Finds and displays a {{ entity_english_name }} entity.
+     *
+     * @View(templateVar="entity", serializerGroups={"{{ entity_service_name }}_read"})
+     * @ApiDoc(
+     *  output="{{ entity_namespaced }}"
+     * )
+     */
+    public function readAction($id)
+    {
+        $entity = $this->findOr404('{{ entity_name }}', $id);
+
+        return $entity;
+    }

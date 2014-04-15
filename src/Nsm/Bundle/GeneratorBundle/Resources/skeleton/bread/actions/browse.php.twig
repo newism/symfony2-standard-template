@@ -1,0 +1,67 @@
+
+    /**
+     * Browse all {{ entity_english_name }} entities.
+     *
+     * @View(templateVar="entities", serializerGroups={"{{ entity_service_name }}_browse"})
+     *
+     * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
+     * @QueryParam(name="perPage", requirements="\d+", default="100", strict=true, description="{{ entity_english_name }} count limit")
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  filters={
+     *      {"name"="title", "dataType"="string"},
+     *      {"name"="project", "dataType"="integer"},
+     *      {"name"="page", "dataType"="integer"},
+     *      {"name"="perPage", "dataType"="integer"},
+     *      {"name"="orderBy", "dataType"="string", "pattern"="(title|createdAt) ASC|DESC"}
+     *  })
+     */
+    public function browseAction(Request $request, $page, $perPage)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var {{ entity_name }}Repository $repo */
+        $repo = $em->getRepository('{{ bundle_name }}:{{ entity_name }}');
+
+        /** @var Form ${{ entity_variable_name }}SearchForm */
+        ${{ entity_variable_name }}SearchForm = $this->createForm(
+            new {{ entity_name }}FilterType(),
+            array(
+//                'title' => 'foo',
+            ),
+            array(
+                'action' => $this->generateUrl('{{ entity_service_name }}_browse'),
+                'method' => 'GET'
+            )
+        );
+
+        ${{ entity_variable_name }}SearchForm->add('search', 'submit');
+
+        ${{ entity_variable_name }}SearchForm->handleRequest($request);
+        $criteria = $repo->sanatiseCriteria(${{ entity_variable_name }}SearchForm->getData());
+
+        $qb = $repo->filter($criteria);
+
+        $pager = $this->paginateQuery($qb, $perPage, $page);
+        $results = $pager->getCurrentPageResults();
+        $responseData = array();
+
+        if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
+            $responseData['pager'] = $pager;
+            $responseData['search_form'] = ${{ entity_variable_name }}SearchForm->createView();
+        } else {
+
+            $pagerfantaFactory = new PagerfantaFactory();
+            $paginatedCollection = $pagerfantaFactory->createRepresentation(
+                $pager,
+                new Route('{{ entity_service_name }}_browse', array())
+            );
+
+            $responseData = $paginatedCollection;
+        }
+
+        $view = $this->view($responseData);
+        $view->setTemplate($this->getTemplate($request->query->get('{{ entity_service_name }}_template', 'browse')));
+
+        return $view;
+    }
