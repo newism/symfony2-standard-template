@@ -1,6 +1,6 @@
-{{ namespace }}\Entity\{{ entity }}:
+{{ bundle_namespace }}\Entity\{{ entity_name }}:
     exclusion_policy: ALL
-    xml_root_name: {{ route_name_prefix }}
+    xml_root_name: {{ entity_service_name }}
     accessor_order: custom
     custom_accessor_order: ["id"]
 #    exclude: true
@@ -20,7 +20,7 @@
     properties:
         id:
             expose: true
-            groups: ["{{ route_name_prefix }}_browse", "{{ route_name_prefix }}_read"]
+            groups: ["{{ entity_service_name }}_browse", "{{ entity_service_name }}_read"]
 
 #        some-property:
 #            exclude: true

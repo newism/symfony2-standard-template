@@ -52,7 +52,7 @@ class ServicesManipulator extends Manipulator
         }
 
         $pattern = '/^imports:$/m';
-        $replacement = sprintf("imports:\n  - { resource: %s.yml }", $service);
+        $replacement = sprintf("imports:\n  - { resource: %s }", $service);
 
         $current = preg_replace($pattern, $replacement, $current, 1);
 

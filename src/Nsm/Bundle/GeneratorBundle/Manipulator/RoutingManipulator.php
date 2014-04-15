@@ -35,38 +35,29 @@ class RoutingManipulator extends Manipulator
     /**
      * Adds a routing resource at the top of the existing ones.
      *
-     * @param string $bundle
-     * @param string $format
-     * @param string $prefix
-     * @param string $path
+     * @param string $serviceName
+     * @param string $resource
      *
      * @return Boolean true if it worked, false otherwise
      *
      * @throws \RuntimeException If bundle is already imported
      */
-    public function addResource($bundle, $format, $prefix = '/', $path = 'routing')
+    public function addResource($serviceName, $resource)
     {
-        $code = sprintf("%s:\n", Container::underscore(substr($bundle, 0, -6)).('/' !== $prefix ? '_'.str_replace('/', '_', substr($prefix, 1)) : ''));
+        $code = $serviceName.":\n";
         $current = '';
         if (file_exists($this->file)) {
             $current = file_get_contents($this->file);
 
-            // TODO: PR for the original code
-            // Modified the below code, previously was checking $bundle name which never worked.
-            // Don't add same code twice
             if (false !== strpos($current, $code)) {
-                throw new \RuntimeException(sprintf('Bundle "%s" is already imported.', $bundle));
+                throw new \RuntimeException(sprintf('Service "%s" is already imported.', $serviceName));
             }
         } elseif (!is_dir($dir = dirname($this->file))) {
             mkdir($dir, 0777, true);
         }
 
-        if ('annotation' == $format) {
-            $code .= sprintf("    resource: \"@%s/Controller/\"\n    type:     annotation\n", $bundle);
-        } else {
-            $code .= sprintf("    resource: \"@%s/Resources/config/%s.%s\"\n", $bundle, $path, $format);
-        }
-        $code .= sprintf("    prefix:   %s\n", "/");
+        $code .= sprintf("    resource: \"%s\"\n", $resource);
+        $code .= "    prefix:   /\n";
         $code .= "\n";
         $code .= $current;
 

@@ -1,24 +1,16 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Nsm\Bundle\GeneratorBundle\Command;
 
+use Doctrine\Bundle\DoctrineBundle\Mapping\DisconnectedMetadataFactory;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\Output;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+
 use Nsm\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
 use Nsm\Bundle\GeneratorBundle\Manipulator\RoutingManipulator;
 use Nsm\Bundle\GeneratorBundle\Manipulator\ServicesManipulator;
@@ -26,17 +18,15 @@ use Nsm\Bundle\GeneratorBundle\Manipulator\ValidationsManipulator;
 
 
 /**
- * Generates a BREAD for a Doctrine entity.
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * Generates a BREAD for an Doctrine entity.
  */
-class GenerateDoctrineBreadCommand extends GenerateDoctrineCommand
+class GenerateDoctrineBreadCommand extends ContainerAwareCommand
 {
     protected $skeletonDirs;
-    protected $formGenerator;
     protected $filesystem;
+    protected $formGenerator;
 
-    protected $variables;
+    protected $templateVariables;
 
     protected $entity;
     /** @var ClassMetadata $bundle */
@@ -114,7 +104,7 @@ EOT
                 '',
             ));
 
-        $entity = $dialog->askAndValidate($output, $dialog->getQuestion('The Entity shortcut name', $input->getOption('entity')), array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateEntityName'), false, $input->getOption('entity'));
+        $entity = $dialog->askAndValidate($output, $dialog->getQuestion('The Entity shortcut name', $input->getOption('entity')), array('Nsm\Bundle\GeneratorBundle\Command\Validators', 'validateEntityName'), false, $input->getOption('entity'));
         $input->setOption('entity', $entity);
         list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
@@ -149,6 +139,342 @@ EOT
                 '',
             ));
     }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int|null
+     * @throws \RuntimeException
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $dialog = $this->getDialogHelper();
+
+        if ($input->isInteractive()) {
+            if (!$dialog->askConfirmation($output, $dialog->getQuestion('Do you confirm generation', 'yes', '?'), true)) {
+                $output->writeln('<error>Command aborted</error>');
+
+                return 1;
+            }
+        }
+
+        // BREAD Generation... Taken from the generator and merged in
+        $dialog->writeSection($output, 'BREAD generation');
+
+        $entity = Validators::validateEntityName($input->getOption('entity'));
+        list($bundle, $entity) = $this->parseShortcutNotation($entity);
+
+        $entityNamespaced = $this->getContainer()->get('doctrine')->getAliasNamespace($bundle).'\\'.$entity;
+
+        $this->bundle = $this->getContainer()->get('kernel')->getBundle($bundle);
+        $this->skeletonDirs = $this->getSkeletonDirs($this->bundle);
+        $this->metadata = $this->getEntityMetadata($entityNamespaced)[0];
+        $this->forceOverwrite = $input->getOption('overwrite');
+
+        $this->templateVariables = array(
+            'entity_name' => $entity,
+            'entity_namespaced' => $entityNamespaced,
+            'entity_variable_name' => lcfirst($entity),
+            'entity_service_name' => $this->transformToLowerCaseUnderScoredStyle($entity),
+            'entity_english_name' => $this->transformToEnglishStyle($entity),
+            'entity_url_name' => $input->getOption('entityUrlName') ? $input->getOption('entityUrlName') : $this->transformToUrlStyle($entity),
+            'bundle_name' => $bundle,
+            'bundle_service_name' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
+            'bundle_namespace' => $this->bundle->getNamespace(),
+            'actions' => array('browse', 'read', 'edit', 'add', 'delete'),
+            'fields' => $this->metadata->fieldMappings,
+        );
+
+        if (count($this->metadata->identifier) > 1) {
+            throw new \RuntimeException('The CRUD generator does not support entity classes with multiple primary keys.');
+        }
+
+        if (!in_array('id', $this->metadata->identifier)) {
+            throw new \RuntimeException('The CRUD generator expects the entity object has a primary key field named "id" with a getId() method.');
+        }
+
+        $output->write('Exporting Controller: ');
+        $this->renderFile(
+            'Controller/Controller.php.twig',
+            sprintf(
+                '%s/Controller/%sController.php',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Subscriber: ');
+        $this->renderFile(
+            'EventSubscriber/EventSubscriber.php.twig',
+            sprintf(
+                '%s/EventSubscriber/%sSubscriber.php',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Routing: ');
+        $this->renderFile(
+            'Resources/config/routing/Routing.yml.twig',
+            sprintf(
+                '%s/Resources/config/routing/%s.yml',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Service: ');
+        $this->renderFile(
+            'Resources/config/services/entities/Service.yml.twig',
+            sprintf(
+                '%s/Resources/config/services/entities/%s.yml',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Validation: ');
+        $this->renderFile(
+            'Resources/config/validations/Validation.yml.twig',
+            sprintf(
+                '%s/Resources/config/validations/%s.yml',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Serializer: ');
+        $this->renderFile(
+            'Resources/config/serializer/Serializer.yml.twig',
+            sprintf(
+                '%s/Resources/config/serializer/%s.yml',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Browse: ');
+        $this->renderFile(
+            'Resources/views/browse.html.twig.twig',
+            sprintf(
+                '%s/Resources/views/%s/browse.html.twig',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Read: ');
+        $this->renderFile(
+            'Resources/views/read.html.twig.twig',
+            sprintf(
+                '%s/Resources/views/%s/read.html.twig',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Add: ');
+        $this->renderFile(
+            'Resources/views/add.html.twig.twig',
+            sprintf(
+                '%s/Resources/views/%s/add.html.twig',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Edit: ');
+        $this->renderFile(
+            'Resources/views/edit.html.twig.twig',
+            sprintf(
+                '%s/Resources/views/%s/edit.html.twig',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting Destroy: ');
+        $this->renderFile(
+            'Resources/views/destroy.html.twig.twig',
+            sprintf(
+                '%s/Resources/views/%s/destroy.html.twig',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting collection: ');
+        $this->renderFile(
+            'Resources/views/_partials/collection.html.twig.twig',
+            sprintf(
+                '%s/Resources/views/%s/_partials/collection.html.twig',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting collectionItem: ');
+        $this->renderFile(
+            'Resources/views/_partials/collectionItem.html.twig.twig',
+            sprintf(
+                '%s/Resources/views/%s/_partials/collectionItem.html.twig',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting FormType: ');
+        $this->renderFile(
+            'Form/Type/FormType.php.twig',
+            sprintf(
+                '%s/Form/Type/%sType.php',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+        $output->write('Exporting FormFilterType: ');
+        $this->renderFile(
+            'Form/Type/FormFilterType.php.twig',
+            sprintf(
+                '%s/Form/Type/%sFilterType.php',
+                $this->bundle->getPath(),
+                $entity
+            )
+        );
+        $output->write("<info>Ok</info>\n");
+
+
+        // configurations
+        $this->getContainer()->get('filesystem')->mkdir($this->bundle->getPath().'/Resources/config/');
+        $this->updateRouting();
+        $this->updateServices();
+        $this->updateValidations();
+
+    }
+
+    /**************************
+     *
+     * Config Update Methods
+     *
+     **************************/
+
+    /**
+     * @return array
+     */
+    protected function updateRouting()
+    {
+        $routing = new RoutingManipulator($this->bundle->getPath().'/Resources/config/routing.yml');
+        try {
+            $ret = $routing->addResource(
+                $this->templateVariables['bundle_service_name']."_".$this->templateVariables['entity_service_name'],
+                $this->templateVariables['bundle_name']."/Resources/config/routing/".$this->templateVariables['entity_name'].".yml"
+            ) || false;
+        } catch (\RuntimeException $exc) {
+            $ret = false;
+        }
+
+        if (!$ret) {
+            return array(
+                '- ROUTING NOT UPDATED: Import the bundle\'s routing resource in the bundle routing file if it doesn\'t currently exist'
+            );
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function updateServices()
+    {
+        $services = new ServicesManipulator($this->bundle->getPath().'/Resources/config/services.yml');
+        try {
+            $ret = $services->addResource(
+                'services/entities/'.$this->templateVariables['entity_name'].".yml"
+            ) || false;
+        } catch (\RuntimeException $exc) {
+            $ret = false;
+        }
+
+        if (!$ret) {
+            return array(
+                '- SERVICES NOT UPDATED: Import the entities service resource in the bundle services file if it doesn\'t currently exist'
+            );
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function updateValidations()
+    {
+        $validations = new ValidationsManipulator($this->bundle->getPath().'/Resources/config/validations.yml');
+        try {
+            $ret = $validations->addResource(
+                'config/validations/'.$this->templateVariables['entity_name'].".yml"
+            ) || false;
+        } catch (\RuntimeException $exc) {
+            $ret = false;
+        }
+
+        if (!$ret) {
+            return array(
+                '- VALIDATIONS NOT UPDATED: Import the entities validation resource in the bundle validations file if it doesn\'t currently exist'
+            );
+        }
+    }
+
+
+    /**************************
+     *
+     * File Manipulation Methods
+     *
+     **************************/
+
+    protected function renderFile($template, $target)
+    {
+        if (!$this->forceOverwrite && file_exists($target)) {
+            throw new \RuntimeException(sprintf('Unable to generate %s as it already exists.', $target));
+        }
+
+        if (!is_dir(dirname($target))) {
+            mkdir(dirname($target), 0777, true);
+        }
+
+        return file_put_contents($target, $this->render($template, $this->templateVariables));
+    }
+
+    protected function render($template, $parameters)
+    {
+        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem($this->skeletonDirs), array(
+            'debug'            => true,
+            'cache'            => false,
+            'strict_variables' => true,
+            'autoescape'       => false,
+        ));
+
+        return $twig->render($template, $parameters);
+    }
+
+    /**************************
+     *
+     * Helper Methods
+     *
+     **************************/
 
     protected function transformToUrlStyle($text)
     {
@@ -186,661 +512,49 @@ EOT
         return $text;
     }
 
-    /**
-     * @see Command
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function parseShortcutNotation($shortcut)
     {
+        $entity = str_replace('/', '\\', $shortcut);
 
-        $dialog = $this->getDialogHelper();
-
-        if ($input->isInteractive()) {
-            if (!$dialog->askConfirmation($output, $dialog->getQuestion('Do you confirm generation', 'yes', '?'), true)) {
-                $output->writeln('<error>Command aborted</error>');
-
-                return 1;
-            }
+        if (false === $pos = strpos($entity, ':')) {
+            throw new \InvalidArgumentException(sprintf('The entity name must contain a : ("%s" given, expecting something like AcmeBlogBundle:Blog/Post)', $entity));
         }
 
-        // BREAD Generation... Taken from the generator and merged in
-        $dialog->writeSection($output, 'BREAD generation');
-
-        $entity = Validators::validateEntityName($input->getOption('entity'));
-        list($bundle, $entity) = $this->parseShortcutNotation($entity);
-
-        $entityNamespaced = $this->getContainer()->get('doctrine')->getAliasNamespace($bundle).'\\'.$entity;
-
-        $this->bundle = $this->getContainer()->get('kernel')->getBundle($bundle);
-        $this->skeletonDirs = $this->getSkeletonDirs($this->bundle);
-        $this->metadata = $this->getEntityMetadata($entityNamespaced)[0];
-        $this->forceOverwrite = $input->getOption('overwrite');
-
-        $this->variables = array(
-            'entity_name' => $entity,
-            'entity_namespaced' => $entityNamespaced,
-            'entity_variable_name' => lcfirst($entity),
-            'entity_service_name' => $this->transformToLowerCaseUnderScoredStyle($entity),
-            'entity_english_name' => $this->transformToEnglishStyle($entity),
-            'entity_url_name' => $input->getOption('entityUrlName') ? $input->getOption('entityUrlName') : $this->transformToUrlStyle($entity),
-            'bundle_name' => $bundle,
-            'bundle_service_name' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
-            'bundle_namespace' => $this->bundle->getNamespace(),
-            'actions' => array('browse', 'read', 'edit', 'add', 'delete'),
-            'fields' => $this->metadata->fieldMappings,
-        );
-
-        if (count($this->metadata->identifier) > 1) {
-            throw new \RuntimeException('The CRUD generator does not support entity classes with multiple primary keys.');
-        }
-
-        if (!in_array('id', $this->metadata->identifier)) {
-            throw new \RuntimeException('The CRUD generator expects the entity object has a primary key field named "id" with a getId() method.');
-        }
-
-        // Generate Controller
-        $this->renderFile(
-            'bread/controller.php.twig',
-            sprintf(
-                '%s/Controller/%sController.php',
-                $this->bundle->getPath(),
-                $this->variables['entity_name']
-            ),
-            $this->variables
-        );
-
-        // Generate Subscriber
-        $this->renderFile(
-            'bread/eventSubscriber.php.twig',
-            sprintf(
-                '%s/EventSubscriber/%sSubscriber.php',
-                $this->bundle->getPath(),
-                $this->variables['entity_name']
-            ),
-            $this->variables
-        );
-
-        $this->generateSubscriberClass();
-
-        $this->generateRouting();
-        $this->generateServices();
-        $this->generateValidations();
-        $this->generateSerializations();
-
-        // Check for view directories
-        $dir = sprintf('%s/Resources/views/%s', $this->bundle->getPath(), str_replace('\\', '/', $this->entity));
-        if (!file_exists($dir)) {
-            $this->filesystem->mkdir($dir, 0777);
-        }
-        if (!file_exists($dir."/_partials")) {
-            $this->filesystem->mkdir($dir, 0777);
-        }
-
-        $this->generateBrowseView($dir);
-        $this->generateReadView($dir);
-        $this->generateAddView($dir);
-        $this->generateEditView($dir);
-        $this->generateDeleteView($dir);
-        $this->generatePartialView($dir."/_partials");
-//        $this->generateTestClass();
-
-
-
-        $output->writeln('Generating the BREAD code: <info>OK</info>');
-
-        $errors = array();
-        $runner = $dialog->getRunner($output, $errors);
-
-        // form
-        if ($withWrite) {
-            $this->generateForm($bundle, $entity, $metadata);
-            $output->writeln('Generating the Form code: <info>OK</info>');
-        }
-
-        // configurations
-        $runner($this->updateRouting($dialog, $input, $output, $bundle, $format, $entity, $prefix));
-        $runner($this->updateServices($dialog, $input, $output, $bundle, $format, $entity, $prefix));
-        $runner($this->updateValidations($dialog, $input, $output, $bundle, $format, $entity, $prefix));
-
-        $dialog->writeGeneratorSummary($output, $errors);
+        return array(substr($entity, 0, $pos), substr($entity, $pos + 1));
     }
 
-    /**************************
-     *
-     * Config Generation Methods
-     *
-     **************************/
-
-    /**
-     * @param DialogHelper    $dialog
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param BundleInterface $bundle
-     * @param                 $format
-     * @param                 $entity
-     * @param                 $prefix
-     *
-     * @return array
-     */
-    protected function updateRouting(DialogHelper $dialog, InputInterface $input, OutputInterface $output, BundleInterface $bundle, $format, $entity, $prefix)
+    protected function getSkeletonDirs(BundleInterface $bundle = null)
     {
-        $auto = true;
-        if ($input->isInteractive()) {
-            $auto = $dialog->askConfirmation($output, $dialog->getQuestion('Confirm automatic update of the Routing', 'yes', '?'), true);
+        $skeletonDirs = array();
+
+        if (isset($bundle) && is_dir($dir = $bundle->getPath().'/Resources/SensioGeneratorBundle/skeleton')) {
+            $skeletonDirs[] = $dir;
         }
 
-        $output->write('Importing the BREAD routes: ');
-        $this->getContainer()->get('filesystem')->mkdir($bundle->getPath().'/Resources/config/');
-        $routing = new RoutingManipulator($bundle->getPath().'/Resources/config/routing.yml');
-        try {
-            $ret = $auto ? $routing->addResource($bundle->getName(), $format, '/'.$prefix, 'routing/'.str_replace('\\', '_', $entity)) : false;
-        } catch (\RuntimeException $exc) {
-            $ret = false;
+        if (is_dir($dir = $this->getContainer()->get('kernel')->getRootdir().'/Resources/SensioGeneratorBundle/skeleton')) {
+            $skeletonDirs[] = $dir;
         }
 
-        if (!$ret) {
-            $help = sprintf("        <comment>resource: \"@%s/Resources/config/routing/%s.%s\"</comment>\n", $bundle->getName(), str_replace('\\', '_', $entity), $format);
-            $help .= sprintf("        <comment>prefix:   /%s</comment>\n", "");
+        $skeletonDirs[] = __DIR__.'/../Resources/skeleton';
+        $skeletonDirs[] = __DIR__.'/../Resources';
 
-            return array(
-                '- Import the bundle\'s routing resource in the bundle routing file if it doesn\'t currently exist',
-                sprintf('  (%s).', $bundle->getPath().'/Resources/config/routing.yml'),
-                '',
-                sprintf('    <comment>%s:</comment>', $bundle->getName().('' !== $prefix ? '_'.str_replace('/', '_', $prefix) : '')),
-                $help,
-                '',
-            );
-        }
+        return $skeletonDirs;
     }
 
-    /**
-     * @param DialogHelper    $dialog
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param BundleInterface $bundle
-     * @param                 $format
-     * @param                 $entity
-     * @param                 $prefix
-     *
-     * @return array
-     */
-    protected function updateServices(DialogHelper $dialog, InputInterface $input, OutputInterface $output, BundleInterface $bundle, $format, $entity, $prefix)
+    protected function getDialogHelper()
     {
-        $auto = true;
-        if ($input->isInteractive()) {
-            $auto = $dialog->askConfirmation($output, $dialog->getQuestion('Confirm automatic update of Services', 'yes', '?'), true);
+        $dialog = $this->getHelperSet()->get('dialog');
+        if (!$dialog || get_class($dialog) !== 'Nsm\Bundle\GeneratorBundle\Command\Helper\DialogHelper') {
+            $this->getHelperSet()->set($dialog = new DialogHelper());
         }
 
-        $output->write('Importing the BREAD services: ');
-        $this->getContainer()->get('filesystem')->mkdir($bundle->getPath().'/Resources/config/');
-        $services = new ServicesManipulator($bundle->getPath().'/Resources/config/services.yml');
-        try {
-            $ret = $auto ? $services->addResource('services/entities/'.str_replace('\\', '_', $entity)) : false;
-        } catch (\RuntimeException $exc) {
-            $ret = false;
-        }
-
-        if (!$ret) {
-            $help = sprintf("  - { resource: %s.yml }\n", 'services/entities/'.str_replace('\\', '_', $entity));
-
-            return array(
-                '- Import the entities service resource in the bundle services file if it doesn\'t currently exist',
-                sprintf('  (%s).', $bundle->getPath().'/Resources/config/services.yml'),
-                '',
-                sprintf('<comment>%s</comment>', $help),
-                '',
-            );
-        }
+        return $dialog;
     }
 
-    /**
-     * @param DialogHelper    $dialog
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param BundleInterface $bundle
-     * @param                 $format
-     * @param                 $entity
-     * @param                 $prefix
-     *
-     * @return array
-     */
-    protected function updateValidations(DialogHelper $dialog, InputInterface $input, OutputInterface $output, BundleInterface $bundle, $format, $entity, $prefix)
+    protected function getEntityMetadata($entity)
     {
-        $auto = true;
-        if ($input->isInteractive()) {
-            $auto = $dialog->askConfirmation($output, $dialog->getQuestion('Confirm automatic update of Validations', 'yes', '?'), true);
-        }
+        $factory = new DisconnectedMetadataFactory($this->getContainer()->get('doctrine'));
 
-        $output->write('Importing the BREAD validations: ');
-        $this->getContainer()->get('filesystem')->mkdir($bundle->getPath().'/Resources/config/');
-        $validations = new ValidationsManipulator($bundle->getPath().'/Resources/config/validations.yml');
-        try {
-            $ret = $auto ? $validations->addResource('config/validations/'.str_replace('\\', '_', $entity)) : false;
-        } catch (\RuntimeException $exc) {
-            $ret = false;
-        }
-
-        if (!$ret) {
-            $help = "    - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/".str_replace('\\', '_', $entity).".yml'\n";
-
-            return array(
-                '- Import the entities validation resource in the bundle validations file if it doesn\'t currently exist',
-                sprintf('  (%s).', $bundle->getPath().'/Resources/config/validations.yml'),
-                '',
-                sprintf('<comment>%s</comment>', $help),
-                '',
-            );
-        }
-    }
-
-    /**************************
-     *
-     * Form Generation Methods
-     *
-     **************************/
-
-    /**
-     * Tries to generate forms if they don't exist yet and if we need write operations on entities.
-     */
-    protected function generateForm($bundle, $entity, $metadata)
-    {
-        try {
-            $this->getFormGenerator($bundle)->generate($bundle, $entity, $metadata[0]);
-        } catch (\RuntimeException $e ) {
-            // form already exists
-        }
-
-        try {
-            $this->getFormGenerator($bundle)->generateFilter($bundle, $entity, $metadata[0]);
-        } catch (\RuntimeException $e ) {
-            // filter already exists
-        }
-    }
-
-    protected function createGenerator($bundle = null)
-    {
-        return new DoctrineBreadGenerator($this->getContainer()->get('filesystem'));
-    }
-
-    protected function getFormGenerator($bundle = null)
-    {
-        if (null === $this->formGenerator) {
-            $this->formGenerator = new DoctrineFormGenerator($this->getContainer()->get('filesystem'));
-            $this->formGenerator->setSkeletonDirs($this->getSkeletonDirs($bundle));
-        }
-
-        return $this->formGenerator;
-    }
-
-    public function setFormGenerator(DoctrineFormGenerator $formGenerator)
-    {
-        $this->formGenerator = $formGenerator;
-    }
-
-
-
-
-
-
-
-
-
-    /**
-     * Generates the subscriber class only.
-     * @param $forceOverwrite
-     *
-     * @throws \RuntimeException
-     */
-    protected function generateSubscriberClass()
-    {
-        $dir = $this->bundle->getPath();
-
-        $parts = explode('\\', $this->entity);
-        $entityClass = array_pop($parts);
-        $entityNamespace = implode('\\', $parts);
-
-        $target = sprintf(
-            '%s/EventSubscriber/%s/%sSubscriber.php',
-            $dir,
-            str_replace('\\', '/', $entityNamespace),
-            $entityClass
-        );
-
-        if (!$this->forceOverwrite && file_exists($target)) {
-            throw new \RuntimeException('Unable to generate the subscriber as it already exists.');
-        }
-
-        $variables = array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'entity_class'      => $entityClass,
-            'namespace'         => $this->bundle->getNamespace(),
-            'entity_namespace'  => $entityNamespace,
-            'format'            => $this->format,
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/eventSubscriber.php.twig', $target, $variables);
-    }
-
-    /**
-     * Sets the configuration format.
-     *
-     * @param string $format The configuration format
-     */
-    private function setFormat($format)
-    {
-        switch ($format) {
-            case 'yml':
-            case 'xml':
-            case 'php':
-            case 'annotation':
-                $this->format = $format;
-                break;
-            default:
-                $this->format = 'yml';
-                break;
-        }
-    }
-
-    /**
-     * Generates the routing configuration.
-     *
-     */
-    protected function generateRouting()
-    {
-
-        $target = sprintf(
-            '%s/Resources/config/routing/%s.%s',
-            $this->bundle->getPath(),
-            strtolower(str_replace('\\', '_', $this->entity)),
-            $this->format
-        );
-
-        $variables = array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'variable_name'     => lcfirst($this->entity),
-            'bundle_config_namespace' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
-        );
-
-        $this->renderFile('crud/config/routing.'.$this->format.'.twig', $target, $variables);
-    }
-
-    /**
-     * Generates the service configuration.
-     *
-     */
-    protected function generateServices()
-    {
-        if (!in_array($this->format, array('yml', 'xml', 'php'))) {
-            return;
-        }
-
-        $target = sprintf(
-            '%s/Resources/config/services/entities/%s.%s',
-            $this->bundle->getPath(),
-            strtolower(str_replace('\\', '_', $this->entity)),
-            $this->format
-        );
-
-        $variables = array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'namespace'         => $this->bundle->getNamespace(),
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'variable_name'     => lcfirst($this->entity),
-            'bundle_config_namespace' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
-        );
-
-        $this->renderFile('crud/config/services.'.$this->format.'.twig', $target, $variables);
-    }
-
-    /**
-     * Generates the validations configuration.
-     *
-     */
-    protected function generateValidations()
-    {
-        if (!in_array($this->format, array('yml', 'xml', 'php'))) {
-            return;
-        }
-
-        $target = sprintf(
-            '%s/Resources/config/validations/%s.%s',
-            $this->bundle->getPath(),
-            strtolower(str_replace('\\', '_', $this->entity)),
-            $this->format
-        );
-
-        $variables = array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'namespace'         => $this->bundle->getNamespace(),
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'variable_name'     => lcfirst($this->entity),
-            'bundle_config_namespace' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
-        );
-
-        $this->renderFile('crud/config/validations.'.$this->format.'.twig', $target, $variables);
-    }
-
-    /**
-     * Generates the serialization configuration.
-     *
-     */
-    protected function generateSerializations()
-    {
-        if (!in_array($this->format, array('yml', 'xml', 'php'))) {
-            return;
-        }
-
-        $target = sprintf(
-            '%s/Resources/config/serializations/Entity.%s.%s',
-            $this->bundle->getPath(),
-            str_replace('\\', '_', $this->entity),
-            $this->format
-        );
-
-        $variables = array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'namespace'         => $this->bundle->getNamespace(),
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/config/serializations.'.$this->format.'.twig', $target, $variables);
-    }
-
-    /**
-     * Generates the functional test class only.
-     *
-     */
-    protected function generateTestClass()
-    {
-        $parts = explode('\\', $this->entity);
-        $entityClass = array_pop($parts);
-        $entityNamespace = implode('\\', $parts);
-
-        $dir    = $this->bundle->getPath() .'/Tests/Controller';
-        $target = $dir .'/'. str_replace('\\', '/', $entityNamespace).'/'. $entityClass .'ControllerTest.php';
-
-        $variables = array(
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'entity'            => $this->entity,
-            'bundle'            => $this->bundle->getName(),
-            'entity_class'      => $entityClass,
-            'namespace'         => $this->bundle->getNamespace(),
-            'entity_namespace'  => $entityNamespace,
-            'actions'           => $this->actions,
-            'form_type_name'    => strtolower(str_replace('\\', '_', $this->bundle->getNamespace()).($parts ? '_' : '').implode('_', $parts).'_'.$entityClass.'Type'),
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/tests/test.php.twig', $target, $variables);
-    }
-
-    /**
-     * Generates the browse.html.twig template in the final bundle.
-     *
-     * @param string $dir The path to the folder that hosts templates in the bundle
-     */
-    protected function generateBrowseView($dir)
-    {
-        $variables = array(
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'fields'            => $this->metadata->fieldMappings,
-            'actions'           => $this->actions,
-            'record_actions'    => $this->getRecordActions(),
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/views/browse.html.twig.twig', $dir.'/browse.html.twig', $variables);
-    }
-
-    /**
-     * Generates the show.html.twig template in the final bundle.
-     *
-     * @param string $dir The path to the folder that hosts templates in the bundle
-     */
-    protected function generateReadView($dir)
-    {
-        $variables = array(
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'fields'            => $this->metadata->fieldMappings,
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/views/read.html.twig.twig', $dir.'/read.html.twig', $variables);
-    }
-
-    /**
-     * Generates the add.html.twig template in the final bundle.
-     *
-     * @param string $dir The path to the folder that hosts templates in the bundle
-     */
-    protected function generateAddView($dir)
-    {
-        $variables = array(
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'actions'           => $this->actions,
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/views/add.html.twig.twig', $dir.'/add.html.twig', $variables);
-    }
-
-    /**
-     * Generates the edit.html.twig template in the final bundle.
-     *
-     * @param string $dir The path to the folder that hosts templates in the bundle
-     */
-    protected function generateEditView($dir)
-    {
-        $variables = array(
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'entity'            => $this->entity,
-            'bundle'            => $this->bundle->getName(),
-            'actions'           => $this->actions,
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/views/edit.html.twig.twig', $dir.'/edit.html.twig', $variables);
-    }
-
-    /**
-     * Generates the delete.html.twig template in the final bundle.
-     *
-     * @param string $dir The path to the folder that hosts templates in the bundle
-     */
-    protected function generateDeleteView($dir)
-    {
-        $variables = array(
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'entity'            => $this->entity,
-            'bundle'            => $this->bundle->getName(),
-            'actions'           => $this->actions,
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/views/delete.html.twig.twig', $dir.'/delete.html.twig', $variables);
-    }
-
-    /**
-     * Generates the _partial templates in the final bundle.
-     *
-     * @param string $dir The path to the folder that hosts templates in the bundle
-     */
-    protected function generatePartialView($dir)
-    {
-        $variables = array(
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'fields'            => $this->metadata->fieldMappings,
-            'actions'           => $this->actions,
-            'record_actions'    => $this->getRecordActions(),
-            'route_prefix'      => $this->routePrefix,
-            'route_name_prefix' => $this->routeNamePrefix,
-            'variable_name'     => lcfirst($this->entity),
-        );
-
-        $this->renderFile('crud/views/_partials/collection.html.twig.twig', $dir.'/collection.html.twig', $variables);
-        $this->renderFile('crud/views/_partials/collectionItem.html.twig.twig', $dir.'/collectionItem.html.twig', $variables);
-    }
-
-    /**************************
-     *
-     * File Manipulation Methods
-     *
-     **************************/
-
-    protected function renderFile($template, $target, $parameters)
-    {
-        if (!$this->forceOverwrite && file_exists($target)) {
-            throw new \RuntimeException(sprintf('Unable to generate %s as it already exists.', $target));
-        }
-
-        if (!is_dir(dirname($target))) {
-            mkdir(dirname($target), 0777, true);
-        }
-
-        return file_put_contents($target, $this->render($template, $parameters));
-    }
-
-    protected function render($template, $parameters)
-    {
-        $twig = new \Twig_Environment(new \Twig_Loader_Filesystem($this->skeletonDirs), array(
-            'debug'            => true,
-            'cache'            => false,
-            'strict_variables' => true,
-            'autoescape'       => false,
-        ));
-
-        return $twig->render($template, $parameters);
+        return $factory->getClassMetadata($entity)->getMetadata();
     }
 }

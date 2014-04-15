@@ -1,31 +1,23 @@
 <?php
 
-namespace {{ namespace }}\EventSubscriber{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+namespace {{ bundle_namespace }}\EventSubscriber;
 
-{% block use_statements %}
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Events;
-use {{ namespace }}\Entity\{{ entity }};
-use {{ namespace }}\Entity\{{ entity }}Manager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-{% endblock use_statements %}
+
+use {{ bundle_namespace }}\Entity\{{ entity_name }};
+use {{ bundle_namespace }}\Entity\{{ entity_name }}Manager;
 
 /**
-{% block phpdoc_class_header %}
- * {{ entity }} subscriber.
-{% endblock phpdoc_class_header %}
+ * {{ entity_english_name }} subscriber.
  *
-{% block phpdoc_class_annotations %}
-{% endblock phpdoc_class_annotations %}
  */
-{% block class_definition %}
-class {{ entity_class }}Subscriber implements EventSubscriber
-{% endblock class_definition %}
+class {{ entity_name }}Subscriber implements EventSubscriber
 {
-{% block class_body %}
     protected $container;
 
     /**
@@ -38,7 +30,6 @@ class {{ entity_class }}Subscriber implements EventSubscriber
         $this->container = $container;
     }
 
-
     /**
      * @return array
      */
@@ -46,5 +37,4 @@ class {{ entity_class }}Subscriber implements EventSubscriber
     {
         return array();
     }
-{% endblock class_body %}
 }

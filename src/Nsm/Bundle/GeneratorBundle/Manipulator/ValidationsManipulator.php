@@ -52,7 +52,7 @@ class ValidationsManipulator extends Manipulator
         }
 
         $pattern = '/^  validator.mapping.loader.yaml_files_loader.mapping_files:$/m';
-        $replacement = "  validator.mapping.loader.yaml_files_loader.mapping_files:\n    - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/".$validation.".yml'";
+        $replacement = "  validator.mapping.loader.yaml_files_loader.mapping_files:\n    - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/".$validation."'";
 
         $current = preg_replace($pattern, $replacement, $current, 1);
 
