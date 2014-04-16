@@ -7,25 +7,71 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * {{ entity_english_name }}
+ * {{ entity_english_name }} Form Type
  */
 class {{ entity_name }}Type extends AbstractType
 {
-{% if fields|length > 0 %}
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-        {#{%- for field in fields %}#}
 
-            {#->add('{{ field }}')#}
-        {#{%- endfor %}#}
-        ;
+{%- for field in meta_data.fieldMappings %}
+{# Double line carriage return here to put one line buffer between $builder calls #}
+
+
+        $builder->add(
+            '{{ field.fieldName }}',
+            '{{ field.type }}',
+            array(
+                'label' => '{{ field.fieldName }}',
+                'required' => {{ field.nullable is defined and field.nullable  ? "false" : "true" }},
+            )
+        );
+{%- endfor %}
+{%- for field in meta_data.associationMappings %}
+{% if field.type == 4 %}
+
+        // One To Many
+        $builder->add(
+            '{{ field.fieldName }}',
+            'collection',
+            array(
+                'label' => '{{ field.fieldName }}',
+                'type' => new {{ field.targetEntity|split('\\')|last }}Type,
+                'options' => array(
+                    'by_reference' => false,
+                    'error_bubbling' => false,
+                    'prototype' => true,
+                    'allow_add' => true,
+                    'allow_delete' => true
+                )
+            )
+        );
+{% elseif field.type == 2 %}
+
+        // Many To One
+        $builder->add(
+            '{{ field.fieldName }}',
+            'entity',
+            array(
+                'label' => '{{ field.fieldName }}',
+                'class' => '{{ bundle_name }}:{{ field.targetEntity|split('\\')|last }}',
+                'property' => 'id',
+                'query_builder' => function (\{{ bundle_namespace }}\Entity\{{ field.targetEntity|split('\\')|last }}Repository $repo) {
+                    $qb = $repo->createQueryBuilder('{{ field.targetEntity|split('\\')|last }}');
+
+                    return $qb;
+                }
+            )
+        );
+{%- endif %}
+
+{%- endfor %}
+
     }
-{% endif %}
 
     /**
      * @param OptionsResolverInterface $resolver
@@ -34,7 +80,9 @@ class {{ entity_name }}Type extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => '{{ bundle_namespace }}\Entity\{{ entity_name }}'
+                'data_class' => '{{ bundle_namespace }}\Entity\{{ entity_name }}',
+                'cascade_validation' => true,
+                'error_bubbling' => false,
             )
         );
     }

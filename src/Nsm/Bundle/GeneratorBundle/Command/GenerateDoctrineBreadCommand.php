@@ -26,10 +26,6 @@ class GenerateDoctrineBreadCommand extends ContainerAwareCommand
 
     protected $templateVariables;
 
-    /** @var ClassMetadata $bundle */
-    protected $bundle;
-    protected $metadata;
-
     protected $forceOverwrite;
 
 
@@ -158,35 +154,36 @@ EOT
         // BREAD Generation... Taken from the generator and merged in
         $dialog->writeSection($output, 'BREAD generation');
 
-        $entity = Validators::validateEntityName($input->getOption('entity'));
-        list($bundle, $entity) = $this->parseShortcutNotation($entity);
+        $entityName = Validators::validateEntityName($input->getOption('entity'));
+        list($bundleName, $entityName) = $this->parseShortcutNotation($entityName);
 
-        $entityNamespaced = $this->getContainer()->get('doctrine')->getAliasNamespace($bundle).'\\'.$entity;
+        $entityNamespaced = $this->getContainer()->get('doctrine')->getAliasNamespace($bundleName).'\\'.$entityName;
 
-        $this->bundle = $this->getContainer()->get('kernel')->getBundle($bundle);
-        $this->skeletonDirs = $this->getSkeletonDirs($this->bundle);
-        $this->metadata = $this->getEntityMetadata($entityNamespaced)[0];
+        /** @var BundleInterface $bundle */
+        $bundle = $this->getContainer()->get('kernel')->getBundle($bundleName);
+        $metadata = $this->getEntityMetadata($entityNamespaced)[0];
+        $this->skeletonDirs = $this->getSkeletonDirs($bundle);
         $this->forceOverwrite = $input->getOption('overwrite');
 
         $this->templateVariables = array(
-            'entity_name' => $entity,
+            'entity_name' => $entityName,
             'entity_namespaced' => $entityNamespaced,
-            'entity_variable_name' => lcfirst($entity),
-            'entity_service_name' => $this->transformToLowerCaseUnderScoredStyle($entity),
-            'entity_english_name' => $this->transformToEnglishStyle($entity),
-            'entity_url_name' => $input->getOption('entityUrlName') ? $input->getOption('entityUrlName') : $this->transformToUrlStyle($entity),
-            'bundle_name' => $bundle,
-            'bundle_service_name' => Container::underscore(substr($this->bundle->getName(), 0, -6)),
-            'bundle_namespace' => $this->bundle->getNamespace(),
+            'entity_variable_name' => lcfirst($entityName),
+            'entity_service_name' => $this->transformToLowerCaseUnderScoredStyle($entityName),
+            'entity_english_name' => $this->transformToEnglishStyle($entityName),
+            'entity_url_name' => $input->getOption('entityUrlName') ? $input->getOption('entityUrlName') : $this->transformToUrlStyle($entityName),
+            'bundle_name' => $bundleName,
+            'bundle_service_name' => Container::underscore(substr($bundleName, 0, -6)),
+            'bundle_namespace' => $bundle->getNamespace(),
             'actions' => array('browse', 'read', 'edit', 'add', 'delete'),
-            'fields' => $this->metadata->fieldMappings,
+            'meta_data' => $metadata,
         );
 
-        if (count($this->metadata->identifier) > 1) {
+        if (count($metadata->identifier) > 1) {
             throw new \RuntimeException('The BREAD generator does not support entity classes with multiple primary keys.');
         }
 
-        if (!in_array('id', $this->metadata->identifier)) {
+        if (!in_array('id', $metadata->identifier)) {
             throw new \RuntimeException('The BREAD generator expects the entity object has a primary key field named "id" with a getId() method.');
         }
 
@@ -195,8 +192,8 @@ EOT
             'Entity/EntityManager.php.twig',
             sprintf(
                 '%s/Entity/%sManager.php',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Manager',
             $input,
@@ -207,8 +204,8 @@ EOT
             'Entity/EntityQueryBuilder.php.twig',
             sprintf(
                 '%s/Entity/%sQueryBuilder.php',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Query Builder',
             $input,
@@ -219,8 +216,8 @@ EOT
             'Entity/EntityRepository.php.twig',
             sprintf(
                 '%s/Entity/%sRepository.php',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Repository',
             $input,
@@ -231,8 +228,8 @@ EOT
             'Controller/Controller.php.twig',
             sprintf(
                 '%s/Controller/%sController.php',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Controller',
             $input,
@@ -243,8 +240,8 @@ EOT
             'EventSubscriber/EventSubscriber.php.twig',
             sprintf(
                 '%s/EventSubscriber/%sSubscriber.php',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Event Subscriber',
             $input,
@@ -255,8 +252,8 @@ EOT
             'Resources/config/routing/Routing.yml.twig',
             sprintf(
                 '%s/Resources/config/routing/%s.yml',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Routings',
             $input,
@@ -267,8 +264,8 @@ EOT
             'Resources/config/services/entities/Service.yml.twig',
             sprintf(
                 '%s/Resources/config/services/entities/%s.yml',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Services',
             $input,
@@ -279,8 +276,8 @@ EOT
             'Resources/config/validations/Validation.yml.twig',
             sprintf(
                 '%s/Resources/config/validations/%s.yml',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Validations',
             $input,
@@ -291,8 +288,8 @@ EOT
             'Resources/config/serializer/Serializer.yml.twig',
             sprintf(
                 '%s/Resources/config/serializer/Entity.%s.yml',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Serializer',
             $input,
@@ -303,8 +300,8 @@ EOT
             'Resources/views/browse.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/browse.html.twig',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Browse Template',
             $input,
@@ -315,8 +312,8 @@ EOT
             'Resources/views/read.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/read.html.twig',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Read Template',
             $input,
@@ -327,8 +324,8 @@ EOT
             'Resources/views/add.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/add.html.twig',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Add Template',
             $input,
@@ -339,8 +336,8 @@ EOT
             'Resources/views/edit.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/edit.html.twig',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Edit Template',
             $input,
@@ -351,8 +348,8 @@ EOT
             'Resources/views/destroy.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/destroy.html.twig',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Destroy Template',
             $input,
@@ -363,8 +360,8 @@ EOT
             'Resources/views/_partials/collection.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/_partials/collection.html.twig',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Collection Template',
             $input,
@@ -375,8 +372,8 @@ EOT
             'Resources/views/_partials/collectionItem.html.twig.twig',
             sprintf(
                 '%s/Resources/views/%s/_partials/collectionItem.html.twig',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Collection Item Template',
             $input,
@@ -387,8 +384,8 @@ EOT
             'Form/Type/FormType.php.twig',
             sprintf(
                 '%s/Form/Type/%sType.php',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Form Type',
             $input,
@@ -399,16 +396,28 @@ EOT
             'Form/Type/FormFilterType.php.twig',
             sprintf(
                 '%s/Form/Type/%sFilterType.php',
-                $this->bundle->getPath(),
-                $entity
+                $bundle->getPath(),
+                $entityName
             ),
             'Form Filter Type',
             $input,
             $output
         );
 
+        $this->renderFile(
+            'Tests/Test.php.twig',
+            sprintf(
+                '%s/Tests/%sTest.php',
+                $bundle->getPath(),
+                $entityName
+            ),
+            'Full Functional Test',
+            $input,
+            $output
+        );
+
         // update configurations
-        $this->getContainer()->get('filesystem')->mkdir($this->bundle->getPath().'/Resources/config/');
+        $this->getContainer()->get('filesystem')->mkdir($bundle->getPath().'/Resources/config/');
 
         if (
             $input->isInteractive() && $dialog->askConfirmation($output, $dialog->getQuestion('Confirm update of routing', 'yes', '?'), true)
@@ -416,7 +425,7 @@ EOT
             !$input->isInteractive()
         ) {
             $output->write('Updating Routing File: ');
-            $routing = new RoutingManipulator($this->bundle->getPath().'/Resources/config/routing.yml');
+            $routing = new RoutingManipulator($bundle->getPath().'/Resources/config/routing.yml');
             try {
                 $ret = $routing->addResource(
                     $this->templateVariables['bundle_service_name']."_".$this->templateVariables['entity_service_name'],
@@ -437,7 +446,7 @@ EOT
             !$input->isInteractive()
         ) {
             $output->write('Updating Service File: ');
-            $services = new ServicesManipulator($this->bundle->getPath().'/Resources/config/services.yml');
+            $services = new ServicesManipulator($bundle->getPath().'/Resources/config/services.yml');
             try {
                 $ret = $services->addResource(
                     'services/entities/'.$this->templateVariables['entity_name'].".yml"
@@ -456,7 +465,7 @@ EOT
             !$input->isInteractive()
         ) {
             $output->write('Updating Validation File: ');
-            $validations = new ValidationsManipulator($this->bundle->getPath().'/Resources/config/validations.yml');
+            $validations = new ValidationsManipulator($bundle->getPath().'/Resources/config/validations.yml');
             try {
                 $ret = $validations->addResource(
                     'config/validations/'.$this->templateVariables['entity_name'].".yml"
