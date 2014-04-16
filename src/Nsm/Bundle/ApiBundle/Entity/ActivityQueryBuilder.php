@@ -2,12 +2,10 @@
 
 namespace Nsm\Bundle\ApiBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
+use Nsm\Bundle\CoreBundle\Entity\AbstractQueryBuilder;
 
 class ActivityQueryBuilder extends AbstractQueryBuilder
 {
-    
+
 
 }

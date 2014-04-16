@@ -4,6 +4,7 @@ namespace Nsm\Bundle\ApiBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
+use Nsm\Bundle\CoreBundle\Entity\AbstractRepository;
 
 /**
  * ActivityRepository
@@ -13,20 +14,4 @@ use Doctrine\ORM\EntityRepository;
  */
 class ActivityRepository extends AbstractRepository
 {
-    /**
-     * @param array $criteria
-     * @param bool $removeEmpty
-     * @return $this
-     */
-    public function sanatiseCriteria(array $criteria, $removeEmpty = true)
-    {
-//        if(true === isset($criteria['dateRange'])) {
-//            $dateRange = $criteria['dateRange'];
-//            $criteria['dateRange'] = array(
-//                "startedAt" => $dateRange->getStart(),
-//                "endedAt" => $dateRange->getEnd()
-//            );
-//        }
-        return parent::sanatiseCriteria($criteria);
-    }
 }

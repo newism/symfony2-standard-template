@@ -10,16 +10,12 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Util\Codes;
 use Hateoas\Configuration\Route;
-use Hateoas\Representation\CollectionRepresentation;
-use Hateoas\Representation\Factory\PagerfantaFactory;
-use Hateoas\Representation\PaginatedRepresentation;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Nsm\Bundle\ApiBundle\Entity\Project;
 use Nsm\Bundle\ApiBundle\Entity\ProjectRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\ProjectFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\ProjectType;
-use Nsm\Paginator\HateosPaginatorFactory;
-use Nsm\Paginator\Paginator;
+use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -63,7 +59,8 @@ class ProjectsController extends AbstractController
         $projectSearchForm->handleRequest($request);
         $criteria = $repo->sanatiseCriteria($projectSearchForm->getData());
 
-        $qb = $repo->filter($criteria);
+        $qb = $repo->createQueryBuilder();
+        $qb->filterByCriteria($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
         $results = $pager->getCurrentPageResults();
@@ -201,7 +198,7 @@ class ProjectsController extends AbstractController
 
         $responseData = array(
             'entity' => $entity,
-            'form'   => $form,
+            'form' => $form,
         );
 
         $view = $this->view($responseData);

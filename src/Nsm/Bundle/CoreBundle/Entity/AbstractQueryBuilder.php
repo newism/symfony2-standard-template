@@ -1,35 +1,27 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\Entity;
+namespace Nsm\Bundle\CoreBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Nsm\Bundle\ApiBundle\Form\Model\DateRange;
 
-class AbstractQueryBuilder extends QueryBuilder
+class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
 {
     /**
      * @var AbstractRepository $repo
      */
-    protected $repo;
+    protected $repository;
 
     /**
-     * @var string $entityAlias
-     */
-    protected $entityAlias;
-
-    /**
-     * @param EntityManager $em
+     * @param EntityManager      $em
      * @param AbstractRepository $repository
-     * @param null $alias
      */
-    public function __construct(EntityManager $em, AbstractRepository $repository, $alias = null)
+    public function __construct(EntityManager $em, AbstractRepository $repository)
     {
         parent::__construct($em);
 
-        $this->repository  = $repository;
-        $this->entityAlias = (null !== $alias) ? $alias : $this->getEntityAlias();
+        $this->repository = $repository;
     }
 
     /**
@@ -41,42 +33,8 @@ class AbstractQueryBuilder extends QueryBuilder
     }
 
     /**
-     * Get related entity class name
-     *
-     * @return string
-     */
-    protected function getEntityClassName()
-    {
-        return $this->getRepository()->getClassName();
-    }
-
-    /**
-     * Get related entity alias used in query
-     * Will be used entity class name without namespace
-     *
-     * @return string
-     */
-    public function getEntityAlias()
-    {
-        $className = explode('\\', $this->getEntityClassName());
-
-        return end($className);
-    }
-
-    /**
-     * Select the
-     * @return $this
-     */
-    public function selectRootEntity()
-    {
-        $this->select($this->getEntityAlias());
-        $this->from($this->getEntityClassName(), $this->getEntityAlias());
-
-        return $this;
-    }
-
-    /**
      * @param array $criteria
+     *
      * @return $this
      */
     public function filterByCriteria(array $criteria)
@@ -92,6 +50,7 @@ class AbstractQueryBuilder extends QueryBuilder
 
     /**
      * @param $id
+     *
      * @return $this
      */
     public function filterById($id)
@@ -102,10 +61,11 @@ class AbstractQueryBuilder extends QueryBuilder
     }
 
     /**
-     * @param $columnName
-     * @param $value
-     * @param bool $inclusive
+     * @param        $columnName
+     * @param        $value
+     * @param bool   $inclusive
      * @param string $method
+     *
      * @return $this
      */
     public function addWhere($columnName, $value, $inclusive = true, $method = "andWhere")
@@ -138,23 +98,23 @@ class AbstractQueryBuilder extends QueryBuilder
                 }
 
                 $clause = $this->expr()->andX($startExpr, $endExpr);
-                
+
                 break;
 
             case(true === is_array($value) || $value instanceof \Iterator) :
                 $comparison = (true == $inclusive) ? "in" : "notIn";
                 // Todo: $value may be an array of entitues.
                 // array_unique returns the string value which is probably not an integer
-                $clause     = $this->expr()->$comparison($columnName, array_unique($value, SORT_REGULAR));
+                $clause = $this->expr()->$comparison($columnName, array_unique($value, SORT_REGULAR));
                 break;
-            
+
             case ($value === 'isNull' || $value === 'isNotNull') :
                 $clause = $this->expr()->$value($columnName);
                 break;
 
             default:
                 $comparison = (true == $inclusive) ? "=" : "<>";
-                $clause     = sprintf('%s %s %s', $columnName, $comparison, "?" . $parameterCount);
+                $clause = sprintf('%s %s %s', $columnName, $comparison, "?" . $parameterCount);
                 $this->setParameter($parameterCount, $value);
         }
 
@@ -166,6 +126,7 @@ class AbstractQueryBuilder extends QueryBuilder
     /**
      * @param $method
      * @param $arguments
+     *
      * @return $this
      */
     public function __call($method, $arguments)

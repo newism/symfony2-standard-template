@@ -3,6 +3,7 @@
 namespace Nsm\Bundle\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\Get;
+use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -18,7 +19,7 @@ class DashboardController extends AbstractController
     public function browseAction(Request $request)
     {
         $responseData = array();
-        $view         = $this->view($responseData);
+        $view = $this->view($responseData);
         $view->setTemplate($this->getTemplate($request->query->get('_template', 'browse')));
 
         return $view;

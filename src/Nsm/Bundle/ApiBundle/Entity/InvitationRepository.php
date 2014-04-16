@@ -2,8 +2,7 @@
 
 namespace Nsm\Bundle\ApiBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityRepository;
+use Nsm\Bundle\CoreBundle\Entity\AbstractRepository;
 
 /**
  * InvitationRepository

@@ -17,7 +17,12 @@
     </div>
     {{ form_end(search_form) }}
 
-    <table>
+    <table data-widget="dataTable" data-data-table-options="{{ {
+        'serverSide': true,
+        'ajax': path('project_browse'),
+        '_paging': false,
+        '_searching': false
+    }|json_encode(constant('JSON_HEX_QUOT')) }}">
         <caption>
             Showing {{ pager.currentPageFirstResultOffset }} - {{ pager.currentPageLastResultOffset }} of {{ pager.totalResultCount }} results
         </caption>

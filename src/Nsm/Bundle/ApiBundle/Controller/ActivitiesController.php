@@ -10,14 +10,12 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Util\Codes;
 use Hateoas\Configuration\Route;
-use Hateoas\Representation\Factory\PagerfantaFactory;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Nsm\Bundle\ApiBundle\Entity\Activity;
 use Nsm\Bundle\ApiBundle\Entity\ActivityRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\ActivityFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\ActivityType;
-use Nsm\Bundle\FormBundle\Form\Model\DateRange;
-use Nsm\Paginator\HateosPaginatorFactory;
+use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -63,7 +61,8 @@ class ActivitiesController extends AbstractController
         $activitySearchForm->handleRequest($request);
         $criteria = $repo->sanatiseCriteria($activitySearchForm->getData());
 
-        $qb = $repo->filter($criteria);
+        $qb = $repo->createQueryBuilder();
+        $qb->filterByCriteria($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
         $results = $pager->getCurrentPageResults();

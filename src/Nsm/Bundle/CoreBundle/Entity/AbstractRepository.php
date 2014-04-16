@@ -1,9 +1,11 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\Entity;
+namespace Nsm\Bundle\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
+use Nsm\Bundle\CoreBundle\Entity\QueryBuilderInterface;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * AbstractRepository
@@ -13,27 +15,46 @@ use Doctrine\ORM\EntityRepository;
  */
 class AbstractRepository extends EntityRepository implements RepositoryInterface
 {
-    /**
-     * @param $criteria
-     * @param null $alias
-     * @return ProjectQueryBuilder
-     */
-    public function filter($criteria = null, $alias = null)
-    {
-        $qb = new ProjectQueryBuilder($this->getEntityManager(), $this, $alias = null);
-        $qb->selectRootEntity();
 
-        if(null !== $criteria) {
-            $qb->filterByCriteria($criteria);
+    /**
+     * @param $className
+     *
+     * @return mixed
+     */
+    private function getEntityAlias($className)
+    {
+        $className = explode('\\', $className);
+
+        return end($className);
+    }
+
+    /**
+     * @param null $alias
+     * @param null $indexBy
+     *
+     * @return AbstractQueryBuilder
+     */
+    public function createQueryBuilder($alias = null, $indexBy = null)
+    {
+        if(null === $alias) {
+            $alias = $this->getEntityAlias($this->getClassName());
         }
+
+        $class = str_replace("Repository", "QueryBuilder", get_called_class());
+
+        /** @var AbstractQueryBuilder $qb */
+        $qb = new $class($this->getEntityManager(), $this);
+        $qb->select($alias)
+            ->from($this->_entityName, $alias, $indexBy);
 
         return $qb;
     }
 
     /**
      * @param array $criteria
-     * @param bool $removeEmpty
-     * @return $this
+     * @param bool  $removeEmpty
+     *
+     * @return array
      */
     public function sanatiseCriteria(array $criteria, $removeEmpty = true)
     {

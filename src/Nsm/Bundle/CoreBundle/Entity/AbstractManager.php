@@ -1,6 +1,6 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\Entity;
+namespace Nsm\Bundle\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 
@@ -110,7 +110,7 @@ abstract class AbstractManager implements ManagerInterface
     }
 
     /**
-     * @return \Nsm\Bundle\ApiBundle\Entity\RepositoryInterface
+     * @return \Nsm\Bundle\CoreBundle\Entity\RepositoryInterface
      */
     public function getRepository()
     {

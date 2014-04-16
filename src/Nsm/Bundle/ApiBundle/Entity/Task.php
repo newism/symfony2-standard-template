@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Nsm\Bundle\CoreBundle\Entity\AbstractEntity;
 
 class Task extends AbstractEntity
 {

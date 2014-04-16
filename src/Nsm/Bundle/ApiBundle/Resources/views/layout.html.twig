@@ -119,8 +119,9 @@
 
 {% block javascripts %}{% endblock %}
 
-<script src="/bundles/nsmform/bower_components/jquery/jquery.js"></script>
-<script src="/bundles/nsmform/bower_components/selectize/dist/js/standalone/selectize.js"></script>
+<script src="/bundles/nsmapi/bower_components/jquery/jquery.js"></script>
+    <script src="/bundles/nsmapi/bower_components/selectize/dist/js/standalone/selectize.js"></script>
+    <script src="/bundles/nsmapi/bower_components/DataTables/media/js/jquery.dataTables.js"></script>
 
 <script>
     $('[data-widget=entitySearch]').each(function(){
@@ -135,6 +136,14 @@
 
         $(this).selectize(options.selectizeOptions);
     });
+    $('[data-widget=dataTable]').each(function(){
+        var $this = $(this),
+            options = $this.data('dataTableOptions') || {}
+            ;
+        console.log(options);
+        $(this).DataTable(options);
+    });
+
 </script>
 
 </body>

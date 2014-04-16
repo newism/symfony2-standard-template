@@ -1,6 +1,6 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\Entity;
+namespace Nsm\Bundle\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 

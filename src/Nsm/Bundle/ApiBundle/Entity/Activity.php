@@ -8,6 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Nsm\Bundle\FormBundle\Form\Model\DateRange;
 use Symfony\Component\Validator\Constraints as Assert;
+use Nsm\Bundle\CoreBundle\Entity\AbstractEntity;
 
 
 class Activity extends AbstractEntity

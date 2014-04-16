@@ -2,6 +2,8 @@
 
 namespace Nsm\Bundle\ApiBundle\Entity;
 
-class TaskManager extends AbstractManager implements ManagerInterface
+use Nsm\Bundle\CoreBundle\Entity\AbstractManager;
+
+class TaskManager extends AbstractManager
 {
 }

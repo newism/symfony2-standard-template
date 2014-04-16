@@ -10,15 +10,12 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Util\Codes;
 use Hateoas\Configuration\Route;
-use Hateoas\Representation\CollectionRepresentation;
-use Hateoas\Representation\Factory\PagerfantaFactory;
-use Hateoas\Representation\PaginatedRepresentation;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Nsm\Bundle\ApiBundle\Entity\Task;
 use Nsm\Bundle\ApiBundle\Entity\TaskRepository;
 use Nsm\Bundle\ApiBundle\Form\Type\TaskFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\TaskType;
-use Nsm\Paginator\HateosPaginatorFactory;
+use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -64,7 +61,8 @@ class TasksController extends AbstractController
         $taskSearchForm->handleRequest($request);
         $criteria = $repo->sanatiseCriteria($taskSearchForm->getData());
 
-        $qb = $repo->filter($criteria);
+        $qb = $repo->createQueryBuilder();
+        $qb->filterByCriteria($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
         $results = $pager->getCurrentPageResults();
@@ -157,55 +155,55 @@ class TasksController extends AbstractController
     }
 
 
-/**
- * Creates a add Task entity.
- *
- * @Post("/tasks", name="task_post")
- * @Get("/tasks/add", name="task_add")
- *
- * @QueryParam(name="projectId", requirements="\d+", strict=true, nullable=true, description="The tasks project")
- *
- * @View()
- * @ApiDoc(
- *  input="Nsm\Bundle\ApiBundle\Form\Type\TaskType",
- *  output="Nsm\Bundle\ApiBundle\Entity\Task"
- * )
- */
-public function addAction(Request $request, $projectId)
-{
-    $entity = new Task();
+    /**
+     * Creates a add Task entity.
+     *
+     * @Post("/tasks", name="task_post")
+     * @Get("/tasks/add", name="task_add")
+     *
+     * @QueryParam(name="projectId", requirements="\d+", strict=true, nullable=true, description="The tasks project")
+     *
+     * @View()
+     * @ApiDoc(
+     *  input="Nsm\Bundle\ApiBundle\Form\Type\TaskType",
+     *  output="Nsm\Bundle\ApiBundle\Entity\Task"
+     * )
+     */
+    public function addAction(Request $request, $projectId)
+    {
+        $entity = new Task();
 
-    $project = $this->find('Project', $projectId);
-    $entity->setProject($project);
+        $project = $this->find('Project', $projectId);
+        $entity->setProject($project);
 
-    /** @var Form $form */
-    $form = $this->createForm(
-        new TaskType(),
-        $entity,
-        array(
-            'action' => $this->generateUrl('task_post'),
-            'method' => 'POST'
-        )
-    )->add('Save', 'submit');
+        /** @var Form $form */
+        $form = $this->createForm(
+            new TaskType(),
+            $entity,
+            array(
+                'action' => $this->generateUrl('task_post'),
+                'method' => 'POST'
+            )
+        )->add('Save', 'submit');
 
-    $form->handleRequest($request);
+        $form->handleRequest($request);
 
-    if ($form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($entity);
-        $em->flush();
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
 
-        return $this->redirect(
-            $this->generateUrl('task_read', array('id' => $entity->getId())),
-            Codes::HTTP_CREATED
+            return $this->redirect(
+                $this->generateUrl('task_read', array('id' => $entity->getId())),
+                Codes::HTTP_CREATED
+            );
+        }
+
+        return array(
+            'entity' => $entity,
+            'form' => $form,
         );
     }
-
-    return array(
-        'entity' => $entity,
-        'form' => $form,
-    );
-}
 
     /**
      * Deletes a Task entity.

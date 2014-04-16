@@ -2,6 +2,8 @@
 
 namespace Nsm\Bundle\ApiBundle\Entity;
 
-class InvitationManager extends AbstractManager implements ManagerInterface
+use Nsm\Bundle\CoreBundle\Entity\AbstractManager;
+
+class InvitationManager extends AbstractManager
 {
 }

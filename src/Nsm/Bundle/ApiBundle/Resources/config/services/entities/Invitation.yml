@@ -39,4 +39,4 @@ services:
         arguments:
             - @nsm_api.form.data_transformer.invitaton_to_code_transformer
         tags:
-            - {name: "form.type", alias: "nsm_api_invitation_code_type"}
+            - {name: "form.type", alias: "invitation_code"}

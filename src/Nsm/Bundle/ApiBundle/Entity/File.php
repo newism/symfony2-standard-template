@@ -9,7 +9,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Nsm\Bundle\ApiBundle\Form\Model\DateRange;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Nsm\Bundle\CoreBundle\Entity\AbstractEntity;
 /**
  * Activity
  *

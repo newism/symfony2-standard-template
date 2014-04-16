@@ -1,6 +1,6 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\Entity;
+namespace Nsm\Bundle\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
@@ -10,14 +10,6 @@ use Doctrine\ORM\EntityRepository;
  */
 interface RepositoryInterface
 {
-    /**
-     * @param null $criteria
-     * @param null $alias
-     *
-     * @return mixed
-     */
-    public function filter($criteria = null, $alias = null);
-
     /**
      * @param array $criteria
      * @param bool  $removeEmpty

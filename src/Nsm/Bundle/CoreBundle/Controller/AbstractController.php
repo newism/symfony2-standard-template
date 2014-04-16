@@ -1,17 +1,13 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\Controller;
+namespace Nsm\Bundle\CoreBundle\Controller;
 
 use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\FOSRestController;
+use Nsm\Bundle\CoreBundle\Entity\AbstractManager;
 use Nsm\Paginator\HateosPaginatorFactory;
 use Nsm\Paginator\Paginator;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Nsm\Bundle\ApiBundle\Entity\AbstractManager;
 
 /**
  * Abstract controller.
@@ -41,10 +37,11 @@ class AbstractController extends FOSRestController
 
     /**
      * Get the entity manager for the controller
-     * 
+     *
      * @return AbstractManager
      */
-    public function getEntityManager(){
+    public function getEntityManager()
+    {
 
         if (null === $this->entityManager) {
             $entityDiscriminator = $this->getEntityDiscriminator();
@@ -68,7 +65,7 @@ class AbstractController extends FOSRestController
             return null;
         }
 
-        $em     = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('NsmApiBundle:' . $entityDisriminator)->find($id);
 
         return $entity;
@@ -118,7 +115,7 @@ class AbstractController extends FOSRestController
         return $paginator;
     }
 
-    
+
     /**
      * @param $template
      *
@@ -154,7 +151,7 @@ class AbstractController extends FOSRestController
      */
     public function createPaginatedCollection($pager, $route)
     {
-        $pagerFactory   = new HateosPaginatorFactory();
+        $pagerFactory = new HateosPaginatorFactory();
         $paginatedCollection = $pagerFactory->createRepresentation(
             $pager,
             $route

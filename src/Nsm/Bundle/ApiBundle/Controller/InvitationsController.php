@@ -2,10 +2,10 @@
 
 namespace Nsm\Bundle\ApiBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\Post;
-use FOS\RestBundle\Controller\Annotations\Patch;
 use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Patch;
+use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use Hateoas\Configuration\Route;
@@ -16,9 +16,10 @@ use Nsm\Bundle\ApiBundle\Form\DataTransformer\InvitationToCodeTransformer;
 use Nsm\Bundle\ApiBundle\Form\Type\InvitationClaimType;
 use Nsm\Bundle\ApiBundle\Form\Type\InvitationFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\InvitationType;
+use Nsm\Bundle\CoreBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Form\Form;
 
 /**
  * Invitation controller.
@@ -61,7 +62,8 @@ class InvitationsController extends AbstractController
         $invitationSearchForm->handleRequest($request);
         $criteria = $repo->sanatiseCriteria($invitationSearchForm->getData());
 
-        $qb = $repo->filter($criteria);
+        $qb = $repo->createQueryBuilder();
+        $qb->filterByCriteria($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
         $results = $pager->getCurrentPageResults();
@@ -200,7 +202,7 @@ class InvitationsController extends AbstractController
 
         $responseData = array(
             'entity' => $entity,
-            'form'   => $form,
+            'form' => $form,
         );
 
         $view = $this->view($responseData);
@@ -251,7 +253,7 @@ class InvitationsController extends AbstractController
         );
 
     }
-    
+
     /**
      * Router for claiming an invitation
      *

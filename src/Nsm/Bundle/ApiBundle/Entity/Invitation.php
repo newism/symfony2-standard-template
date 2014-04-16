@@ -5,7 +5,7 @@ namespace Nsm\Bundle\ApiBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Nsm\Bundle\UserBundle\Entity\User;
-
+use Nsm\Bundle\CoreBundle\Entity\AbstractEntity;
 
 class Invitation extends AbstractEntity
 {
