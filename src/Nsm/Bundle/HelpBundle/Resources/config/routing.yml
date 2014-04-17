@@ -1,0 +1,2 @@
+help_tips:
+  resource: "@NsmHelpBundle/Resources/config/routing/Tip.yml"
