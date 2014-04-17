@@ -1,6 +1,9 @@
 parameters:
     validator.mapping.loader.yaml_files_loader.mapping_files:
         - "%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validation/Activity.yml"
+        - "%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validation/Project.yml"
+        - "%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validation/Task.yml"
+        - "%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validation/Invitation.yml"
 
 imports:
     - { resource: "services/entities/Activity.yml" }
