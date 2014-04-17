@@ -1,0 +1,20 @@
+{{ entity_service_name }}_browse:
+    pattern:  '/{{ entity_url_name }}.{_format}'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:browse", _format: html }
+
+{{ entity_service_name }}_read:
+    pattern:  '/{{ entity_url_name }}/{id}/read'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:read" }
+
+{{ entity_service_name }}_edit:
+    pattern:  '/{{ entity_url_name }}/{id}/edit'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:edit" }
+
+{{ entity_service_name }}_add:
+    pattern:  '/{{ entity_url_name }}/new'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:add" }
+
+{{ entity_service_name }}_destroy:
+    pattern:  '/{{ entity_url_name }}/{id}/destroy'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:destroy" }
+    requirements: { _method: post|delete }

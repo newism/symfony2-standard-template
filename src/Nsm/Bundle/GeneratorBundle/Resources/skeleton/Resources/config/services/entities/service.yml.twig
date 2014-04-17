@@ -1,0 +1,24 @@
+parameters:
+
+    {{ bundle_service_name }}.entity.{{ entity_service_name }}.class: {{ bundle_namespace }}\Entity\{{ entity_name }}
+    {{ bundle_service_name }}.entity.{{ entity_service_name }}_manager.class: {{ bundle_namespace }}\Entity\{{ entity_name }}Manager
+    {{ bundle_service_name }}.entity.{{ entity_service_name }}_repository.class: {{ bundle_namespace }}\Entity\{{ entity_name }}Repository
+    {{ bundle_service_name }}.event_subscriber.{{ entity_service_name }}_event_subscriber.class: {{ bundle_namespace }}\EventSubscriber\{{ entity_name }}Subscriber
+
+services:
+
+    {{ bundle_service_name }}.entity.{{ entity_service_name }}_manager:
+        class: %{{ bundle_service_name }}.entity.{{ entity_service_name }}_manager.class%
+        arguments: [%{{ bundle_service_name }}.entity.{{ entity_service_name }}.class%, @doctrine.orm.entity_manager]
+
+    {{ bundle_service_name }}.entity.{{ entity_service_name }}_repository:
+        class: %{{ bundle_service_name }}.entity.{{ entity_service_name }}_repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments: [%{{ bundle_service_name }}.entity.{{ entity_service_name }}.class%]
+
+    {{ bundle_service_name }}.event_subscriber.{{ entity_service_name }}_event_subscriber:
+        class: %{{ bundle_service_name }}.event_subscriber.{{ entity_service_name }}_event_subscriber.class%
+        arguments: [@service_container]
+        tags:
+          - {name: "doctrine.event_subscriber", connection: "default"}

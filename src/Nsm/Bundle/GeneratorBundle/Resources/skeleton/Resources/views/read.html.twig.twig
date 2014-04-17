@@ -1,0 +1,31 @@
+{{ "{% extends 'NsmApiBundle::layout.html.twig' %}" }}
+
+{{ "{% block body -%}" }}
+    <h1>{{ entity_english_name }}</h1>
+
+    <table class="record_properties">
+        <tbody>
+        {%- for field, metadata in meta_data.fieldMappings %}
+
+            <tr>
+                <th>{{ field|capitalize }}</th>
+
+            {%- if metadata.type in ['date', 'datetime'] %}
+
+                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ '|date(\'Y-m-d H:i:s\') }}' }}</td>
+
+            {%- else %}
+
+                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}</td>
+
+            {%- endif %}
+
+            </tr>
+
+        {%- endfor %}
+
+        </tbody>
+    </table>
+
+    {% include 'Resources/views/others/record_actions.html.twig.twig' %}
+{{ "{% endblock %}" }}

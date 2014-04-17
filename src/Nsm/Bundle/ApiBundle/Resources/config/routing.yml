@@ -1,19 +1,1 @@
-dashboard:
-    resource: "@NsmApiBundle/Controller/DashboardController.php"
-    type:     annotation
 
-projects:
-    resource: "@NsmApiBundle/Controller/ProjectsController.php"
-    type:     annotation
-
-tasks:
-    resource: "@NsmApiBundle/Controller/TasksController.php"
-    type:     annotation
-
-activities:
-    resource: "@NsmApiBundle/Controller/ActivitiesController.php"
-    type:     annotation
-
-invitations:
-    resource: "@NsmApiBundle/Controller/InvitationsController.php"
-    type:     annotation

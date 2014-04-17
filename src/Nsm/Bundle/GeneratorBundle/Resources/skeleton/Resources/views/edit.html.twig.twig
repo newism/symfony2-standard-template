@@ -1,0 +1,9 @@
+{{ "{% extends 'NsmApiBundle::layout.html.twig' %}" }}
+
+{{ "{% block body -%}" }}
+    <h1>{{ entity_english_name }} edit</h1>
+
+    {{ '{{ form(edit_form) }}' }}
+
+    {% include 'Resources/views/others/record_actions.html.twig.twig' %}
+{{ "{% endblock %}" }}
