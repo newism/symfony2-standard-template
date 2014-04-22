@@ -1,0 +1,20 @@
+task_browse:
+    pattern:  '/task.{_format}'
+    defaults: { _controller: "NsmApiBundle:Task:browse", _format: html }
+
+task_read:
+    pattern:  '/task/{id}/read'
+    defaults: { _controller: "NsmApiBundle:Task:read" }
+
+task_edit:
+    pattern:  '/task/{id}/edit'
+    defaults: { _controller: "NsmApiBundle:Task:edit" }
+
+task_add:
+    pattern:  '/task/new'
+    defaults: { _controller: "NsmApiBundle:Task:add" }
+
+task_destroy:
+    pattern:  '/task/{id}/destroy'
+    defaults: { _controller: "NsmApiBundle:Task:destroy" }
+    requirements: { _method: post|delete }

@@ -7,10 +7,15 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Events;
-use Nsm\Bundle\ApiBundle\Entity\Activity;
-use Nsm\Bundle\ApiBundle\Entity\ActivityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Nsm\Bundle\ApiBundle\Entity\Activity;
+use Nsm\Bundle\ApiBundle\Entity\ActivityManager;
+
+/**
+ * Activity subscriber.
+ *
+ */
 class ActivitySubscriber implements EventSubscriber
 {
     protected $container;
@@ -25,7 +30,6 @@ class ActivitySubscriber implements EventSubscriber
         $this->container = $container;
     }
 
-
     /**
      * @return array
      */
@@ -33,5 +37,4 @@ class ActivitySubscriber implements EventSubscriber
     {
         return array();
     }
-
 }

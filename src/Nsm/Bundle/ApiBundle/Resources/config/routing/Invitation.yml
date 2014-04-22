@@ -1,0 +1,20 @@
+invitation_browse:
+    pattern:  '//invitation.{_format}'
+    defaults: { _controller: "NsmApiBundle:Invitation:browse", _format: html }
+
+invitation_read:
+    pattern:  '//invitation/{id}/read'
+    defaults: { _controller: "NsmApiBundle:Invitation:read" }
+
+invitation_edit:
+    pattern:  '//invitation/{id}/edit'
+    defaults: { _controller: "NsmApiBundle:Invitation:edit" }
+
+invitation_add:
+    pattern:  '//invitation/new'
+    defaults: { _controller: "NsmApiBundle:Invitation:add" }
+
+invitation_destroy:
+    pattern:  '//invitation/{id}/destroy'
+    defaults: { _controller: "NsmApiBundle:Invitation:destroy" }
+    requirements: { _method: post|delete }

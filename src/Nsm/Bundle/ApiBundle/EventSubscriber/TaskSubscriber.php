@@ -7,10 +7,15 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Events;
-use Nsm\Bundle\ApiBundle\Entity\Activity;
-use Nsm\Bundle\ApiBundle\Entity\Task;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Nsm\Bundle\ApiBundle\Entity\Task;
+use Nsm\Bundle\ApiBundle\Entity\TaskManager;
+
+/**
+ * Task subscriber.
+ *
+ */
 class TaskSubscriber implements EventSubscriber
 {
     protected $container;
@@ -24,7 +29,6 @@ class TaskSubscriber implements EventSubscriber
     {
         $this->container = $container;
     }
-
 
     /**
      * @return array
@@ -85,5 +89,4 @@ class TaskSubscriber implements EventSubscriber
         }
 
     }
-
 }

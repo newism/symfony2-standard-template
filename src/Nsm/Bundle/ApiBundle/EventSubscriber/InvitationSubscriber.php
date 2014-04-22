@@ -7,10 +7,15 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Events;
-use Nsm\Bundle\ApiBundle\Entity\Project;
-use Nsm\Bundle\ApiBundle\Entity\Task;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Nsm\Bundle\ApiBundle\Entity\Invitation;
+use Nsm\Bundle\ApiBundle\Entity\InvitationManager;
+
+/**
+ * Invitation subscriber.
+ *
+ */
 class InvitationSubscriber implements EventSubscriber
 {
     protected $container;
@@ -28,12 +33,8 @@ class InvitationSubscriber implements EventSubscriber
     /**
      * @return array
      */
-    /**
-     * @return array
-     */
     public function getSubscribedEvents()
     {
         return array();
     }
-
 }

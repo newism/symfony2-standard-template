@@ -1,0 +1,19 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% block body -%}
+    <h1>Invitation destroy</h1>
+
+    {{ form(edit_form) }}
+
+    <div>
+    <a href="{{ path('invitation') }}">
+        Back to the list
+    </a>
+</div>
+<div>
+    <a href="{{ path('invitation_edit', { 'id': entity.id }) }}">
+        Edit
+    </a>
+</div>
+<div>{{ form(delete_form) }}</div>
+{% endblock %}

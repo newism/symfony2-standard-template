@@ -1,0 +1,54 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% block body -%}
+    <h1>Invitation</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ entity.code }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.email }}</td>
+            </tr>
+            <tr>
+                <th>Expiresat</th>
+                <td>{{ entity.expiresAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Claimedat</th>
+                <td>{{ entity.claimedAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{{ entity.updatedAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Deletedat</th>
+                <td>{{ entity.deletedAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+    <a href="{{ path('invitation') }}">
+        Back to the list
+    </a>
+</div>
+<div>
+    <a href="{{ path('invitation_edit', { 'id': entity.id }) }}">
+        Edit
+    </a>
+</div>
+<div>{{ form(delete_form) }}</div>
+{% endblock %}

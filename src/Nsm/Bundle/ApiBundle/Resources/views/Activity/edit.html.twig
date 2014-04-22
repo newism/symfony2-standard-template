@@ -1,0 +1,13 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% block content -%}
+    <h1>Activity edit</h1>
+
+    {{ form(form) }}
+
+    <div>
+        <a href="{{ path('activity_browse') }}">
+            Back to the list
+        </a>
+    </div>
+{% endblock %}

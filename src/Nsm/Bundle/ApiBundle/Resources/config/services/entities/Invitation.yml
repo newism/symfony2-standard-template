@@ -22,8 +22,8 @@ services:
             - %nsm_api.entity.invitation.class%
             - @doctrine.orm.entity_manager
 
-    nsm_api.event_subscriber.task_subscriber:
-        class: %nsm_api.event_subscriber.task_subscriber.class%
+    nsm_api.event_subscriber.invitation_subscriber:
+        class: %nsm_api.event_subscriber.invitation_subscriber.class%
         arguments:
             - @service_container
         tags:

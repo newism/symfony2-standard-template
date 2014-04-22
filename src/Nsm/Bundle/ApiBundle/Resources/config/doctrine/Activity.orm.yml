@@ -27,3 +27,6 @@ Nsm\Bundle\ApiBundle\Entity\Activity:
         task:
             targetEntity: Task
             inversedBy: activities
+        contactCard:
+            targetEntity: Nsm\Bundle\ContactCardBundle\Entity\ContactCard
+            inversedBy: null

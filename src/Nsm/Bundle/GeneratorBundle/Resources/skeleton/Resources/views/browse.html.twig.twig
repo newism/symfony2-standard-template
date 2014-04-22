@@ -1,0 +1,18 @@
+{{ "{% extends '"~bundle_name~"::layout.html.twig' %}" }}
+
+{{ "{% set entities = pager.getCurrentPageResults %}" }}
+
+{{ "{% block content %}" }}
+
+    <h1>{{ entity_english_name }} list</h1>
+
+    {{ "{% include '" ~ bundle_name ~ ":" ~ entity_name ~ ":_partials/collection.html.twig' with {" }}
+        "entities": entities
+    {{ "} %}" }}
+
+    <div>
+        <a href="{{ "{{ path('" ~ entity_service_name ~ "_add') }}" }}">
+            Create a new entry
+        </a>
+    </div>
+{{ "{% endblock %}" }}

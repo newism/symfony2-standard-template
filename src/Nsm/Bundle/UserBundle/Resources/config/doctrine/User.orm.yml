@@ -1,6 +1,6 @@
 Nsm\Bundle\UserBundle\Entity\User:
     type: entity
-    table: NsmUser
+    table: nsm_user
     id:
         id:
             type: integer

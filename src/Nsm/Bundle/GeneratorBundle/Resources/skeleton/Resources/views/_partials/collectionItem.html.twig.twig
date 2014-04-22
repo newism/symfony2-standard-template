@@ -1,0 +1,23 @@
+            <tr>
+                <td><a href="{{ "{{ path('"~entity_service_name~"_read', { 'id': entity.id }) }}" }}">{{ "{{ entity.id }}" }}</a></td>
+                {%- for field in meta_data.fieldMappings %}
+                {%- if field.fieldName != 'id'  %}
+
+                <td>{{ "{{ entity."~field.fieldName~" is defined ? entity."~field.fieldName~(field.type == "datetime" ? "|date('r')")~" }}" }}</td>
+                {%- endif  %}
+                {%- endfor  %}
+
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ "{{ path('"~entity_service_name~"_read', { 'id': entity.id }) }}" }}">read</a>
+                        </li>
+                        <li>
+                            <a href="{{ "{{ path('"~entity_service_name~"_edit', { 'id': entity.id }) }}" }}">edit</a>
+                        </li>
+                        <li>
+                            <a href="{{ "{{ path('"~entity_service_name~"_destroy', { 'id': entity.id }) }}" }}">destroy</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>

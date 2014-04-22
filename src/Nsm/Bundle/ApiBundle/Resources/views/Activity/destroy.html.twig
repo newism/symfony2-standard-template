@@ -1,0 +1,18 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% block content -%}
+    <h1>Activity destroy</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit">Destroy</button>
+        </p>
+    {{ form_end(form) }}
+
+    <div>
+        <a href="{{ path('activity_browse') }}">
+            Back to the list
+        </a>
+    </div>
+{% endblock %}
