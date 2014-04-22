@@ -1,0 +1,242 @@
+<?php
+
+namespace {{ bundle_namespace }}\Controller;
+
+// Core
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+
+// Third Party
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Util\Codes;
+use Hateoas\Configuration\Route;
+use Hateoas\Representation\Factory\PagerfantaFactory;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+
+// Project Based
+use {{ bundle_core_namespace }}\Controller\AbstractController;
+use {{ bundle_namespace }}\Entity\{{ entity_name }};
+use {{ bundle_namespace }}\Entity\{{ entity_name }}Manager;
+use {{ bundle_namespace }}\Entity\{{ entity_name }}Repository;
+use {{ bundle_namespace }}\Entity\{{ entity_name }}QueryBuilder;
+use {{ bundle_namespace }}\Form\Type\{{ entity_name }}Type;
+use {{ bundle_namespace }}\Form\Type\{{ entity_name }}FilterType;
+
+use Nsm\Bundle\FormBundle\Form\Model\DateRange;
+
+/**
+ * {{ entity_name }} controller.
+ */
+class {{ entity_name }}Controller extends AbstractController
+{
+   /**
+     * Browse all {{ entity_english_name }} entities.
+     *
+     * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
+     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="{{ entity_english_name }} count limit")
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  filters={
+     *      {"name"="title", "dataType"="string"},
+     *      {"name"="orderBy", "dataType"="string", "pattern"="(title|createdAt) ASC|DESC"}
+     *  })
+     */
+    public function browseAction(Request $request, $page, $perPage)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var {{ entity_name }}Repository $repo */
+        $repo = $em->getRepository('NsmApiBundle:{{ entity_name }}');
+
+        /** @var Form $form */
+        ${{ entity_variable_name }}SearchForm = $this->createForm(
+            new {{ entity_name }}FilterType(),
+            array(),
+            array(
+                'action' => $this->generateUrl('{{ entity_service_name }}_browse'),
+                'method' => 'GET'
+            )
+        )->add('search', 'submit');
+
+        ${{ entity_variable_name }}SearchForm->handleRequest($request);
+        $criteria = $repo->sanatiseCriteria(${{ entity_variable_name }}SearchForm->getData());
+
+        $qb = $repo->createQueryBuilder();
+        $qb->filterByCriteria($criteria);
+
+        $pager = $this->paginateQuery($qb, $perPage, $page);
+        $results = $pager->getCurrentPageResults();
+        $responseData = array();
+
+        if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
+            $responseData['pager'] = $pager;
+            $responseData['search_form'] = ${{ entity_variable_name }}SearchForm->createView();
+        } else {
+
+            $paginatedCollection = $this->createPaginatedCollection(
+                $pager,
+                new Route('{{ entity_service_name }}_browse', array())
+            );
+
+            $responseData = $paginatedCollection;
+        }
+
+        $view = $this->view($responseData);
+        $view->setTemplate($this->getTemplate($request->query->get('_template', 'browse')));
+
+        return $view;
+    }
+
+    /**
+     * Finds and displays a {{ entity_english_name }} entity.
+     *
+     * @View(templateVar="entity", serializerGroups={"{{ entity_service_name }}_read"})
+     * @ApiDoc(
+     *  output="{{ entity_namespaced }}"
+     * )
+     */
+    public function readAction($id)
+    {
+        $entity = $this->findOr404('{{ entity_name }}', $id);
+
+        return $entity;
+    }
+
+    /**
+     * Edits an existing {{ entity_english_name }} entity.
+     *
+     * @View()
+     * @ApiDoc(
+     *  input="{{ bundle_namespace }}\Form\Type\{{ entity_name }}Type",
+     *  output="{{ entity_namespaced }}"
+     * )
+     */
+    public function editAction(Request $request, $id)
+    {
+        $entity = $this->findOr404('{{ entity_name }}', $id);
+
+        /** @var Form $form */
+        $form = $this->createForm(
+            new {{ entity_name }}Type(),
+            $entity,
+            array(
+                'action' => $this->generateUrl('{{ entity_service_name }}_patch', array('id' => $entity->getId())),
+                'method' => 'PATCH'
+            )
+        )->add('Update', 'submit');
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect(
+                $this->generateUrl(
+                    '{{ entity_service_name }}_read',
+                    array(
+                        'id' => $entity->getId()
+                    )
+                )
+            );
+        }
+
+        $responseData = array(
+            'entity' => $entity,
+            'form' => $form
+        );
+
+        $view = $this->view($responseData);
+        $view->setTemplate($this->getTemplate($request->query->get('_template', 'browse')));
+
+        return $view;
+    }
+
+    /**
+     * Creates a {{ entity_english_name }} entity.
+     *
+     * @View()
+     * @ApiDoc(
+     *  input="{{ bundle_namespace }}\Form\Type\{{ entity_name }}Type",
+     *  output="{{ entity_namespaced }}"
+     * )
+     */
+    public function addAction(Request $request)
+    {
+        $entity = new {{ entity_name }}();
+
+        /** @var Form $form */
+        $form = $this->createForm(
+            new {{ entity_name }}Type(),
+            $entity,
+            array(
+                'action' => $this->generateUrl('{{ entity_service_name }}_add'),
+                'method' => 'POST'
+            )
+        )->add('Save', 'submit');
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect(
+                $this->generateUrl('{{ entity_service_name }}_read', array('id' => $entity->getId())),
+                Codes::HTTP_CREATED
+            );
+        }
+
+        $responseData = array(
+            'entity' => $entity,
+            'form'   => $form,
+        );
+
+        $view = $this->view($responseData);
+        $view->setTemplate($this->getTemplate($request->query->get('_template', 'add')));
+
+        return $view;
+
+    }
+
+    /**
+     * Destroys a {{ entity_english_name }} entity.
+     *
+     * @View()
+     * @ApiDoc()
+     */
+    public function destroyAction(Request $request, $id)
+    {
+        $entity = $this->findOr404('{{ entity_name }}', $id);
+
+        /** @var Form $form */
+        $form = $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->setAction($this->generateUrl('{{ entity_service_name }}_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($entity);
+            $em->flush();
+
+            if ($this->get('fos_rest.view_handler')->isFormatTemplating($request->getRequestFormat())) {
+                return $this->redirect($this->generateUrl('{{ entity_service_name }}_browse', array()));
+            }
+        }
+
+        return array(
+            'entity' => $entity,
+            'form' => $form
+        );
+
+    }
+}

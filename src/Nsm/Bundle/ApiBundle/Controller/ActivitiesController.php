@@ -216,7 +216,7 @@ class ActivitiesController extends AbstractController
             $em->flush();
 
             if ($this->get('fos_rest.view_handler')->isFormatTemplating($request->getRequestFormat())) {
-                return $this->redirect($this->generateUrl('activity_browse', array()), Codes::HTTP_OK);
+                return $this->redirect($this->generateUrl('activity_browse', array()));
             }
         }
 

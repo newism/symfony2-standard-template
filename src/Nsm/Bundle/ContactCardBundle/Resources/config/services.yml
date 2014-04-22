@@ -1,0 +1,6 @@
+services:
+    nsm_contact_card.manager:
+        class: Nsm\Bundle\ContactCardBundle\Entity\ContactCardManager
+        arguments:
+            - Nsm\Bundle\ContactCardBundle\Entity\ContactCard
+            - @doctrine.orm.entity_manager

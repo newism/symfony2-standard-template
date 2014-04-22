@@ -1,0 +1,39 @@
+activity_browse:
+    pattern:  '/activity.{_format}'
+    defaults: { _controller: "NsmApiBundle:Activity:browse", _format: html }
+    requirements: { _method: get }
+
+activity_read:
+    pattern:  '/activity/{id}/read'
+    defaults: { _controller: "NsmApiBundle:Activity:read" }
+    requirements: { _method: get }
+
+activity_edit:
+    pattern:  '/activity/{id}/edit'
+    defaults: { _controller: "NsmApiBundle:Activity:edit" }
+    requirements: { _method: get }
+
+activity_patch:
+    pattern:  '/activity/{id}'
+    defaults: { _controller: "NsmApiBundle:Activity:edit" }
+    requirements: { _method: patch }
+
+activity_add:
+    pattern:  '/activity/add'
+    defaults: { _controller: "NsmApiBundle:Activity:add" }
+    requirements: { _method: get }
+
+activity_post:
+    pattern:  '/activity'
+    defaults: { _controller: "NsmApiBundle:Activity:add" }
+    requirements: { _method: post }
+
+activity_destroy:
+    pattern:  '/activity/{id}/destroy'
+    defaults: { _controller: "NsmApiBundle:Activity:destroy" }
+    requirements: { _method: get }
+
+activity_delete:
+    pattern:  '/activity/{id}'
+    defaults: { _controller: "NsmApiBundle:Activity:destroy" }
+    requirements: { _method: delete }

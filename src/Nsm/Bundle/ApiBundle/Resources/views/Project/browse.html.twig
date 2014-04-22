@@ -1,0 +1,18 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% set entities = pager.getCurrentPageResults %}
+
+{% block content %}
+
+    <h1>Project list</h1>
+
+    {% include 'NsmApiBundle:Project:_partials/collection.html.twig' with {
+        "entities": entities
+    } %}
+
+    <div>
+        <a href="{{ path('project_add') }}">
+            Create a new entry
+        </a>
+    </div>
+{% endblock %}

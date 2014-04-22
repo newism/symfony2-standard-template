@@ -7,10 +7,15 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Events;
-use Nsm\Bundle\ApiBundle\Entity\Project;
-use Nsm\Bundle\ApiBundle\Entity\Task;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Nsm\Bundle\ApiBundle\Entity\Project;
+use Nsm\Bundle\ApiBundle\Entity\ProjectManager;
+
+/**
+ * Project subscriber.
+ *
+ */
 class ProjectSubscriber implements EventSubscriber
 {
     protected $container;

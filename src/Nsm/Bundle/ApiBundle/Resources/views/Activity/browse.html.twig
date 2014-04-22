@@ -1,0 +1,18 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% set entities = pager.getCurrentPageResults %}
+
+{% block content %}
+
+    <h1>Activity list</h1>
+
+    {% include 'NsmApiBundle:Activity:_partials/collection.html.twig' with {
+        "entities": entities
+    } %}
+
+    <div>
+        <a href="{{ path('activity_add') }}">
+            Create a new entry
+        </a>
+    </div>
+{% endblock %}

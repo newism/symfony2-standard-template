@@ -24,6 +24,6 @@ class TimeZoneType extends Type
 
     public function getName()
     {
-        return 'timeZone';
+        return 'timezone';
     }
 }

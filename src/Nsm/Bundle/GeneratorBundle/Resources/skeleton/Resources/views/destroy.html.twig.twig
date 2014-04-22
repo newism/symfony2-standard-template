@@ -1,0 +1,18 @@
+{{ "{% extends '"~bundle_name~"::layout.html.twig' %}" }}
+
+{{ "{% block content -%}" }}
+    <h1>{{ entity_english_name }} destroy</h1>
+
+    {{ "{{ form_start(form) }}" }}
+        {{ "{{ form_widget(form) }}" }}
+        <p>
+            <button type="submit">Destroy</button>
+        </p>
+    {{ "{{ form_end(form) }}" }}
+
+    <div>
+        <a href="{{ "{{ path('" ~ entity_service_name ~ "_browse') }}" }}">
+            Back to the list
+        </a>
+    </div>
+{{ "{% endblock %}" }}

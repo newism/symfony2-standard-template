@@ -1,0 +1,6 @@
+parameters:
+    validator.mapping.loader.yaml_files_loader.mapping_files:
+        - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validations/Activity.yml'
+        - "%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validations/Project.yml"
+        - "%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validations/Task.yml"
+        - "%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validations/Invitation.yml"
