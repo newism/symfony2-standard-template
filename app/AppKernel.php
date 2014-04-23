@@ -35,6 +35,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Nsm\Bundle\CoreBundle\NsmCoreBundle(),
+            new ClubEvo\Bundle\ApiBundle\ClubEvoApiBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

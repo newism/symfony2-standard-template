@@ -1,0 +1,17 @@
+ClubEvo\Bundle\ApiBundle\Entity\RoadsideAssistEmployee:
+    type: entity
+    table: roadside_assist_employee
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+    fields:
+        role:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: ''
+    lifecycleCallbacks: {  }

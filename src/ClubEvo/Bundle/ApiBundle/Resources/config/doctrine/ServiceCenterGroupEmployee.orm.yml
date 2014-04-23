@@ -1,0 +1,11 @@
+ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployee:
+    type: entity
+    table: service_center_group_employee
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+    lifecycleCallbacks: {  }

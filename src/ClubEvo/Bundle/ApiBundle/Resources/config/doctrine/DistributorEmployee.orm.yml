@@ -1,0 +1,18 @@
+ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployee:
+    type: entity
+    table: distributor_employee
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+    fields:
+        role:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+    lifecycleCallbacks: {  }

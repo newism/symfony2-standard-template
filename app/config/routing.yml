@@ -1,3 +1,7 @@
+club_evo_api:
+    resource: "@ClubEvoApiBundle/Resources/config/routing.yml"
+    prefix:   /
+
 NsmUserBundle:
     resource: "@NsmUserBundle/Resources/config/routing.yml"
 
