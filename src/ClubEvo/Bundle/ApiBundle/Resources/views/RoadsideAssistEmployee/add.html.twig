@@ -1,0 +1,13 @@
+{% extends 'ClubEvoApiBundle::layout.html.twig' %}
+
+{% block content -%}
+    <h1>Roadside Assist Employee creation</h1>
+
+    {{ form(form) }}
+
+    <div>
+        <a href="{{ path('roadside_assist_employee_browse') }}">
+            Back to the list
+        </a>
+    </div>
+{% endblock %}

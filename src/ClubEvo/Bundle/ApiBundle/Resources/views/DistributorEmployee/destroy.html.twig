@@ -1,0 +1,18 @@
+{% extends 'ClubEvoApiBundle::layout.html.twig' %}
+
+{% block content -%}
+    <h1>Distributor Employee destroy</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit">Destroy</button>
+        </p>
+    {{ form_end(form) }}
+
+    <div>
+        <a href="{{ path('distributor_employee_browse') }}">
+            Back to the list
+        </a>
+    </div>
+{% endblock %}

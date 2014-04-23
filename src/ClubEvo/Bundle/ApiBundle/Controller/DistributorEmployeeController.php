@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ bundle_namespace }}\Controller;
+namespace ClubEvo\Bundle\ApiBundle\Controller;
 
 // Core
 use Symfony\Component\Form\Form;
@@ -15,26 +15,26 @@ use Hateoas\Representation\Factory\PagerfantaFactory;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 // Project Based
-use {{ bundle_namespace }}\Controller\AbstractController;
-use {{ bundle_namespace }}\Entity\{{ entity_name }};
-use {{ bundle_namespace }}\Entity\{{ entity_name }}Manager;
-use {{ bundle_namespace }}\Entity\{{ entity_name }}Repository;
-use {{ bundle_namespace }}\Entity\{{ entity_name }}QueryBuilder;
-use {{ bundle_namespace }}\Form\Type\{{ entity_name }}Type;
-use {{ bundle_namespace }}\Form\Type\{{ entity_name }}FilterType;
+use ClubEvo\Bundle\ApiBundle\Controller\AbstractController;
+use ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployee;
+use ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployeeManager;
+use ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployeeRepository;
+use ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployeeQueryBuilder;
+use ClubEvo\Bundle\ApiBundle\Form\Type\DistributorEmployeeType;
+use ClubEvo\Bundle\ApiBundle\Form\Type\DistributorEmployeeFilterType;
 
 use Nsm\Bundle\FormBundle\Form\Model\DateRange;
 
 /**
- * {{ entity_name }} controller.
+ * DistributorEmployee controller.
  */
-class {{ entity_name }}Controller extends AbstractController
+class DistributorEmployeeController extends AbstractController
 {
    /**
-     * Browse all {{ entity_english_name }} entities.
+     * Browse all Distributor Employee entities.
      *
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
-     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="{{ entity_english_name }} count limit")
+     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Distributor Employee count limit")
      *
      * @ApiDoc(
      *  resource=true,
@@ -47,21 +47,21 @@ class {{ entity_name }}Controller extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var {{ entity_name }}Repository $repo */
-        $repo = $em->getRepository('{{ bundle_name }}:{{ entity_name }}');
+        /** @var DistributorEmployeeRepository $repo */
+        $repo = $em->getRepository('ClubEvoApiBundle:DistributorEmployee');
 
         /** @var Form $form */
-        ${{ entity_variable_name }}SearchForm = $this->createForm(
-            new {{ entity_name }}FilterType(),
+        $distributorEmployeeSearchForm = $this->createForm(
+            new DistributorEmployeeFilterType(),
             array(),
             array(
-                'action' => $this->generateUrl('{{ entity_service_name }}_browse'),
+                'action' => $this->generateUrl('distributor_employee_browse'),
                 'method' => 'GET'
             )
         )->add('search', 'submit');
 
-        ${{ entity_variable_name }}SearchForm->handleRequest($request);
-        $criteria = $repo->sanatiseCriteria(${{ entity_variable_name }}SearchForm->getData());
+        $distributorEmployeeSearchForm->handleRequest($request);
+        $criteria = $repo->sanatiseCriteria($distributorEmployeeSearchForm->getData());
 
         $qb = $repo->createQueryBuilder();
         $qb->filterByCriteria($criteria);
@@ -72,12 +72,12 @@ class {{ entity_name }}Controller extends AbstractController
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
             $responseData['pager'] = $pager;
-            $responseData['search_form'] = ${{ entity_variable_name }}SearchForm->createView();
+            $responseData['search_form'] = $distributorEmployeeSearchForm->createView();
         } else {
 
             $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
-                new Route('{{ entity_service_name }}_browse', array())
+                new Route('distributor_employee_browse', array())
             );
 
             $responseData = $paginatedCollection;
@@ -90,39 +90,39 @@ class {{ entity_name }}Controller extends AbstractController
     }
 
     /**
-     * Finds and displays a {{ entity_english_name }} entity.
+     * Finds and displays a Distributor Employee entity.
      *
-     * @View(templateVar="entity", serializerGroups={"{{ entity_service_name }}_read"})
+     * @View(templateVar="entity", serializerGroups={"distributor_employee_read"})
      * @ApiDoc(
-     *  output="{{ entity_namespaced }}"
+     *  output="ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployee"
      * )
      */
     public function readAction($id)
     {
-        $entity = $this->findOr404('{{ entity_name }}', $id);
+        $entity = $this->findOr404('DistributorEmployee', $id);
 
         return $entity;
     }
 
     /**
-     * Edits an existing {{ entity_english_name }} entity.
+     * Edits an existing Distributor Employee entity.
      *
      * @View()
      * @ApiDoc(
-     *  input="{{ bundle_namespace }}\Form\Type\{{ entity_name }}Type",
-     *  output="{{ entity_namespaced }}"
+     *  input="ClubEvo\Bundle\ApiBundle\Form\Type\DistributorEmployeeType",
+     *  output="ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployee"
      * )
      */
     public function editAction(Request $request, $id)
     {
-        $entity = $this->findOr404('{{ entity_name }}', $id);
+        $entity = $this->findOr404('DistributorEmployee', $id);
 
         /** @var Form $form */
         $form = $this->createForm(
-            new {{ entity_name }}Type(),
+            new DistributorEmployeeType(),
             $entity,
             array(
-                'action' => $this->generateUrl('{{ entity_service_name }}_patch', array('id' => $entity->getId())),
+                'action' => $this->generateUrl('distributor_employee_patch', array('id' => $entity->getId())),
                 'method' => 'PATCH'
             )
         )->add('Update', 'submit');
@@ -136,7 +136,7 @@ class {{ entity_name }}Controller extends AbstractController
 
             return $this->redirect(
                 $this->generateUrl(
-                    '{{ entity_service_name }}_read',
+                    'distributor_employee_read',
                     array(
                         'id' => $entity->getId()
                     )
@@ -156,24 +156,24 @@ class {{ entity_name }}Controller extends AbstractController
     }
 
     /**
-     * Creates a {{ entity_english_name }} entity.
+     * Creates a Distributor Employee entity.
      *
      * @View()
      * @ApiDoc(
-     *  input="{{ bundle_namespace }}\Form\Type\{{ entity_name }}Type",
-     *  output="{{ entity_namespaced }}"
+     *  input="ClubEvo\Bundle\ApiBundle\Form\Type\DistributorEmployeeType",
+     *  output="ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployee"
      * )
      */
     public function addAction(Request $request)
     {
-        $entity = new {{ entity_name }}();
+        $entity = new DistributorEmployee();
 
         /** @var Form $form */
         $form = $this->createForm(
-            new {{ entity_name }}Type(),
+            new DistributorEmployeeType(),
             $entity,
             array(
-                'action' => $this->generateUrl('{{ entity_service_name }}_post'),
+                'action' => $this->generateUrl('distributor_employee_post'),
                 'method' => 'POST'
             )
         )->add('Save', 'submit');
@@ -186,7 +186,7 @@ class {{ entity_name }}Controller extends AbstractController
             $em->flush();
 
             return $this->redirect(
-                $this->generateUrl('{{ entity_service_name }}_read', array('id' => $entity->getId())),
+                $this->generateUrl('distributor_employee_read', array('id' => $entity->getId())),
                 Codes::HTTP_CREATED
             );
         }
@@ -204,19 +204,19 @@ class {{ entity_name }}Controller extends AbstractController
     }
 
     /**
-     * Destroys a {{ entity_english_name }} entity.
+     * Destroys a Distributor Employee entity.
      *
      * @View()
      * @ApiDoc()
      */
     public function destroyAction(Request $request, $id)
     {
-        $entity = $this->findOr404('{{ entity_name }}', $id);
+        $entity = $this->findOr404('DistributorEmployee', $id);
 
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->setAction($this->generateUrl('{{ entity_service_name }}_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('distributor_employee_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->getForm();
 
@@ -229,7 +229,7 @@ class {{ entity_name }}Controller extends AbstractController
             $em->flush();
 
             if ($this->get('fos_rest.view_handler')->isFormatTemplating($request->getRequestFormat())) {
-                return $this->redirect($this->generateUrl('{{ entity_service_name }}_browse', array()));
+                return $this->redirect($this->generateUrl('distributor_employee_browse', array()));
             }
         }
 

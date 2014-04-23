@@ -1,6 +1,7 @@
 ClubEvo\Bundle\ApiBundle\Entity\RoadsideAssistEmployee:
     type: entity
     table: roadside_assist_employee
+    repositoryClass: RoadsideAssistEmployeeRepository
     id:
         id:
             type: integer
@@ -8,10 +9,13 @@ ClubEvo\Bundle\ApiBundle\Entity\RoadsideAssistEmployee:
             unsigned: false
             comment: ''
             id: true
+            generator:
+                strategy: AUTO
     fields:
         role:
-            type: integer
+            type: string
             nullable: true
-            unsigned: false
+            length: 45
+            fixed: false
             comment: ''
     lifecycleCallbacks: {  }

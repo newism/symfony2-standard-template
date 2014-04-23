@@ -1,0 +1,24 @@
+parameters:
+
+    club_evo_api.entity.roadside_assist_employee.class: ClubEvo\Bundle\ApiBundle\Entity\RoadsideAssistEmployee
+    club_evo_api.entity.roadside_assist_employee_manager.class: ClubEvo\Bundle\ApiBundle\Entity\RoadsideAssistEmployeeManager
+    club_evo_api.entity.roadside_assist_employee_repository.class: ClubEvo\Bundle\ApiBundle\Entity\RoadsideAssistEmployeeRepository
+    club_evo_api.event_subscriber.roadside_assist_employee_subscriber.class: ClubEvo\Bundle\ApiBundle\EventSubscriber\RoadsideAssistEmployeeSubscriber
+
+services:
+
+    club_evo_api.entity.roadside_assist_employee_manager:
+        class: %club_evo_api.entity.roadside_assist_employee_manager.class%
+        arguments: [%club_evo_api.entity.roadside_assist_employee.class%, @doctrine.orm.entity_manager]
+
+    club_evo_api.entity.roadside_assist_employee_repository:
+        class: %club_evo_api.entity.roadside_assist_employee_repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments: [%club_evo_api.entity.roadside_assist_employee.class%]
+
+    club_evo_api.event_subscriber.roadside_assist_employee_subscriber:
+        class: %club_evo_api.event_subscriber.roadside_assist_employee_subscriber.class%
+        arguments: [@service_container]
+        tags:
+          - {name: "doctrine.event_subscriber", connection: "default"}

@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ bundle_namespace }}\Controller;
+namespace ClubEvo\Bundle\ApiBundle\Controller;
 
 // Core
 use Symfony\Component\Form\Form;
@@ -15,26 +15,26 @@ use Hateoas\Representation\Factory\PagerfantaFactory;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 // Project Based
-use {{ bundle_namespace }}\Controller\AbstractController;
-use {{ bundle_namespace }}\Entity\{{ entity_name }};
-use {{ bundle_namespace }}\Entity\{{ entity_name }}Manager;
-use {{ bundle_namespace }}\Entity\{{ entity_name }}Repository;
-use {{ bundle_namespace }}\Entity\{{ entity_name }}QueryBuilder;
-use {{ bundle_namespace }}\Form\Type\{{ entity_name }}Type;
-use {{ bundle_namespace }}\Form\Type\{{ entity_name }}FilterType;
+use ClubEvo\Bundle\ApiBundle\Controller\AbstractController;
+use ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployee;
+use ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployeeManager;
+use ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployeeRepository;
+use ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployeeQueryBuilder;
+use ClubEvo\Bundle\ApiBundle\Form\Type\ServiceCenterGroupEmployeeType;
+use ClubEvo\Bundle\ApiBundle\Form\Type\ServiceCenterGroupEmployeeFilterType;
 
 use Nsm\Bundle\FormBundle\Form\Model\DateRange;
 
 /**
- * {{ entity_name }} controller.
+ * ServiceCenterGroupEmployee controller.
  */
-class {{ entity_name }}Controller extends AbstractController
+class ServiceCenterGroupEmployeeController extends AbstractController
 {
    /**
-     * Browse all {{ entity_english_name }} entities.
+     * Browse all Service Center Group Employee entities.
      *
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
-     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="{{ entity_english_name }} count limit")
+     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Service Center Group Employee count limit")
      *
      * @ApiDoc(
      *  resource=true,
@@ -47,21 +47,21 @@ class {{ entity_name }}Controller extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var {{ entity_name }}Repository $repo */
-        $repo = $em->getRepository('{{ bundle_name }}:{{ entity_name }}');
+        /** @var ServiceCenterGroupEmployeeRepository $repo */
+        $repo = $em->getRepository('ClubEvoApiBundle:ServiceCenterGroupEmployee');
 
         /** @var Form $form */
-        ${{ entity_variable_name }}SearchForm = $this->createForm(
-            new {{ entity_name }}FilterType(),
+        $serviceCenterGroupEmployeeSearchForm = $this->createForm(
+            new ServiceCenterGroupEmployeeFilterType(),
             array(),
             array(
-                'action' => $this->generateUrl('{{ entity_service_name }}_browse'),
+                'action' => $this->generateUrl('service_center_group_employee_browse'),
                 'method' => 'GET'
             )
         )->add('search', 'submit');
 
-        ${{ entity_variable_name }}SearchForm->handleRequest($request);
-        $criteria = $repo->sanatiseCriteria(${{ entity_variable_name }}SearchForm->getData());
+        $serviceCenterGroupEmployeeSearchForm->handleRequest($request);
+        $criteria = $repo->sanatiseCriteria($serviceCenterGroupEmployeeSearchForm->getData());
 
         $qb = $repo->createQueryBuilder();
         $qb->filterByCriteria($criteria);
@@ -72,12 +72,12 @@ class {{ entity_name }}Controller extends AbstractController
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
             $responseData['pager'] = $pager;
-            $responseData['search_form'] = ${{ entity_variable_name }}SearchForm->createView();
+            $responseData['search_form'] = $serviceCenterGroupEmployeeSearchForm->createView();
         } else {
 
             $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
-                new Route('{{ entity_service_name }}_browse', array())
+                new Route('service_center_group_employee_browse', array())
             );
 
             $responseData = $paginatedCollection;
@@ -90,39 +90,39 @@ class {{ entity_name }}Controller extends AbstractController
     }
 
     /**
-     * Finds and displays a {{ entity_english_name }} entity.
+     * Finds and displays a Service Center Group Employee entity.
      *
-     * @View(templateVar="entity", serializerGroups={"{{ entity_service_name }}_read"})
+     * @View(templateVar="entity", serializerGroups={"service_center_group_employee_read"})
      * @ApiDoc(
-     *  output="{{ entity_namespaced }}"
+     *  output="ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployee"
      * )
      */
     public function readAction($id)
     {
-        $entity = $this->findOr404('{{ entity_name }}', $id);
+        $entity = $this->findOr404('ServiceCenterGroupEmployee', $id);
 
         return $entity;
     }
 
     /**
-     * Edits an existing {{ entity_english_name }} entity.
+     * Edits an existing Service Center Group Employee entity.
      *
      * @View()
      * @ApiDoc(
-     *  input="{{ bundle_namespace }}\Form\Type\{{ entity_name }}Type",
-     *  output="{{ entity_namespaced }}"
+     *  input="ClubEvo\Bundle\ApiBundle\Form\Type\ServiceCenterGroupEmployeeType",
+     *  output="ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployee"
      * )
      */
     public function editAction(Request $request, $id)
     {
-        $entity = $this->findOr404('{{ entity_name }}', $id);
+        $entity = $this->findOr404('ServiceCenterGroupEmployee', $id);
 
         /** @var Form $form */
         $form = $this->createForm(
-            new {{ entity_name }}Type(),
+            new ServiceCenterGroupEmployeeType(),
             $entity,
             array(
-                'action' => $this->generateUrl('{{ entity_service_name }}_patch', array('id' => $entity->getId())),
+                'action' => $this->generateUrl('service_center_group_employee_patch', array('id' => $entity->getId())),
                 'method' => 'PATCH'
             )
         )->add('Update', 'submit');
@@ -136,7 +136,7 @@ class {{ entity_name }}Controller extends AbstractController
 
             return $this->redirect(
                 $this->generateUrl(
-                    '{{ entity_service_name }}_read',
+                    'service_center_group_employee_read',
                     array(
                         'id' => $entity->getId()
                     )
@@ -156,24 +156,24 @@ class {{ entity_name }}Controller extends AbstractController
     }
 
     /**
-     * Creates a {{ entity_english_name }} entity.
+     * Creates a Service Center Group Employee entity.
      *
      * @View()
      * @ApiDoc(
-     *  input="{{ bundle_namespace }}\Form\Type\{{ entity_name }}Type",
-     *  output="{{ entity_namespaced }}"
+     *  input="ClubEvo\Bundle\ApiBundle\Form\Type\ServiceCenterGroupEmployeeType",
+     *  output="ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployee"
      * )
      */
     public function addAction(Request $request)
     {
-        $entity = new {{ entity_name }}();
+        $entity = new ServiceCenterGroupEmployee();
 
         /** @var Form $form */
         $form = $this->createForm(
-            new {{ entity_name }}Type(),
+            new ServiceCenterGroupEmployeeType(),
             $entity,
             array(
-                'action' => $this->generateUrl('{{ entity_service_name }}_post'),
+                'action' => $this->generateUrl('service_center_group_employee_post'),
                 'method' => 'POST'
             )
         )->add('Save', 'submit');
@@ -186,7 +186,7 @@ class {{ entity_name }}Controller extends AbstractController
             $em->flush();
 
             return $this->redirect(
-                $this->generateUrl('{{ entity_service_name }}_read', array('id' => $entity->getId())),
+                $this->generateUrl('service_center_group_employee_read', array('id' => $entity->getId())),
                 Codes::HTTP_CREATED
             );
         }
@@ -204,19 +204,19 @@ class {{ entity_name }}Controller extends AbstractController
     }
 
     /**
-     * Destroys a {{ entity_english_name }} entity.
+     * Destroys a Service Center Group Employee entity.
      *
      * @View()
      * @ApiDoc()
      */
     public function destroyAction(Request $request, $id)
     {
-        $entity = $this->findOr404('{{ entity_name }}', $id);
+        $entity = $this->findOr404('ServiceCenterGroupEmployee', $id);
 
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->setAction($this->generateUrl('{{ entity_service_name }}_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('service_center_group_employee_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->getForm();
 
@@ -229,7 +229,7 @@ class {{ entity_name }}Controller extends AbstractController
             $em->flush();
 
             if ($this->get('fos_rest.view_handler')->isFormatTemplating($request->getRequestFormat())) {
-                return $this->redirect($this->generateUrl('{{ entity_service_name }}_browse', array()));
+                return $this->redirect($this->generateUrl('service_center_group_employee_browse', array()));
             }
         }
 

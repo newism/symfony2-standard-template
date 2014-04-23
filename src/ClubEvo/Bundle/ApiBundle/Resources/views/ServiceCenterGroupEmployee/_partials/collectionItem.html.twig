@@ -1,0 +1,16 @@
+            <tr>
+                <td><a href="{{ path('service_center_group_employee_read', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('service_center_group_employee_read', { 'id': entity.id }) }}">read</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('service_center_group_employee_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('service_center_group_employee_destroy', { 'id': entity.id }) }}">destroy</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>

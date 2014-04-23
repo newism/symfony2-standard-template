@@ -8,11 +8,6 @@ namespace ClubEvo\Bundle\ApiBundle\Entity;
 class Organisation
 {
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
      * @var string
      */
     private $title;
@@ -47,30 +42,6 @@ class Organisation
      */
     private $contactCard;
 
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     *
-     * @return Organisation
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set title

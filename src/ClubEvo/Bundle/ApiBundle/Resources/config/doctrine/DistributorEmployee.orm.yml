@@ -1,6 +1,7 @@
 ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployee:
     type: entity
     table: distributor_employee
+    repositoryClass: DistributorEmployeeRepository
     id:
         id:
             type: integer
@@ -8,6 +9,8 @@ ClubEvo\Bundle\ApiBundle\Entity\DistributorEmployee:
             unsigned: false
             comment: ''
             id: true
+            generator:
+                strategy: AUTO
     fields:
         role:
             type: string

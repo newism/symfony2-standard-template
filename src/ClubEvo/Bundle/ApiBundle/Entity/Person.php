@@ -8,11 +8,6 @@ namespace ClubEvo\Bundle\ApiBundle\Entity;
 class Person
 {
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
      * @var string
      */
     private $familyName;
@@ -57,30 +52,6 @@ class Person
      */
     private $contactCard;
 
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     *
-     * @return Person
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set familyName

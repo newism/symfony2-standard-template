@@ -1,3 +1,11 @@
-club_evo_api_homepage:
-    path:  /hello/{name}
-    defaults: { _controller: ClubEvoApiBundle:Default:index }
+club_evo_api_service_center_group_employee:
+    resource: "@ClubEvoApiBundle/Resources/config/routing/ServiceCenterGroupEmployee.yml"
+    prefix:   /
+
+club_evo_api_roadside_assist_employee:
+    resource: "@ClubEvoApiBundle/Resources/config/routing/RoadsideAssistEmployee.yml"
+    prefix:   /
+
+club_evo_api_distributor_employee:
+    resource: "@ClubEvoApiBundle/Resources/config/routing/DistributorEmployee.yml"
+    prefix:   /

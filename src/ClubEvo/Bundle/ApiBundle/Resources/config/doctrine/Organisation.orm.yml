@@ -1,13 +1,6 @@
 ClubEvo\Bundle\ApiBundle\Entity\Organisation:
     type: mappedSuperclass
     table: organisation
-    id:
-        id:
-            type: integer
-            nullable: false
-            unsigned: false
-            comment: ''
-            id: true
     fields:
         title:
             type: string
@@ -50,10 +43,10 @@ ClubEvo\Bundle\ApiBundle\Entity\Organisation:
         contactCard:
             targetEntity: Nsm\Bundle\ContactCardBundle\Entity\ContactCard
             cascade: {  }
-            mappedBy: contactCard
+            mappedBy: null
             inversedBy: null
             joinColumns:
-                ContactCard_id:
+                contact_card:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

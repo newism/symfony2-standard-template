@@ -1,0 +1,39 @@
+distributor_employee_browse:
+    pattern:  '/distributor-employee.{_format}'
+    defaults: { _controller: "ClubEvoApiBundle:DistributorEmployee:browse", _format: html }
+    requirements: { _method: get }
+
+distributor_employee_read:
+    pattern:  '/distributor-employee/{id}/read'
+    defaults: { _controller: "ClubEvoApiBundle:DistributorEmployee:read" }
+    requirements: { _method: get }
+
+distributor_employee_edit:
+    pattern:  '/distributor-employee/{id}/edit'
+    defaults: { _controller: "ClubEvoApiBundle:DistributorEmployee:edit" }
+    requirements: { _method: get }
+
+distributor_employee_patch:
+    pattern:  '/distributor-employee/{id}'
+    defaults: { _controller: "ClubEvoApiBundle:DistributorEmployee:edit" }
+    requirements: { _method: patch }
+
+distributor_employee_add:
+    pattern:  '/distributor-employee/add'
+    defaults: { _controller: "ClubEvoApiBundle:DistributorEmployee:add" }
+    requirements: { _method: get }
+
+distributor_employee_post:
+    pattern:  '/distributor-employee'
+    defaults: { _controller: "ClubEvoApiBundle:DistributorEmployee:add" }
+    requirements: { _method: post }
+
+distributor_employee_destroy:
+    pattern:  '/distributor-employee/{id}/destroy'
+    defaults: { _controller: "ClubEvoApiBundle:DistributorEmployee:destroy" }
+    requirements: { _method: get }
+
+distributor_employee_delete:
+    pattern:  '/distributor-employee/{id}'
+    defaults: { _controller: "ClubEvoApiBundle:DistributorEmployee:destroy" }
+    requirements: { _method: delete }

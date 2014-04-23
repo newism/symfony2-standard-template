@@ -1,0 +1,39 @@
+service_center_group_employee_browse:
+    pattern:  '/service-center-group-employee.{_format}'
+    defaults: { _controller: "ClubEvoApiBundle:ServiceCenterGroupEmployee:browse", _format: html }
+    requirements: { _method: get }
+
+service_center_group_employee_read:
+    pattern:  '/service-center-group-employee/{id}/read'
+    defaults: { _controller: "ClubEvoApiBundle:ServiceCenterGroupEmployee:read" }
+    requirements: { _method: get }
+
+service_center_group_employee_edit:
+    pattern:  '/service-center-group-employee/{id}/edit'
+    defaults: { _controller: "ClubEvoApiBundle:ServiceCenterGroupEmployee:edit" }
+    requirements: { _method: get }
+
+service_center_group_employee_patch:
+    pattern:  '/service-center-group-employee/{id}'
+    defaults: { _controller: "ClubEvoApiBundle:ServiceCenterGroupEmployee:edit" }
+    requirements: { _method: patch }
+
+service_center_group_employee_add:
+    pattern:  '/service-center-group-employee/add'
+    defaults: { _controller: "ClubEvoApiBundle:ServiceCenterGroupEmployee:add" }
+    requirements: { _method: get }
+
+service_center_group_employee_post:
+    pattern:  '/service-center-group-employee'
+    defaults: { _controller: "ClubEvoApiBundle:ServiceCenterGroupEmployee:add" }
+    requirements: { _method: post }
+
+service_center_group_employee_destroy:
+    pattern:  '/service-center-group-employee/{id}/destroy'
+    defaults: { _controller: "ClubEvoApiBundle:ServiceCenterGroupEmployee:destroy" }
+    requirements: { _method: get }
+
+service_center_group_employee_delete:
+    pattern:  '/service-center-group-employee/{id}'
+    defaults: { _controller: "ClubEvoApiBundle:ServiceCenterGroupEmployee:destroy" }
+    requirements: { _method: delete }

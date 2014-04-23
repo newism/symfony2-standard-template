@@ -1,0 +1,13 @@
+{% extends 'ClubEvoApiBundle::layout.html.twig' %}
+
+{% block content -%}
+    <h1>Distributor Employee edit</h1>
+
+    {{ form(form) }}
+
+    <div>
+        <a href="{{ path('distributor_employee_browse') }}">
+            Back to the list
+        </a>
+    </div>
+{% endblock %}
