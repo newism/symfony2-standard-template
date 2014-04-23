@@ -1,0 +1,71 @@
+ClubEvo\Bundle\ApiBundle\Entity\Person:
+    type: mappedSuperclass
+    table: person
+    fields:
+        familyName:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: family_name
+        givenName:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: given_name
+        additionalNames:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: additional_names
+        honorificPrefix:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: honorific_prefix
+        honorificSuffix:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: honorific_suffix
+        nickName:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: nick_name
+        birthday:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: birthday
+        gender:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: gender
+    oneToOne:
+        contactCard:
+            targetEntity: Nsm\Bundle\ContactCardBundle\Entity\ContactCard
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_card:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

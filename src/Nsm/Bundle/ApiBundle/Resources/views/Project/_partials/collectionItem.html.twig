@@ -1,0 +1,22 @@
+            <tr>
+                <td><a href="{{ path('project_read', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.id is defined ? entity.id }}</td>
+                <td>{{ entity.title is defined ? entity.title }}</td>
+                <td>{{ entity.description is defined ? entity.description }}</td>
+                <td>{{ entity.taskDurationSum is defined ? entity.taskDurationSum }}</td>
+                <td>{{ entity.createdAt is defined ? entity.createdAt }}</td>
+                <td>{{ entity.updatedAt is defined ? entity.updatedAt }}</td>
+                <td>{{ entity.deletedAt is defined ? entity.deletedAt }}</td>                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('project_read', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('project_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('project_destroy', { 'id': entity.id }) }}">destroy</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>

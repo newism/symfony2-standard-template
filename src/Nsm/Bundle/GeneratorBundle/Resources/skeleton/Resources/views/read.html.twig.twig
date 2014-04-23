@@ -1,0 +1,40 @@
+{{ "{% extends '"~bundle_name~"::layout.html.twig' %}" }}
+
+{{ "{% block content -%}" }}
+    <h1>{{ entity_english_name }}</h1>
+
+    <table class="record_properties">
+        <tbody>
+        {%- for field, metadata in meta_data.fieldMappings %}
+
+            <tr>
+                <th>{{ field|capitalize }}</th>
+
+            {%- if metadata.type in ['date', 'datetime'] %}
+
+                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ '|date(\'Y-m-d H:i:s\') }}' }}</td>
+
+            {%- else %}
+
+                <td>{{ '{{ entity.' ~ field|replace({'_': ''}) ~ ' }}' }}</td>
+
+            {%- endif %}
+
+            </tr>
+
+        {%- endfor %}
+
+        </tbody>
+    </table>
+
+    <div>
+        <a href="{{ "{{ path('" ~ entity_service_name ~ "_edit', { 'id': entity.id }) }}" }}">
+            Edit
+        </a>
+    </div>
+    <div>
+        <a href="{{ "{{ path('" ~ entity_service_name ~ "_browse') }}" }}">
+            Back to the list
+        </a>
+    </div>
+{{ "{% endblock %}" }}

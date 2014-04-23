@@ -1,0 +1,18 @@
+{% extends 'ClubEvoApiBundle::layout.html.twig' %}
+
+{% set entities = pager.getCurrentPageResults %}
+
+{% block content %}
+
+    <h1>Service Center Group Employee list</h1>
+
+    {% include 'ClubEvoApiBundle:ServiceCenterGroupEmployee:_partials/collection.html.twig' with {
+        "entities": entities
+    } %}
+
+    <div>
+        <a href="{{ path('service_center_group_employee_add') }}">
+            Create a new entry
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'NsmApiBundle::layout.html.twig' %}
+
+{% set entities = pager.getCurrentPageResults %}
+
+{% block body %}
+
+    <h1>Invitation list</h1>
+
+    {% include 'NsmApiBundle:Invitation:_partials/collection.html.twig' with {
+        "entities": entities
+    } %}
+
+    <ul>
+        <li>
+            <a href="{{ path('invitation_add') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}

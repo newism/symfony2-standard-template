@@ -1,3 +1,7 @@
+club_evo_api:
+    resource: "@ClubEvoApiBundle/Resources/config/routing.yml"
+    prefix:   /ce
+
 NsmUserBundle:
     resource: "@NsmUserBundle/Resources/config/routing.yml"
 
@@ -8,4 +12,6 @@ NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
 
-
+NsmApiBundle:
+    resource: "@NsmApiBundle/Resources/config/routing.yml"
+    prefix:   /

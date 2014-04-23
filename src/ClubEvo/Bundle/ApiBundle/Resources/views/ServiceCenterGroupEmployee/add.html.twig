@@ -1,0 +1,13 @@
+{% extends 'ClubEvoApiBundle::layout.html.twig' %}
+
+{% block content -%}
+    <h1>Service Center Group Employee creation</h1>
+
+    {{ form(form) }}
+
+    <div>
+        <a href="{{ path('service_center_group_employee_browse') }}">
+            Back to the list
+        </a>
+    </div>
+{% endblock %}

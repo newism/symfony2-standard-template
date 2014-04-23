@@ -1,0 +1,45 @@
+Nsm\Bundle\ContactCardBundle\Entity\ContactCard:
+    type: entity
+    table: contact_card
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+                contactCard:
+    oneToMany:
+        addresses:
+            targetEntity: Address
+            cascade:
+                - remove
+            mappedBy: contactCard
+            inversedBy: null
+        emails:
+            targetEntity: Email
+            cascade:
+                - remove
+            mappedBy: contactCard
+            inversedBy: null
+        immps:
+            targetEntity: Immp
+            cascade:
+                - remove
+            mappedBy: contactCard
+            inversedBy: null
+        telephones:
+            targetEntity: Telephone
+            cascade:
+                - remove
+            mappedBy: contactCard
+            inversedBy: null
+        urls:
+            targetEntity: Url
+            cascade:
+                - remove
+            mappedBy: contactCard
+            inversedBy: null
+    lifecycleCallbacks: {  }

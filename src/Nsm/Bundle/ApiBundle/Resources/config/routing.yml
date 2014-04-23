@@ -1,14 +1,27 @@
 dashboard:
     resource: "@NsmApiBundle/Controller/DashboardController.php"
     type:     annotation
+nsm_api_invitation:
+    resource: "@NsmApiBundle/Resources/config/routing/Invitation.yml"
+    prefix:   /
 
 projects:
     resource: "@NsmApiBundle/Controller/ProjectsController.php"
     type:     annotation
+nsm_api_task:
+    resource: "@NsmApiBundle/Resources/config/routing/Task.yml"
+    prefix:   /
 
 tasks:
     resource: "@NsmApiBundle/Controller/TasksController.php"
     type:     annotation
+nsm_api_project:
+    resource: "@NsmApiBundle/Resources/config/routing/Project.yml"
+    prefix:   /
+
+nsm_api_activity:
+    resource: "@NsmApiBundle/Resources/config/routing/Activity.yml"
+    prefix:   /
 
 activities:
     resource: "@NsmApiBundle/Controller/ActivitiesController.php"

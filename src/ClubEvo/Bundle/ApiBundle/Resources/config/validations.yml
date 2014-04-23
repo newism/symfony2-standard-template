@@ -1,0 +1,6 @@
+
+parameters:
+    validator.mapping.loader.yaml_files_loader.mapping_files:
+        - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validations/ServiceCenterGroupEmployee.yml'
+        - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validations/RoadsideAssistEmployee.yml'
+        - '%kernel.root_dir%/../src/Nsm/Bundle/ApiBundle/Resources/config/validations/DistributorEmployee.yml'

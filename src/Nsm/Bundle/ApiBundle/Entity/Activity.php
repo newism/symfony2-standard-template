@@ -6,16 +6,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Nsm\Bundle\ContactCardBundle\Entity\ContactCardableInterface;
+use Nsm\Bundle\ContactCardBundle\Traits\ContactCardableTrait;
 use Nsm\Bundle\FormBundle\Form\Model\DateRange;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nsm\Bundle\CoreBundle\Entity\AbstractEntity;
 
-
-class Activity extends AbstractEntity
+class Activity extends AbstractEntity implements ContactCardableInterface
 {
     use ORMBehaviors\Timestampable\Timestampable,
         ORMBehaviors\SoftDeletable\SoftDeletable,
-        ORMBehaviors\Blameable\Blameable;
+        ORMBehaviors\Blameable\Blameable,
+        ContactCardableTrait;
 
     /**
      * @var integer

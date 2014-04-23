@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Nsm\Bundle\ApiBundle\NsmApiBundle(),
             new Nsm\Bundle\FormBundle\NsmFormBundle(),
             new Nsm\Bundle\UserBundle\NsmUserBundle(),
+            new Nsm\Bundle\ContactCardBundle\NsmContactCardBundle(),
 
             // API
             new Nelmio\CorsBundle\NelmioCorsBundle(),
@@ -34,16 +35,18 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Nsm\Bundle\CoreBundle\NsmCoreBundle(),
+            new ClubEvo\Bundle\ApiBundle\ClubEvoApiBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+            $bundles[] = new Nsm\Bundle\GeneratorBundle\NsmGeneratorBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
 
         if (in_array($this->getEnvironment(), array('test'))) {
-            $bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
+            //$bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
             $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
         }
 

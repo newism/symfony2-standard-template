@@ -1,0 +1,39 @@
+roadside_assist_employee_browse:
+    pattern:  '/roadside-assist-employee.{_format}'
+    defaults: { _controller: "ClubEvoApiBundle:RoadsideAssistEmployee:browse", _format: html }
+    requirements: { _method: get }
+
+roadside_assist_employee_read:
+    pattern:  '/roadside-assist-employee/{id}/read'
+    defaults: { _controller: "ClubEvoApiBundle:RoadsideAssistEmployee:read" }
+    requirements: { _method: get }
+
+roadside_assist_employee_edit:
+    pattern:  '/roadside-assist-employee/{id}/edit'
+    defaults: { _controller: "ClubEvoApiBundle:RoadsideAssistEmployee:edit" }
+    requirements: { _method: get }
+
+roadside_assist_employee_patch:
+    pattern:  '/roadside-assist-employee/{id}'
+    defaults: { _controller: "ClubEvoApiBundle:RoadsideAssistEmployee:edit" }
+    requirements: { _method: patch }
+
+roadside_assist_employee_add:
+    pattern:  '/roadside-assist-employee/add'
+    defaults: { _controller: "ClubEvoApiBundle:RoadsideAssistEmployee:add" }
+    requirements: { _method: get }
+
+roadside_assist_employee_post:
+    pattern:  '/roadside-assist-employee'
+    defaults: { _controller: "ClubEvoApiBundle:RoadsideAssistEmployee:add" }
+    requirements: { _method: post }
+
+roadside_assist_employee_destroy:
+    pattern:  '/roadside-assist-employee/{id}/destroy'
+    defaults: { _controller: "ClubEvoApiBundle:RoadsideAssistEmployee:destroy" }
+    requirements: { _method: get }
+
+roadside_assist_employee_delete:
+    pattern:  '/roadside-assist-employee/{id}'
+    defaults: { _controller: "ClubEvoApiBundle:RoadsideAssistEmployee:destroy" }
+    requirements: { _method: delete }

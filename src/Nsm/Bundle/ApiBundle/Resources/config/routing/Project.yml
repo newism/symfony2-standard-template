@@ -1,0 +1,20 @@
+project_browse:
+    pattern:  '/project.{_format}'
+    defaults: { _controller: "NsmApiBundle:Project:browse", _format: html }
+
+project_read:
+    pattern:  '/project/{id}/read'
+    defaults: { _controller: "NsmApiBundle:Project:read" }
+
+project_edit:
+    pattern:  '/project/{id}/edit'
+    defaults: { _controller: "NsmApiBundle:Project:edit" }
+
+project_add:
+    pattern:  '/project/new'
+    defaults: { _controller: "NsmApiBundle:Project:add" }
+
+project_destroy:
+    pattern:  '/project/{id}/destroy'
+    defaults: { _controller: "NsmApiBundle:Project:destroy" }
+    requirements: { _method: post|delete }

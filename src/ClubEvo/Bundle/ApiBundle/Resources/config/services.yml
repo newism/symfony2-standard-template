@@ -1,0 +1,7 @@
+parameters:
+#    club_evo_api.example.class: ClubEvo\Bundle\ApiBundle\Example
+
+services:
+#    club_evo_api.example:
+#        class: %club_evo_api.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

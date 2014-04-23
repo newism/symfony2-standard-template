@@ -1,0 +1,40 @@
+<?php
+
+namespace {{ bundle_namespace }}\EventSubscriber;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PreFlushEventArgs;
+use Doctrine\ORM\Events;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use {{ bundle_namespace }}\Entity\{{ entity_name }};
+use {{ bundle_namespace }}\Entity\{{ entity_name }}Manager;
+
+/**
+ * {{ entity_english_name }} subscriber.
+ *
+ */
+class {{ entity_name }}Subscriber implements EventSubscriber
+{
+    protected $container;
+
+    /**
+     * Constructor
+     *
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubscribedEvents()
+    {
+        return array();
+    }
+}

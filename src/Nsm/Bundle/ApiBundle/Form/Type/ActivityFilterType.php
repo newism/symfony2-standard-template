@@ -11,10 +11,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Activity Form Filter Type
+ */
 class ActivityFilterType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @param FormBuilderInterface $builder
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -125,16 +129,22 @@ class ActivityFilterType extends AbstractType
         );
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
-                'csrf_protection' => false,
-                'required' => true
+                'data_class'      => null,
+                'csrf_protection' => false
             )
         );
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'filter';

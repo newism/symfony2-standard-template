@@ -7,23 +7,18 @@ parameters:
 
 services:
 
+    nsm_api.entity.task_manager:
+        class: %nsm_api.entity.task_manager.class%
+        arguments: [%nsm_api.entity.task.class%, @doctrine.orm.entity_manager]
+
     nsm_api.entity.task_repository:
         class: %nsm_api.entity.task_repository.class%
         factory_service: "doctrine.orm.entity_manager"
         factory_method: "getRepository"
-        arguments:
-            - %nsm_api.entity.task.class%
-
-    nsm_api.entity.task_manager:
-        class: %nsm_api.entity.task_manager.class%
-        arguments:
-            - %nsm_api.entity.task.class%
-            - @doctrine.orm.entity_manager
+        arguments: [%nsm_api.entity.task.class%]
 
     nsm_api.event_subscriber.task_subscriber:
         class: %nsm_api.event_subscriber.task_subscriber.class%
-        arguments:
-            - @service_container
+        arguments: [@service_container]
         tags:
-            - {name: "doctrine.event_subscriber", connection: "default"}
-
+          - {name: "doctrine.event_subscriber", connection: "default"}

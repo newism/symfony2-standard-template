@@ -1,0 +1,21 @@
+ClubEvo\Bundle\ApiBundle\Entity\ServiceCenterGroupEmployee:
+    type: entity
+    table: service_center_group_employee
+    repositoryClass: ServiceCenterGroupEmployeeRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        role:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+    lifecycleCallbacks: {  }

@@ -1,0 +1,52 @@
+ClubEvo\Bundle\ApiBundle\Entity\Organisation:
+    type: mappedSuperclass
+    table: organisation
+    fields:
+        title:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        acn:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        abn:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        type:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        class:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        subclass:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: subClass
+    oneToOne:
+        contactCard:
+            targetEntity: Nsm\Bundle\ContactCardBundle\Entity\ContactCard
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_card:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

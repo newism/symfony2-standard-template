@@ -1,0 +1,81 @@
+Nsm\Bundle\ContactCardBundle\Entity\Address:
+    type: entity
+    table: address
+    indexes:
+        fk_Address_ContactCard1_idx:
+            columns:
+                - ContactCard_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        type:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        streetAddress:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: streetAddress
+        locality:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        region:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        postalCode:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: postalCode
+        countryName:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: countryName
+        geolat:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: geoLat
+        geolong:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: geoLong
+    manyToOne:
+        contactCard:
+            targetEntity: ContactCard
+            cascade: {  }
+            mappedBy: null
+            inversedBy: addresses
+            joinColumns:
+                ContactCard_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

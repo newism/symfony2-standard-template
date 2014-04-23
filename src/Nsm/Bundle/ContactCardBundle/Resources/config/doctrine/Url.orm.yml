@@ -1,0 +1,46 @@
+Nsm\Bundle\ContactCardBundle\Entity\Url:
+    type: entity
+    table: url
+    indexes:
+        fk_Url_ContactCard1_idx:
+            columns:
+                - ContactCard_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        url:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        type:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        label:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+    manyToOne:
+        contactCard:
+            targetEntity: ContactCard
+            cascade: {  }
+            mappedBy: null
+            inversedBy: immps
+            joinColumns:
+                ContactCard_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

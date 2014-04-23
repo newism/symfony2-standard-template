@@ -1,0 +1,31 @@
+    {{ form_start(search_form, {'attr': {'class': 'Form', 'novalidate': 'novalidate'}}) }}
+    <table>
+        <tbody>
+        {# Need to stipulate which fields to show there #}
+        {{ form_row(search_form) }}
+        </tbody>
+    </table>
+    <div class="Form-actions">
+        {{ form_row(search_form.search) }}
+    </div>
+    {{ form_end(search_form) }}
+
+    <table>
+        <caption>
+            Showing {{ pager.currentPageFirstResultOffset }} - {{ pager.currentPageLastResultOffset }} of {{ pager.totalResultCount }} results
+        </caption>
+
+        <thead>
+        <tr>
+            <th>{{ 'id'|trans }}</th>
+            <th>{{ 'role'|trans }}</th>            <th>{{ 'browse_actions'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            {% include 'ClubEvoApiBundle:RoadsideAssistEmployee:_partials/collectionItem.html.twig' with {
+                "entity": entity
+            } %}
+        {% endfor %}
+        </tbody>
+    </table>

@@ -1,0 +1,39 @@
+{{ entity_service_name }}_browse:
+    pattern:  '/{{ entity_url_name }}.{_format}'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:browse", _format: html }
+    requirements: { _method: get }
+
+{{ entity_service_name }}_read:
+    pattern:  '/{{ entity_url_name }}/{id}/read'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:read" }
+    requirements: { _method: get }
+
+{{ entity_service_name }}_edit:
+    pattern:  '/{{ entity_url_name }}/{id}/edit'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:edit" }
+    requirements: { _method: get }
+
+{{ entity_service_name }}_patch:
+    pattern:  '/{{ entity_url_name }}/{id}'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:edit" }
+    requirements: { _method: patch }
+
+{{ entity_service_name }}_add:
+    pattern:  '/{{ entity_url_name }}/add'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:add" }
+    requirements: { _method: get }
+
+{{ entity_service_name }}_post:
+    pattern:  '/{{ entity_url_name }}'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:add" }
+    requirements: { _method: post }
+
+{{ entity_service_name }}_destroy:
+    pattern:  '/{{ entity_url_name }}/{id}/destroy'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:destroy" }
+    requirements: { _method: get }
+
+{{ entity_service_name }}_delete:
+    pattern:  '/{{ entity_url_name }}/{id}'
+    defaults: { _controller: "{{ bundle_name }}:{{ entity_name }}:destroy" }
+    requirements: { _method: delete }
