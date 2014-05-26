@@ -3,7 +3,10 @@
 {% block content -%}
     <h1>Project creation</h1>
 
-    {{ form(form) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_end(form) }}
 
     <ul class="record_actions">
         <li>

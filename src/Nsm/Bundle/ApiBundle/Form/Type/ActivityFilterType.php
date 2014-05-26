@@ -94,6 +94,7 @@ class ActivityFilterType extends AbstractType
                     )
                 )
             );
+        $builder->add('birthday', 'birthday', array('mapped' => false));
         $builder->add(
             'title',
             'text',

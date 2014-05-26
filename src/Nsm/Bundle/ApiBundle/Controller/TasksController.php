@@ -18,12 +18,31 @@ use Nsm\Bundle\ApiBundle\Form\Type\TaskType;
 use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Task controller.
  */
 class TasksController extends AbstractController
 {
+    protected $templateGroup = 'NsmApiBundle:Tasks';
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    private function findTaskOr404($id)
+    {
+        $entity = $this->get('nsm_api.entity.task_repository')->find($id);
+
+        if (!$entity instanceof Task) {
+            throw new NotFoundHttpException('Task not found.');
+        }
+
+        return $entity;
+    }
+
     /**
      * Browse all Task entities.
      *
@@ -44,10 +63,6 @@ class TasksController extends AbstractController
      */
     public function browseAction(Request $request, $page, $perPage)
     {
-        $em = $this->getDoctrine()->getManager();
-        /** @var TaskRepository $repo */
-        $repo = $em->getRepository('NsmApiBundle:Task');
-
         /** @var Form $form */
         $taskSearchForm = $this->createForm(
             new TaskFilterType(),
@@ -59,13 +74,13 @@ class TasksController extends AbstractController
         )->add('search', 'submit');
 
         $taskSearchForm->handleRequest($request);
-        $criteria = $repo->sanatiseCriteria($taskSearchForm->getData());
+        $criteria = $taskSearchForm->getData();
 
-        $qb = $repo->createQueryBuilder();
+        $qb = $this->get('nsm_api.entity.task_repository')->createQueryBuilder();
         $qb->filterByCriteria($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
-        $results = $pager->getCurrentPageResults();
+
         $responseData = array();
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
@@ -100,7 +115,7 @@ class TasksController extends AbstractController
      */
     public function readAction($id)
     {
-        $entity = $this->findOr404('Task', $id);
+        $entity = $this->findTaskOr404($id);
 
         return $entity;
     }
@@ -119,7 +134,7 @@ class TasksController extends AbstractController
      */
     public function editAction(Request $request, $id)
     {
-        $entity = $this->findOr404('Task', $id);
+        $entity = $this->findTaskOr404($id);
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -173,8 +188,10 @@ class TasksController extends AbstractController
     {
         $entity = new Task();
 
-        $project = $this->find('Project', $projectId);
-        $entity->setProject($project);
+        if (null !== $projectId) {
+            $project = $this->get('nsm_api.entity.project_repository')->find($projectId);
+            $entity->setProject($project);
+        }
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -182,19 +199,43 @@ class TasksController extends AbstractController
             $entity,
             array(
                 'action' => $this->generateUrl('task_post'),
-                'method' => 'POST'
+                'method' => 'POST',
+                'target_path_choices' => array(
+                    'add_task' => 'Add Task'
+                )
             )
-        )->add('Save', 'submit');
+        )
+            ->add('Save', 'submit')
+            ->add(
+                'Refresh',
+                'submit',
+                array(
+                    'attr' => array(
+                        'formnovalidate' => 'formnovalidate'
+                    ),
+                    'validation_groups' => false
+                )
+            );
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->get('Save')->isClicked() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
+            $targetPath = $form->get('_target_path')->getData();
+
+            switch ($targetPath) {
+                case 'add_task':
+                    $targetPath = $this->generateUrl('task_add', array('projectId' => $entity->getProject()->getId()));
+                    break;
+                default:
+                    $targetPath = $this->generateUrl('task_read', array('id' => $entity->getId()));
+            }
+
             return $this->redirect(
-                $this->generateUrl('task_read', array('id' => $entity->getId())),
+                $targetPath,
                 Codes::HTTP_CREATED
             );
         }
@@ -216,7 +257,7 @@ class TasksController extends AbstractController
      */
     public function destroyAction(Request $request, $id)
     {
-        $entity = $this->findOr404('Task', $id);
+        $entity = $this->findTaskOr404($id);
 
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))

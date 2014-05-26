@@ -10,6 +10,9 @@
         <import resource="services/EntitySearch.xml"/>
         <import resource="services/Help.xml"/>
         <import resource="services/Layout.xml"/>
+        <import resource="services/TargetPath.xml"/>
+        <import resource="services/RouteChoice.xml"/>
+        <import resource="services/CollectionPrototypeData.xml"/>
     </imports>
 
 </container>

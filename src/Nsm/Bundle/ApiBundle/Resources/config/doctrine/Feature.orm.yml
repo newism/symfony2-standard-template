@@ -1,0 +1,38 @@
+Nsm\Bundle\ApiBundle\Entity\Feature:
+    type: entity
+    repositoryClass: Nsm\Bundle\ApiBundle\Entity\FeatureRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        description:
+            type: text
+            nullable: true
+        background:
+            type: text
+            nullable: true
+        taskDurationSum:
+            type: decimal
+            scale: 2
+        createdAt:
+            type: datetime
+            nullable: true
+        updatedAt:
+            type: datetime
+            nullable: true
+        deletedAt:
+            type: datetime
+            nullable: true
+    manyToOne:
+        project:
+            targetEntity: Project
+            inversedBy: features
+    oneToMany:
+        tasks:
+            targetEntity: Task
+            mappedBy: feature

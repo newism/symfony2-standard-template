@@ -1,6 +1,5 @@
 Nsm\Bundle\ApiBundle\Entity\Activity:
     type: entity
-    table: activity
     repositoryClass: Nsm\Bundle\ApiBundle\Entity\ActivityRepository
     id:
         id:

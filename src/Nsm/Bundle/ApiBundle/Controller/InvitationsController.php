@@ -19,6 +19,7 @@ use Nsm\Bundle\ApiBundle\Form\Type\InvitationType;
 use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\SecurityContext;
 
 /**
@@ -26,6 +27,24 @@ use Symfony\Component\Security\Core\SecurityContext;
  */
 class InvitationsController extends AbstractController
 {
+    protected $templateGroup = 'NsmApiBundle:Invitations';
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    private function findInvitationOr404($id)
+    {
+        $entity = $this->get('nsm_api.entity.invitation_repository')->find($id);
+
+        if (!$entity instanceof Invitation) {
+            throw new NotFoundHttpException('Invitation not found.');
+        }
+
+        return $entity;
+    }
+
     /**
      * Browse all Invitation entities.
      *
@@ -44,11 +63,6 @@ class InvitationsController extends AbstractController
      */
     public function browseAction(Request $request, $page, $perPage)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var InvitationRepository $repo */
-        $repo = $em->getRepository('NsmApiBundle:Invitation');
-
         /** @var Form $form */
         $invitationSearchForm = $this->createForm(
             new InvitationFilterType(),
@@ -60,13 +74,13 @@ class InvitationsController extends AbstractController
         )->add('search', 'submit');
 
         $invitationSearchForm->handleRequest($request);
-        $criteria = $repo->sanatiseCriteria($invitationSearchForm->getData());
+        $criteria = $invitationSearchForm->getData();
 
-        $qb = $repo->createQueryBuilder();
+        $qb = $this->get('nsm_api.entity.invitation_repository')->createQueryBuilder();
         $qb->filterByCriteria($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
-        $results = $pager->getCurrentPageResults();
+
         $responseData = array();
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
@@ -100,7 +114,7 @@ class InvitationsController extends AbstractController
      */
     public function readAction($id)
     {
-        $entity = $this->findOr404('Invitation', $id);
+        $entity = $this->findInvitationOr404($id);
 
         return $entity;
     }
@@ -119,8 +133,7 @@ class InvitationsController extends AbstractController
      */
     public function editAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $this->findOr404('Invitation', $id);
+        $entity = $this->findInvitationOr404($id);
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -175,7 +188,7 @@ class InvitationsController extends AbstractController
     public function addAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = new invitation();
+        $entity = new Invitation();
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -223,7 +236,7 @@ class InvitationsController extends AbstractController
      */
     public function destroyAction(Request $request, $id)
     {
-        $entity = $this->findOr404('Invitation', $id);
+        $entity = $this->findInvitationOr404($id);
 
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))

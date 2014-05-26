@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 class DashboardController extends AbstractController
 {
     /**
-     * Browse all Activity entities.
-     *
      * @Get("/.{_format}", name="dashboard_browse", defaults={"_format"="~"})
      */
     public function browseAction(Request $request)

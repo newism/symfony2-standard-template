@@ -1,6 +1,5 @@
 Nsm\Bundle\ApiBundle\Entity\Invitation:
     type: entity
-    table: invitation
     repositoryClass: Nsm\Bundle\ApiBundle\Entity\InvitationRepository
     id:
         id:

@@ -6,7 +6,6 @@ NsmApiBundle:
 
 NsmHelpBundle:
     resource: "@NsmHelpBundle/Resources/config/routing.yml"
-    prefix:   /help
 
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"

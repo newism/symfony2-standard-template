@@ -21,7 +21,7 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
      *
      * @return mixed
      */
-    private function getEntityAlias($className)
+    public function getEntityAlias($className)
     {
         $className = explode('\\', $className);
 
@@ -76,7 +76,7 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
 
         return $sanitisedCriteria;
     }
-    
+
     /**
      * Take a collection and remap the collection to the id
      * 

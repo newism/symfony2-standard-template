@@ -18,7 +18,9 @@ class ActivityType extends AbstractType
             'task',
             'entity',
             array(
-                'class' => 'NsmApiBundle:Task'
+                'class' => 'NsmApiBundle:Task',
+                'empty_data' => null,
+                'empty_value' => ''
             )
         );
 
@@ -37,16 +39,6 @@ class ActivityType extends AbstractType
                 'required' => false
             )
         );
-
-//        $builder->add(
-//            'dateRange',
-//            new DateRangeType(),
-//            array(
-//                'required' => false,
-//                'start_type' => 'datetime',
-//                'end_type' => 'datetime',
-//            )
-//        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

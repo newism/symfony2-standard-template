@@ -5,8 +5,8 @@
 
     <services>
         <service id="nsm_form.form.extension.layout"
-                 class="Nsm\Bundle\FormBundle\Form\Extension\Layout\LayoutExtension">
-            <tag name="form.type_extension" alias="form"/>
+                 class="Nsm\Bundle\FormBundle\Form\Extension\LayoutExtension">
+            <tag name="form.type_extension" alias="form" priority="-255" />
         </service>
     </services>
 </container>

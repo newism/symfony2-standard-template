@@ -18,12 +18,31 @@ use Nsm\Bundle\ApiBundle\Form\Type\ActivityType;
 use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Activity controller.
  */
 class ActivitiesController extends AbstractController
 {
+    protected $templateGroup = 'NsmApiBundle:Activities';
+
+    /**
+     * @param $id
+     *
+     * @return Activity
+     */
+    private function findActivityOr404($id)
+    {
+        $entity = $this->get('nsm_api.entity.activity_repository')->find($id);
+
+        if (!$entity instanceof Activity) {
+            throw new NotFoundHttpException('Activity not found.');
+        }
+
+        return $entity;
+    }
+
     /**
      * Browse all Activity entities.
      *
@@ -44,10 +63,6 @@ class ActivitiesController extends AbstractController
      */
     public function browseAction(Request $request, $page, $perPage)
     {
-        $em = $this->getDoctrine()->getManager();
-        /** @var ActivityRepository $repo */
-        $repo = $em->getRepository('NsmApiBundle:Activity');
-
         /** @var Form $form */
         $activitySearchForm = $this->createForm(
             new ActivityFilterType(),
@@ -59,13 +74,13 @@ class ActivitiesController extends AbstractController
         )->add('search', 'submit');
 
         $activitySearchForm->handleRequest($request);
-        $criteria = $repo->sanatiseCriteria($activitySearchForm->getData());
+        $criteria = $activitySearchForm->getData();
 
-        $qb = $repo->createQueryBuilder();
+        $qb = $this->get('nsm_api.entity.activity_repository')->createQueryBuilder();
         $qb->filterByCriteria($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
-        $results = $pager->getCurrentPageResults();
+
         $responseData = array();
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
@@ -101,7 +116,7 @@ class ActivitiesController extends AbstractController
      */
     public function editAction(Request $request, $id)
     {
-        $entity = $this->findOr404('Activity', $id);
+        $entity = $this->findActivityOr404($id);
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -153,9 +168,10 @@ class ActivitiesController extends AbstractController
     {
         $entity = new Activity();
 
-        $task = $this->find('Task', $taskId);
-        $entity->setTask($task);
-        $entity->start();
+        if (null !== $taskId) {
+            $task = $this->get('nsm_api.entity.task_repository')->find($taskId);
+            $entity->setTask($task);
+        }
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -171,6 +187,7 @@ class ActivitiesController extends AbstractController
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->start();
             $em->persist($entity);
             $em->flush();
 
@@ -198,7 +215,7 @@ class ActivitiesController extends AbstractController
      */
     public function destroyAction(Request $request, $id)
     {
-        $entity = $this->findOr404('Activity', $id);
+        $entity = $this->findActivityOr404($id);
 
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))
@@ -239,7 +256,7 @@ class ActivitiesController extends AbstractController
      */
     public function readAction($id)
     {
-        $entity = $this->findOr404('Activity', $id);
+        $entity = $this->findActivityOr404($id);
 
         return $entity;
     }
@@ -256,7 +273,7 @@ class ActivitiesController extends AbstractController
      */
     public function startAction($id)
     {
-        $entity = $this->findOr404('Activity', $id);
+        $entity = $this->findActivityOr404($id);
         $entity->startTimer();
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);
@@ -277,7 +294,7 @@ class ActivitiesController extends AbstractController
      */
     public function stopAction($id)
     {
-        $entity = $this->findOr404('Activity', $id);
+        $entity = $this->findActivityOr404($id);
         $entity->stopTimer();
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);

@@ -1,21 +1,12 @@
 {% extends 'NsmApiBundle::layout.html.twig' %}
+{% form_theme search_form 'NsmFormBundle:Form:form_table_layout.html.twig' %}
 
 {% set entities = pager.getCurrentPageResults %}
 
 {% block content -%}
     <h1>Project list</h1>
 
-    {{ form_start(search_form, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
-    <table>
-        <tbody>
-        {{ form_row(search_form.id) }}
-        {{ form_row(search_form.title) }}
-        </tbody>
-    </table>
-    <div class="Form-actions">
-        {{ form_row(search_form.search) }}
-    </div>
-    {{ form_end(search_form) }}
+    {{ form(search_form, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
 
     <table data-widget="dataTable" data-data-table-options="{{ {
         'serverSide': true,

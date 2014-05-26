@@ -1,4 +1,5 @@
 {% extends 'NsmApiBundle::layout.html.twig' %}
+{% form_theme search_form 'NsmFormBundle:Form:form_table_layout.html.twig' %}
 
 {% set entities = pager.getCurrentPageResults %}
 

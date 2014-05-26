@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:hx="http://purl.org/NET/hinclude">
 <head>
     <meta charset="UTF-8"/>
     <title>{% block title %}Welcome!{% endblock %}</title>
@@ -42,6 +42,11 @@
             padding: 10px;
         }
 
+        .Collection {background: yellow; margin: 10px;}
+        .Collection-items {background: pink; margin: 10px;}
+        .CollectionItem {background: lightblue; margin: 10px;}
+        .CollectionItem-controls {background: lightgreen; margin: 10px;}
+
         form table .ControlGroup-controls {
             padding: 0
         }
@@ -54,6 +59,10 @@
             padding: 10px;
             text-align: right;
             vertical-align: top
+        }
+
+        textarea {
+            width: 100%; height: 300px;
         }
 
         @media (max-width: 600px) {
@@ -99,7 +108,7 @@
 
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     <ul>
-    {% for item in ['project', 'task', 'activity', 'invitation'] %}
+    {% for item in ['project', 'task', 'feature', 'activity', 'invitation'] %}
         <li><a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a></li>
     {% endfor %}
     </ul>
@@ -113,6 +122,11 @@
     {% endfor %}
 {% endfor %}
 
+{{ render_hinclude(url('tip_browse', {
+    'filter': {'route': app.request.get('_route')},
+    '_template': 'embed'
+})) }}
+
 {% block content %}{% endblock %}
 {% block fos_user_content %}{% endblock %}
 {% block hwi_oauth_content %}{% endblock %}
@@ -120,8 +134,9 @@
 {% block javascripts %}{% endblock %}
 
 <script src="/bundles/nsmapi/bower_components/jquery/jquery.js"></script>
-    <script src="/bundles/nsmapi/bower_components/selectize/dist/js/standalone/selectize.js"></script>
-    <script src="/bundles/nsmapi/bower_components/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="/bundles/nsmapi/bower_components/selectize/dist/js/standalone/selectize.js"></script>
+<script src="/bundles/nsmapi/bower_components/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="/bundles/nsmapi/bower_components/hinclude/hinclude.js"></script>
 
 <script>
     $('[data-widget=entitySearch]').each(function(){
@@ -140,7 +155,6 @@
         var $this = $(this),
             options = $this.data('dataTableOptions') || {}
             ;
-        console.log(options);
         $(this).DataTable(options);
     });
 

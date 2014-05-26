@@ -22,6 +22,11 @@ class TipType extends AbstractType
             'content',
             'textarea'
         );
+
+        $builder->add(
+            'route',
+            'route_choice'
+        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

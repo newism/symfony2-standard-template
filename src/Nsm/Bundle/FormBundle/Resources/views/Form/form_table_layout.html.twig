@@ -1,69 +1,70 @@
-{% extends 'form_div_layout.html.twig' %}
+{% extends 'NsmFormBundle:Form:form_div_layout.html.twig' %}
 
-{% block form_help %}
+{% block form_start %}
     {% spaceless %}
-    {% if help %}
-        <div class="{{ isControlGroup ? 'ControlGroup' : 'Control' }}-help">{{ help }}</div>
-    {% endif %}
+        {{ parent() }}
+        <table>
+            <tbody>
     {% endspaceless %}
-{% endblock %}
 
-{% block form_label %}
-    {{ parent() }}
-    {% if required %}
-        <span class="required" title="This field is required">*</span>
-    {% endif %}
-{% endblock %}
+{% endblock form_start %}
+
+{% block form_end %}
+    {% spaceless %}
+            </tbody>
+        </table>
+        {{ parent() }}
+    {% endspaceless %}
+{% endblock form_end %}
 
 {# Renders a control group #}
 {% block control_group %}
     {% set attr = control_group_attr %}
+    {% set label_attr = control_group_label_attr %}
+
     {% spaceless %}
         <tr {{ block('widget_container_attributes') }}>
             <th scope="row">
             {{ form_label(form, null, {'label_attr': control_group_label_attr}) }}
+            {{ block('form_help') }}
             </th>
             <td class="ControlGroup-controls">
-                {# if the form is compound we just render the widget which starts the loop again #}
-                {% if compound %}
+                {% set attr = control_attr %}
+                <div {{ block('widget_container_attributes') }}>
+                    {{ form_errors(form) }}
                     {{ form_widget(form) }}
-                {# if the form is not compound we just render out the widget in a div manually #}
-                {% else %}
-                    {% set attr = control_attr %}
-                    <div {{ block('widget_container_attributes') }}>
-                        {{ block('form_help') }}
-                        {{ form_errors(form) }}
-                        {{ form_widget(form) }}
-                    </div>
-                {% endif %}
+                </div>
             </td>
         </tr>
     {% endspaceless %}
 {% endblock control_group %}
 
-{# Renders a control and it's inputs #}
-{% block control %}
-    {% set attr = control_attr %}
-    {% spaceless %}
-        <div {{ block('widget_container_attributes') }}>
-            {{ form_label(form, null, {'label_attr': control_label_attr}) }}
-            {{ block('form_help') }}
-            {{ form_errors(form) }}
-            {{ form_widget(form) }}
-        </div>
-    {% endspaceless %}
-{% endblock control %}
+{# Renders a collection #}
+{% block collection %}
 
-{# Renders a form row. Determines if this is a control group (top level) and acts accordingly #}
-{% block form_row %}
+    {#{{ form_row(prototype) }}#}
+
+    {% set collection_attr = collection_attr|merge({
+        'data-prototype': form_row(prototype)
+    }) %}
+
+    {% set attr = collection_attr %}
+    {% set label_attr = collection_label_attr %}
+
     {% spaceless %}
-        {% if isControlGroup %}
-            {{ block('control_group') }}
-        {% else %}
-            {{ block('control') }}
-        {% endif %}
+        <tr {{ block('widget_container_attributes') }}>
+            <th scope="row">
+            {{ form_label(form, null, {'label_attr': label_attr}) }}
+            {{ block('form_help') }}
+            </th>
+            {% set attr = control_attr %}
+            <td class="Collection-items">
+                {{ form_errors(form) }}
+                {{ form_widget(form) }}
+            </td>
+        </tr>
     {% endspaceless %}
-{% endblock form_row %}
+{% endblock collection %}
 
 {% block button_row %}
     {% spaceless %}
@@ -74,14 +75,3 @@
         </tr>
     {% endspaceless %}
 {% endblock button_row %}
-
-{# Renders a compound widget. Div wrappers are added in the control and control block rows  #}
-{% block form_widget_compound %}
-    {% spaceless %}
-        {% if form.parent is empty %}
-            {{ form_errors(form) }}
-        {% endif %}
-        {{ block('form_rows') }}
-        {{ form_rest(form) }}
-    {% endspaceless %}
-{% endblock form_widget_compound %}

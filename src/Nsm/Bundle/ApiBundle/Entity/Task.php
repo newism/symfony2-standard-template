@@ -31,9 +31,19 @@ class Task extends AbstractEntity
     protected $description;
 
     /**
+     * @var string
+     */
+    protected $tags;
+
+    /**
      * @var Project
      */
     protected $project;
+
+    /**
+     * @var Feature
+     */
+    protected $feature;
 
     /**
      * @var ArrayCollection
@@ -45,19 +55,21 @@ class Task extends AbstractEntity
      */
     protected $activityDurationSum;
 
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->activities = new ArrayCollection();
         $this->activityDurationSum = 0;
+        $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -81,7 +93,7 @@ class Task extends AbstractEntity
     /**
      * Get title
      *
-     * @return string
+     * @return string 
      */
     public function getTitle()
     {
@@ -93,7 +105,7 @@ class Task extends AbstractEntity
      *
      * @param string $description
      *
-     * @return Project
+     * @return Task
      */
     public function setDescription($description)
     {
@@ -105,7 +117,7 @@ class Task extends AbstractEntity
     /**
      * Get description
      *
-     * @return string
+     * @return string 
      */
     public function getDescription()
     {
@@ -113,68 +125,33 @@ class Task extends AbstractEntity
     }
 
     /**
-     * Set project
+     * Set tags
      *
-     * @param Project $project
+     * @param string $tags
      *
      * @return Task
      */
-    public function setProject(Project $project = null)
+    public function setTags($tags)
     {
-        $this->project = $project;
+        $this->tags = $tags;
 
         return $this;
     }
 
     /**
-     * Get project
+     * Get tags
      *
-     * @return Project
+     * @return string 
      */
-    public function getProject()
+    public function getTags()
     {
-        return $this->project;
-    }
-
-    /**
-     * Add activity
-     *
-     * @param Activity $activity
-     *
-     * @return Task
-     */
-    public function addActivity(Activity $activity)
-    {
-        $this->activities[] = $activity;
-        $this->modifyActivityDurationSum($activity->getDuration());
-
-        return $this;
-    }
-
-    /**
-     * Remove activity
-     *
-     * @param Activity $activity
-     */
-    public function removeActivity(Activity $activity)
-    {
-        $this->activities->removeElement($activity);
-    }
-
-    /**
-     * Get activities
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getActivities()
-    {
-        return $this->activities;
+        return $this->tags;
     }
 
     /**
      * Set activityDurationSum
      *
-     * @param integer $activityDurationSum
+     * @param string $activityDurationSum
      *
      * @return Task
      */
@@ -188,7 +165,7 @@ class Task extends AbstractEntity
     /**
      * Get activityDurationSum
      *
-     * @return integer
+     * @return string 
      */
     public function getActivityDurationSum()
     {
@@ -196,14 +173,84 @@ class Task extends AbstractEntity
     }
 
     /**
-     * @param $duration
+     * Add activities
      *
-     * @return $this
+     * @param \Nsm\Bundle\ApiBundle\Entity\Activity $activities
+     *
+     * @return Task
      */
-    public function modifyActivityDurationSum($duration)
+    public function addActivity(\Nsm\Bundle\ApiBundle\Entity\Activity $activities)
     {
-        $this->activityDurationSum += $duration;
+        $this->activities[] = $activities;
 
         return $this;
+    }
+
+    /**
+     * Remove activities
+     *
+     * @param \Nsm\Bundle\ApiBundle\Entity\Activity $activities
+     */
+    public function removeActivity(\Nsm\Bundle\ApiBundle\Entity\Activity $activities)
+    {
+        $this->activities->removeElement($activities);
+    }
+
+    /**
+     * Get activities
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+
+    /**
+     * Set feature
+     *
+     * @param \Nsm\Bundle\ApiBundle\Entity\Feature $feature
+     *
+     * @return Task
+     */
+    public function setFeature(\Nsm\Bundle\ApiBundle\Entity\Feature $feature = null)
+    {
+        $this->feature = $feature;
+
+        return $this;
+    }
+
+    /**
+     * Get feature
+     *
+     * @return \Nsm\Bundle\ApiBundle\Entity\Feature 
+     */
+    public function getFeature()
+    {
+        return $this->feature;
+    }
+
+    /**
+     * Set project
+     *
+     * @param \Nsm\Bundle\ApiBundle\Entity\Project $project
+     *
+     * @return Task
+     */
+    public function setProject(\Nsm\Bundle\ApiBundle\Entity\Project $project = null)
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return \Nsm\Bundle\ApiBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }

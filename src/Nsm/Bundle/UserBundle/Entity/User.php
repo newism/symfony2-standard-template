@@ -61,6 +61,9 @@ class User extends BaseUser
      */
     private $instagramId;
 
+    protected $userEntityEvents;
+
+
     /**
      * Constructor
      */

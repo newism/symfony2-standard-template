@@ -12,18 +12,36 @@ use FOS\RestBundle\Util\Codes;
 use Hateoas\Configuration\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Nsm\Bundle\ApiBundle\Entity\Project;
-use Nsm\Bundle\ApiBundle\Entity\ProjectRepository;
+use Nsm\Bundle\ApiBundle\Entity\Task;
 use Nsm\Bundle\ApiBundle\Form\Type\ProjectFilterType;
 use Nsm\Bundle\ApiBundle\Form\Type\ProjectType;
 use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Project controller.
  */
 class ProjectsController extends AbstractController
 {
+    protected $templateGroup = 'NsmApiBundle:Projects';
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    private function findProjectOr404($id)
+    {
+        $entity = $this->get('nsm_api.entity.project_repository')->find($id);
+
+        if (!$entity instanceof Project) {
+            throw new NotFoundHttpException('Project not found.');
+        }
+
+        return $entity;
+    }
 
     /**
      * Browse all Project entities.
@@ -41,11 +59,6 @@ class ProjectsController extends AbstractController
      */
     public function browseAction(Request $request, $page, $perPage)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var ProjectRepository $repo */
-        $repo = $em->getRepository('NsmApiBundle:Project');
-
         /** @var Form $form */
         $projectSearchForm = $this->createForm(
             new ProjectFilterType(),
@@ -57,13 +70,13 @@ class ProjectsController extends AbstractController
         )->add('search', 'submit');
 
         $projectSearchForm->handleRequest($request);
-        $criteria = $repo->sanatiseCriteria($projectSearchForm->getData());
+        $criteria = $projectSearchForm->getData();
 
-        $qb = $repo->createQueryBuilder();
+        $qb = $this->get('nsm_api.entity.project_repository')->createQueryBuilder();
         $qb->filterByCriteria($criteria);
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
-        $results = $pager->getCurrentPageResults();
+
         $responseData = array();
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
@@ -97,7 +110,7 @@ class ProjectsController extends AbstractController
      */
     public function readAction($id)
     {
-        $entity = $this->findOr404('Project', $id);
+        $entity = $this->findProjectOr404($id);
         $entity->getTasks();
 
         return $entity;
@@ -117,7 +130,8 @@ class ProjectsController extends AbstractController
      */
     public function editAction(Request $request, $id)
     {
-        $entity = $this->findOr404('Project', $id);
+        /** @var Project $entity */
+        $entity = $this->findProjectOr404($id);
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -172,6 +186,7 @@ class ProjectsController extends AbstractController
     public function addAction(Request $request)
     {
         $entity = new Project();
+//        $entity->addTask(new Task());
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -181,7 +196,9 @@ class ProjectsController extends AbstractController
                 'action' => $this->generateUrl('project_post'),
                 'method' => 'POST'
             )
-        )->add('Save', 'submit');
+        )
+            ->add('Save', 'submit')
+        ;
 
         $form->handleRequest($request);
 
@@ -219,7 +236,7 @@ class ProjectsController extends AbstractController
      */
     public function destroyAction(Request $request, $id)
     {
-        $entity = $this->findOr404('Project', $id);
+        $entity = $this->findProjectOr404($id);
 
         /** @var Form $form */
         $form = $this->createFormBuilder(array('id' => $id))

@@ -1,6 +1,5 @@
 Nsm\Bundle\ApiBundle\Entity\Project:
     type: entity
-    table: project
     repositoryClass: Nsm\Bundle\ApiBundle\Entity\ProjectRepository
     id:
         id:
@@ -26,9 +25,16 @@ Nsm\Bundle\ApiBundle\Entity\Project:
         deletedAt:
             type: datetime
             nullable: true
+
     oneToMany:
         tasks:
             targetEntity: Task
+            mappedBy: project
+            cascade:
+                - persist
+                - remove
+        features:
+            targetEntity: Feature
             mappedBy: project
             cascade:
                 - remove

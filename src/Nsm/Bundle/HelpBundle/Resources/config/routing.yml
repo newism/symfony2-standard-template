@@ -1,2 +1,3 @@
 help_tips:
-  resource: "@NsmHelpBundle/Resources/config/routing/Tip.yml"
+    resource: "@NsmHelpBundle/Resources/config/routing/Tip.yml"
+    prefix:   /help

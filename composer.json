@@ -42,7 +42,8 @@
         "hwi/oauth-bundle": "0.4.*@dev"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "mockery/mockery": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

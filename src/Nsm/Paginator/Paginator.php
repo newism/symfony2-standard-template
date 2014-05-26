@@ -53,20 +53,19 @@ class Paginator extends BasePaginator
     }
 
     /**
-     * @param $page
+     * @param $pageNumber
      *
      * @return $this
      */
-    public function setCurrentPage($page)
+    public function setCurrentPage($pageNumber)
     {
-        $this->currentPage = intval($page);
+        $this->currentPage = intval($pageNumber);
 
         // Zero based index
         $this->getQuery()->setFirstResult($this->getCurrentPageFirstResultOffset() - 1);
 
         return $this;
     }
-
 
     /**
      * @return int
@@ -98,8 +97,21 @@ class Paginator extends BasePaginator
      */
     public function getPageCount()
     {
-        // No results must have one page
-        return (0 === $this->count()) ? 1 : intval(ceil($this->count() / $this->getQuery()->getMaxResults()));
+        if (0 === $this->count()) {
+            return 0;
+        }
+
+        return intval(ceil($this->count() / $this->getQuery()->getMaxResults()));
+    }
+
+    /**
+     * @param $pageNumber
+     *
+     * @return mixed
+     */
+    private function calculateFirstResultOffset($pageNumber)
+    {
+        return ($pageNumber - 1) * $this->getQuery()->getMaxResults() + 1;
     }
 
     /**
@@ -107,9 +119,9 @@ class Paginator extends BasePaginator
      *
      * @return int
      */
-    public function calculateFirstResultOffset($pageNumber)
+    private function calculateLastResultOffset($pageNumber)
     {
-        return ($pageNumber - 1) * $this->getQuery()->getMaxResults() + 1;
+        return $this->calculateFirstResultOffset($pageNumber) + $this->getPerPage() - 1;
     }
 
     /**
@@ -121,23 +133,12 @@ class Paginator extends BasePaginator
     }
 
     /**
-     * @param $pageNumber
-     *
-     * @return int
-     */
-    public function calculateLastResultOffset($pageNumber)
-    {
-        return $this->getCurrentPageFirstResultOffset() + $this->getPerPage() - 1;
-    }
-
-    /**
      * @return int
      */
     public function getCurrentPageLastResultOffset()
     {
         return $this->calculateLastResultOffset($this->currentPage);
     }
-
 
     /**
      * @return array

@@ -4,7 +4,7 @@ namespace Nsm\Bundle\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Nsm\Bundle\ApiBundle\Form\Model\DateRange;
+use Nsm\Bundle\FormBundle\Form\Model\DateRange;
 
 class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
 {
@@ -39,6 +39,8 @@ class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
      */
     public function filterByCriteria(array $criteria)
     {
+        $criteria = $this->repository->sanatiseCriteria($criteria);
+
         foreach ($criteria as $key => $value) {
 
             $method = 'filterBy' . ucfirst($key);
@@ -47,6 +49,8 @@ class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
 
         return $this;
     }
+
+
 
     /**
      * @param $id
@@ -58,6 +62,18 @@ class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
         $this->addWhere("id", $id);
 
         return $this;
+    }
+
+    /**
+     * @param $className
+     *
+     * @return mixed
+     */
+    public function getEntityAlias($className)
+    {
+        $className = explode('\\', $className);
+
+        return end($className);
     }
 
     /**
@@ -73,7 +89,8 @@ class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
         $parameterCount = count($this->getParameters()) + 1;
 
         if (false === strpos($columnName, ".")) {
-            $columnName = $this->getEntityAlias() . "." . $columnName;
+            $entityAlias = $this->getEntityAlias($this->repository->getClassName());
+            $columnName = $entityAlias . "." . $columnName;
         }
 
         switch (true) {

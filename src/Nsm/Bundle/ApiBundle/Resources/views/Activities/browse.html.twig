@@ -1,4 +1,5 @@
 {% extends 'NsmApiBundle::layout.html.twig' %}
+{% form_theme search_form 'NsmFormBundle:Form:form_table_layout.html.twig' %}
 
 {% set entities = pager.getCurrentPageResults %}
 
@@ -6,21 +7,7 @@
 
     <h1>Activity list</h1>
 
-    {{ form_start(search_form, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
-    <table>
-        <tbody>
-        {{ form_row(search_form.id) }}
-        {{ form_row(search_form.task) }}
-        {#{{ form_row(search_form.taskMultiple) }}#}
-        {{ form_row(search_form.title) }}
-        {{ form_row(search_form.endedAt) }}
-        {{ form_row(search_form.startedAtRange) }}
-        </tbody>
-    </table>
-    <div class="Form-actions">
-        {{ form_row(search_form.search) }}
-    </div>
-    {{ form_end(search_form) }}
+    {{ form(search_form, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
 
     <table>
         <caption>

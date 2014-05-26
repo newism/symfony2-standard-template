@@ -36,6 +36,11 @@ class Project extends AbstractEntity
     protected $tasks;
 
     /**
+     * @var ArrayCollection
+     */
+    protected $features;
+
+    /**
      * @var integer $taskDurationSum
      */
     protected $taskDurationSum;
@@ -75,99 +80,9 @@ class Project extends AbstractEntity
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->features = new ArrayCollection();
+
         $this->taskDurationSum = 0;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return $this
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return $this
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Add tasks
-     *
-     * @param Task $tasks
-     *
-     * @return $this
-     */
-    public function addTask(Task $tasks)
-    {
-        $this->tasks[] = $tasks;
-
-        return $this;
-    }
-
-    /**
-     * Remove tasks
-     *
-     * @param Task $tasks
-     */
-    public function removeTask(Task $tasks)
-    {
-        $this->tasks->removeElement($tasks);
-    }
-
-    /**
-     * Get tasks
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTasks()
-    {
-        return $this->tasks;
     }
 
     /**
@@ -206,4 +121,133 @@ class Project extends AbstractEntity
         return $this;
     }
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return Project
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Project
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Add features
+     *
+     * @param \Nsm\Bundle\ApiBundle\Entity\Feature $features
+     *
+     * @return Project
+     */
+    public function addFeature(\Nsm\Bundle\ApiBundle\Entity\Feature $features)
+    {
+        $features->setProject($this);
+        $this->features[] = $features;
+
+        return $this;
+    }
+
+    /**
+     * Remove features
+     *
+     * @param \Nsm\Bundle\ApiBundle\Entity\Feature $features
+     */
+    public function removeFeature(\Nsm\Bundle\ApiBundle\Entity\Feature $features)
+    {
+        $features->setProject(null);
+        $this->features->removeElement($features);
+    }
+
+    /**
+     * Get features
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFeatures()
+    {
+        return $this->features;
+    }
+
+    /**
+     * Add tasks
+     *
+     * @param \Nsm\Bundle\ApiBundle\Entity\Task $tasks
+     *
+     * @return Project
+     */
+    public function addTask(\Nsm\Bundle\ApiBundle\Entity\Task $tasks)
+    {
+        $tasks->setProject($this);
+        $this->tasks[] = $tasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove tasks
+     *
+     * @param \Nsm\Bundle\ApiBundle\Entity\Task $tasks
+     */
+    public function removeTask(\Nsm\Bundle\ApiBundle\Entity\Task $tasks)
+    {
+        $tasks->setProject(null);
+        $this->tasks->removeElement($tasks);
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
 }

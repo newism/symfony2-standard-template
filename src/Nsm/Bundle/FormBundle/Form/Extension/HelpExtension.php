@@ -1,6 +1,6 @@
 <?php
 
-namespace Nsm\Bundle\FormBundle\Form\Extension\Help;
+namespace Nsm\Bundle\FormBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;

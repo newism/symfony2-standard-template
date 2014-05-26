@@ -20,10 +20,14 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Tip controller.
+ * Tips controller.
  */
 class TipsController extends AbstractController
 {
+    protected $servicePrefix = "nsm_help";
+    protected $bundleName = "NsmHelpBundle";
+    protected $entityDiscriminator = "Tip";
+    protected $templateGroup = "Tips";
 
     /**
      * Browse all Tip entities.
@@ -172,6 +176,7 @@ class TipsController extends AbstractController
     public function addAction(Request $request)
     {
         $entity = new Tip();
+        $entity->setRoute($request->query->get('route'));
 
         /** @var Form $form */
         $form = $this->createForm(

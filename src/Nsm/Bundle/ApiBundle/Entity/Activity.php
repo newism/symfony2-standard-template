@@ -25,7 +25,7 @@ class Activity extends AbstractEntity
     /**
      * @var string
      */
-    protected $title;
+    public $title;
 
     /**
      * @var string

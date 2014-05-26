@@ -1,0 +1,29 @@
+parameters:
+
+    nsm_api.entity.feature.class: Nsm\Bundle\ApiBundle\Entity\Feature
+    nsm_api.entity.feature_manager.class: Nsm\Bundle\ApiBundle\Entity\FeatureManager
+    nsm_api.entity.feature_repository.class: Nsm\Bundle\ApiBundle\Entity\FeatureRepository
+    nsm_api.event_subscriber.feature_subscriber.class: Nsm\Bundle\ApiBundle\EventSubscriber\FeatureSubscriber
+
+services:
+
+    nsm_api.entity.feature_repository:
+        class: %nsm_api.entity.feature_repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments:
+            - %nsm_api.entity.feature.class%
+
+    nsm_api.entity.feature_manager:
+        class: %nsm_api.entity.feature_manager.class%
+        arguments:
+            - %nsm_api.entity.feature.class%
+            - @doctrine.orm.entity_manager
+
+    nsm_api.event_subscriber.feature_subscriber:
+        class: %nsm_api.event_subscriber.feature_subscriber.class%
+        arguments:
+            - @service_container
+        tags:
+            - {name: "doctrine.event_subscriber", connection: "default"}
+

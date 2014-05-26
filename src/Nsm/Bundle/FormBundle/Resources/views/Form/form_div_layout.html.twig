@@ -3,7 +3,7 @@
 {% block form_help %}
     {% spaceless %}
     {% if help %}
-        <div class="{{ isControlGroup ? 'ControlGroup' : 'Control' }}-help">{{ help }}</div>
+        <div class="{{ is_control_group ? 'ControlGroup' : 'Control' }}-help">{{ help }}</div>
     {% endif %}
     {% endspaceless %}
 {% endblock %}
@@ -15,36 +15,89 @@
     {% endif %}
 {% endblock %}
 
+{# Renders a form row. Determines if this is a control group (top level) and acts accordingly #}
+{% block form_row %}
+    {% spaceless %}
+        {% if is_control_group %}
+            {{ block('control_group') }}
+        {% elseif is_collection %}
+            {{ block('collection') }}
+        {% elseif is_collection_item %}
+            {{ block('collection_item') }}
+        {% else %}
+            {{ block('control') }}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_row %}
+
 {# Renders a control group #}
 {% block control_group %}
     {% set attr = control_group_attr %}
+    {% set label_attr = control_group_label_attr %}
+
     {% spaceless %}
         <div {{ block('widget_container_attributes') }}>
-            {{ form_label(form, null, {'label_attr': control_group_label_attr}) }}
+            {{ form_label(form, null, {'label_attr': label_attr}) }}
             {{ block('form_help') }}
-            {{ form_errors(form) }}
+            {% set attr = control_attr %}
             <div class="ControlGroup-controls">
-                {# if the form is compound we just render the widget which starts the loop again #}
-                {% if compound %}
+                <div {{ block('widget_container_attributes') }}>
+                    {{ form_errors(form) }}
                     {{ form_widget(form) }}
-                {# if the form is not compound we just render out the widget in a div manually #}
-                {% else %}
-                    {% set attr = control_attr %}
-                    <div {{ block('widget_container_attributes') }}>
-                        {{ form_widget(form) }}
-                    </div>
-                {% endif %}
+                </div>
             </div>
         </div>
     {% endspaceless %}
 {% endblock control_group %}
 
-{# Renders a control and it's inputs #}
-{% block control %}
-    {% set attr = control_attr %}
+{# Renders a collection #}
+{% block collection %}
+
+    {% set collection_attr = collection_attr|merge({
+        'data-prototype': form_row(prototype)
+    }) %}
+
+    {% set attr = collection_attr %}
+    {% set label_attr = collection_label_attr %}
+
     {% spaceless %}
         <div {{ block('widget_container_attributes') }}>
-            {{ form_label(form, null, {'label_attr': control_label_attr}) }}
+            {{ form_label(form, null, {'label_attr': label_attr}) }}
+            {{ block('form_help') }}
+            <div class="Collection-items">
+                {{ form_errors(form) }}
+                {{ form_widget(form) }}
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock collection %}
+
+{# Renders a collection item and it's controls #}
+{% block collection_item %}
+    {% set attr = collection_item_attr %}
+    {% set label_attr = collection_item_label_attr %}
+
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ form_label(form, null, {'label_attr': label_attr}) }}
+            {{ block('form_help') }}
+            <div class="CollectionItem-controls">
+                {{ form_errors(form) }}
+                {{ form_widget(form) }}
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock collection_item %}
+
+{# Renders a control and it's controlInputs #}
+{% block control %}
+
+    {% set attr = control_attr %}
+    {% set label_attr = control_label_attr %}
+
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ form_label(form, null, {'label_attr': label_attr}) }}
             {{ block('form_help') }}
             {{ form_errors(form) }}
             {{ form_widget(form) }}
@@ -52,24 +105,31 @@
     {% endspaceless %}
 {% endblock control %}
 
-{# Renders a form row. Determines if this is a control group (top level) and acts accordingly #}
-{% block form_row %}
-    {% spaceless %}
-        {% if isControlGroup %}
-            {{ block('control_group') }}
-        {% else %}
-            {{ block('control') }}
-        {% endif %}
-    {% endspaceless %}
-{% endblock form_row %}
 
 {# Renders a compound widget. Div wrappers are added in the control and control block rows  #}
 {% block form_widget_compound %}
     {% spaceless %}
+
         {% if form.parent is empty %}
             {{ form_errors(form) }}
         {% endif %}
+
         {{ block('form_rows') }}
         {{ form_rest(form) }}
+
     {% endspaceless %}
 {% endblock form_widget_compound %}
+
+{# Custom Mapping #}
+
+{% block _tasks_entry_row %}
+    {{ form_row(form) }}
+{% endblock %}
+
+{% block _feature_tasks_entry_row %}
+    {{ block('_tasks_entry_row') }}
+{% endblock _feature_tasks_entry_row %}
+
+{% block _project_tasks_entry_row %}
+    {{ block('_tasks_entry_row') }}
+{% endblock _project_tasks_entry_row %}

@@ -27,6 +27,13 @@ class TipFilterType extends AbstractType
                 'required' => false
             )
         );
+        $builder->add(
+            'route',
+            'route_choice',
+            array(
+                'required' => false
+            )
+        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

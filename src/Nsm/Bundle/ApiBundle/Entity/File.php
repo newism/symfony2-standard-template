@@ -33,7 +33,7 @@ class File extends AbstractEntity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Serializer\Expose()
-     * @Serializer\Groups({"activity_list", "activity_details", "task_list", "task_details"})
+     * @Serializer\Groups({"activity_list", "activity_details", "feature", "task_details"})
      */
     protected $id;
 

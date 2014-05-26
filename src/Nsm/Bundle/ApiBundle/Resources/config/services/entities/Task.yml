@@ -27,3 +27,7 @@ services:
         tags:
             - {name: "doctrine.event_subscriber", connection: "default"}
 
+    nsm_api.form.type.task:
+        class:  Nsm\Bundle\ApiBundle\Form\Type\TaskType
+        tags:
+            - {name: form.type, alias: task}

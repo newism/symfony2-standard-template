@@ -1,0 +1,15 @@
+Nsm\Bundle\ApiBundle\Entity\Feature:
+    properties:
+        title:
+            - NotBlank: ~
+        project:
+            - NotNull: ~
+        taskDurationSum:
+            - GreaterThanOrEqual:
+                value: 0
+        createdAt:
+            - Date: ~
+        updatedAt:
+            - Date: ~
+        deletedAt:
+            - Date: ~

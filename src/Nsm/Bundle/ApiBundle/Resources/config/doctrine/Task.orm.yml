@@ -1,6 +1,5 @@
 Nsm\Bundle\ApiBundle\Entity\Task:
     type: entity
-    table: task
     repositoryClass: Nsm\Bundle\ApiBundle\Entity\TaskRepository
     id:
         id:
@@ -14,6 +13,9 @@ Nsm\Bundle\ApiBundle\Entity\Task:
         description:
             type: text
             nullable: true
+        tags:
+            type: string
+            length: 255
         activityDurationSum:
             type: decimal
             scale: 2
@@ -26,13 +28,19 @@ Nsm\Bundle\ApiBundle\Entity\Task:
         deletedAt:
             type: datetime
             nullable: true
+
     manyToOne:
-        project:
-            targetEntity: Project
+        feature:
+            targetEntity: Feature
             inversedBy: tasks
+        project:
+             targetEntity: Project
+             inversedBy: tasks
+
     oneToMany:
         activities:
             targetEntity: Activity
             mappedBy: task
             cascade:
                 - remove
+
