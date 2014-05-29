@@ -20,40 +20,40 @@ class ProjectType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $taskForm = $builder->create(
-            'task',
-            'form',
-            array(
-                'mapped' => false,
-                'data_class' => 'Nsm\Bundle\ApiBundle\Entity\Task'
-            )
-        );
-        $taskForm->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'taskEventHandler'));
-        $taskForm->addEventListener(FormEvents::SUBMIT, array($this, 'taskEventHandler'));
-
-        $builder->add($taskForm);
+//        $taskForm = $builder->create(
+//            'task',
+//            'form',
+//            array(
+//                'mapped' => false,
+//                'data_class' => 'Nsm\Bundle\ApiBundle\Entity\Task'
+//            )
+//        );
+//        $taskForm->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'taskEventHandler'));
+//        $taskForm->addEventListener(FormEvents::SUBMIT, array($this, 'taskEventHandler'));
+//
+//        $builder->add($taskForm);
 
         $builder->add(
             'title',
             'text'
         );
 
-        $builder->add(
-            'birthday',
-            'birthday',
-            array(
-                'mapped' => false,
-                'widget' => 'single_text'
-            )
-        );
-
-        $builder->add(
-            'birthday2',
-            'birthday',
-            array(
-                'mapped' => false,
-            )
-        );
+//        $builder->add(
+//            'birthday',
+//            'birthday',
+//            array(
+//                'mapped' => false,
+//                'widget' => 'single_text'
+//            )
+//        );
+//
+//        $builder->add(
+//            'birthday2',
+//            'birthday',
+//            array(
+//                'mapped' => false,
+//            )
+//        );
 
 //        $project = $builder->getData();
 //

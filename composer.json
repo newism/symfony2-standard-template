@@ -34,12 +34,13 @@
         "knplabs/doctrine-behaviors": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
 
-        "ocramius/proxy-manager": "0.4.*",
+        "hwi/oauth-bundle": "0.4.*@dev",
 
-        "fp/jsformvalidator-bundle": "dev-master",
+        "behat/behat":                     "~2.5",
+        "behat/common-formatters":         "1.2.*",
+        "webignition/json-pretty-print":   "@dev",
+        "hasbridge/json-schema-validator": "@dev"
 
-        "knplabs/knp-markdown-bundle": "1.2.*@dev",
-        "hwi/oauth-bundle": "0.4.*@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

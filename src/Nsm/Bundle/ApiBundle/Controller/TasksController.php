@@ -199,13 +199,11 @@ class TasksController extends AbstractController
             $entity,
             array(
                 'action' => $this->generateUrl('task_post'),
-                'method' => 'POST',
-                'target_path_choices' => array(
-                    'add_task' => 'Add Task'
-                )
+                'method' => 'POST'
             )
         )
             ->add('Save', 'submit')
+            ->add('Save and add another', 'submit')
             ->add(
                 'Refresh',
                 'submit',
@@ -219,20 +217,17 @@ class TasksController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->get('Save')->isClicked() && $form->isValid()) {
+        if (
+            ($form->get('Save')->isClicked() || $form->get('Save and add another')->isClicked())
+            && $form->isValid()
+        ) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
-            $targetPath = $form->get('_target_path')->getData();
-
-            switch ($targetPath) {
-                case 'add_task':
-                    $targetPath = $this->generateUrl('task_add', array('projectId' => $entity->getProject()->getId()));
-                    break;
-                default:
-                    $targetPath = $this->generateUrl('task_read', array('id' => $entity->getId()));
-            }
+            $targetPath = ($form->get('Save and add another')->isClicked())
+                            ? $this->generateUrl('task_add', array('projectId' => $entity->getProject()->getId()))
+                            : $this->generateUrl('task_read', array('id' => $entity->getId()));
 
             return $this->redirect(
                 $targetPath,

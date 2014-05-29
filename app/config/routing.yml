@@ -1,3 +1,7 @@
+nsm_test_output:
+    resource: "@NsmTestOutputBundle/Resources/config/routing.yml"
+    prefix:   /
+
 NsmUserBundle:
     resource: "@NsmUserBundle/Resources/config/routing.yml"
 

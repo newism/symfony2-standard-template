@@ -1,14 +1,9 @@
 default:
-  formatter:
-    name: progress
   extensions:
-    Behat\Symfony2Extension\Extension:
-      mink_driver: true
-      kernel:
-        env: test
-        debug: true
-    Behat\MinkExtension\Extension:
-      base_url: 'http://www.acme.dev/app_test.php/'
-      default_session: symfony2
-      goutte: ~
-      selenium2: ~
+    Behat\CommonFormatters\Extension:
+      formatters:
+        progress_false: 'Behat\CommonFormatters\ProgressWithFalseStepsFormatter'
+        pretty_false: 'Behat\CommonFormatters\PrettyWithFalseStepsFormatter'
+        html_false: 'Behat\CommonFormatters\HtmlWithFalseStepsFormatter'
+        csv_statistics: 'Behat\CommonFormatters\CsvStatisticsFormatter'
+        json: 'Behat\CommonFormatters\JsonFormatter'
