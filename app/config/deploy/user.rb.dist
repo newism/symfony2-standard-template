@@ -6,6 +6,11 @@
 
 server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 
+ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+
+ask :deploy_to, '/var/www/symfony2-standard-template/{your_name}'
+
+set :controllers_to_clear, []
 
 # Custom SSH Options
 # ==================
