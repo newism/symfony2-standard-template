@@ -20,8 +20,10 @@ class AppKernel extends Kernel
             new Nsm\Bundle\ApiBundle\NsmApiBundle(),
             new Nsm\Bundle\FormBundle\NsmFormBundle(),
             new Nsm\Bundle\UserBundle\NsmUserBundle(),
+            new Nsm\Bundle\CoreBundle\NsmCoreBundle(),
+            new Nsm\Bundle\HelpBundle\NsmHelpBundle(),
+            new Nsm\Bundle\TestOutputBundle\NsmTestOutputBundle(),
 
-            // API
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new FOS\RestBundle\FOSRestBundle(),
@@ -33,9 +35,6 @@ class AppKernel extends Kernel
 
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
-            new Nsm\Bundle\CoreBundle\NsmCoreBundle(),
-            new Nsm\Bundle\HelpBundle\NsmHelpBundle(),
-            new Nsm\Bundle\TestOutputBundle\NsmTestOutputBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

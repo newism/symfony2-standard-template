@@ -1,19 +1,34 @@
-set :application, "set your application name here"
-set :domain,      "#{application}.com"
-set :deploy_to,   "/var/www/#{domain}"
-set :app_path,    "app"
+# config valid only for Capistrano 3.1
+lock '3.2.1'
 
-set :repository,  "#{domain}:/var/repos/#{application}.git"
-set :scm,         :git
-# Or: `accurev`, `bzr`, `cvs`, `darcs`, `subversion`, `mercurial`, `perforce`, or `none`
+set :application, 'symfony2-standard-template'
+set :repo_url, 'git@github.com:newism/symfony2-standard-template.git'
 
-set :model_manager, "doctrine"
-# Or: `propel`
+# curl -sS https://getcomposer.org/installer | php  -- --install-dir=/usr/local/bin --filename=composer
+SSHKit.config.command_map[:composer] = "/usr/local/bin/composer"
+set :composer_install_flags, '--no-dev --no-interaction --optimize-autoloader'
 
-role :web,        domain                         # Your HTTP server, Apache/etc
-role :app,        domain, :primary => true       # This may be the same as your `Web` server
+namespace :deploy do
 
-set  :keep_releases,  3
+  before :starting, 'composer:install_executable'
 
-# Be more verbose by uncommenting the following line
-# logger.level = Logger::MAX_LEVEL
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      # Your restart mechanism here, for example:
+      # execute :touch, release_path.join('tmp/restart.txt')
+    end
+  end
+
+  after :publishing, :restart
+
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
+    end
+  end
+
+end

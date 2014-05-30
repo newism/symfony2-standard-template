@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class DashboardController extends AbstractController
 {
+    protected $templateGroup = 'NsmApiBundle:Dashboard';
+
     /**
      * @Get("/.{_format}", name="dashboard_browse", defaults={"_format"="~"})
      */

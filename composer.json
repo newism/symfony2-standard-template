@@ -36,9 +36,9 @@
 
         "hwi/oauth-bundle": "0.4.*@dev",
 
-        "behat/behat":                     "~2.5",
-        "behat/common-formatters":         "1.2.*",
-        "webignition/json-pretty-print":   "@dev",
+        "behat/behat": "~2.5",
+        "behat/common-formatters": "1.2.*",
+        "webignition/json-pretty-print": "@dev",
         "hasbridge/json-schema-validator": "@dev"
 
     },
