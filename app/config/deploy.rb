@@ -12,3 +12,13 @@ set :linked_dirs,  [fetch(:log_path), fetch(:web_path) + "/uploads", fetch(:app_
 # curl -sS https://getcomposer.org/installer | php  -- --install-dir=/usr/local/bin --filename=composer
 SSHKit.config.command_map[:composer] = "/usr/local/bin/composer"
 set :composer_install_flags, '--no-dev --no-interaction --optimize-autoloader'
+
+namespace :deploy do
+  task :set_symfony_env do
+    fetch(:default_env).merge!(symfony_env: fetch(:symfony_env))
+  end
+end
+
+Capistrano::DSL.stages.each do |stage|
+  after stage, 'deploy:set_symfony_env'
+end
