@@ -122,10 +122,15 @@
     {% endfor %}
 {% endfor %}
 
-{{ render_hinclude(url('tip_browse', {
-    'filter': {'route': app.request.get('_route')},
-    '_template': 'embed'
-})) }}
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+    {{ render_hinclude(url('tip_browse', {
+        'filter': {'route': app.request.get('_route')},
+        '_template': 'embed'
+    })) }}
+
+{% endif %}
+
 
 {% block content %}{% endblock %}
 {% block fos_user_content %}{% endblock %}
