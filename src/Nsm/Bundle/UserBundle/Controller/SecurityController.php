@@ -46,14 +46,19 @@ class SecurityController extends BaseSecurityController
             array(
                 '_csrf_token' => $data['csrf_token'],
                 '_username' => $data['last_username'],
+
+                // Send the user to the invitation confirmation path if it exists
+                // or whereever else they were going
                 '_target_path' => $request->get('_targetPath'),
+
                 // Send the user back to the same login page
                 // with all of it's request params
                 // including the ?invitationCode and target path params
                 '_failure_path' => $request->getRequestUri(),
 
-                // Add the invitation code
-                // This will be transformed into an invitation in the data transformer
+//                // This is not needed if we redirect to a confirmation page
+//                // Add the invitation code
+//                // This will be transformed into an invitation in the data transformer
                 'invitation' => $invitationCode,
             )
         );

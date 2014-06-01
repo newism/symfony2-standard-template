@@ -8,6 +8,7 @@
         <import resource="services/DateRange.xml"/>
         <import resource="services/Criteria.xml"/>
         <import resource="services/EntitySearch.xml"/>
+        <import resource="services/TimeZone.xml"/>
         <import resource="services/Help.xml"/>
         <import resource="services/Layout.xml"/>
         <import resource="services/TargetPath.xml"/>

@@ -54,10 +54,10 @@ doctrine:
         password: %database_password%
         charset:  UTF8
         types:
-            timezone: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\TimeZoneType
-            datetime: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\UTCDateTimeType
+            time_zone: Nsm\Bundle\CoreBundle\Doctrine\DBAL\Types\TimeZoneType
+            datetime: Nsm\Bundle\CoreBundle\Doctrine\DBAL\Types\UTCDateTimeType
         mapping_types:
-            timezone: string
+            time_zone: string
 #            utcdatetime: string
     orm:
         auto_generate_proxy_classes: %kernel.debug%
@@ -104,8 +104,8 @@ fos_rest:
     format_listener:
         rules:
             # setting fallback_format to json means that instead of considering the next rule in case of a priority mismatch, json will be used
-            - { path: '^/', host: 'api.%domain%', priorities: ['json', 'xml'], fallback_format: json, prefer_extension: false }
-            - { path: '^/', priorities: [ 'text/html', '*/*'], fallback_format: html, prefer_extension: true }
+            # - { path: '^/', host: 'api.%domain%', priorities: ['json', 'xml'], fallback_format: json, prefer_extension: false }
+            # - { path: '^/', priorities: [ 'text/html', '*/*'], fallback_format: html, prefer_extension: true }
     view:
         view_response_listener: force
         serialize_null: true

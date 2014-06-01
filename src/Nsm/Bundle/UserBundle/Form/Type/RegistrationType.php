@@ -5,6 +5,7 @@ namespace Nsm\Bundle\UserBundle\Form\Type;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseRegistrationFormType;
 use Nsm\Bundle\FormBundle\DataTransformer\DateTimeZoneToStringTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationType extends BaseRegistrationFormType
 {
@@ -20,8 +21,8 @@ class RegistrationType extends BaseRegistrationFormType
             ->add('lastName', 'text')
             ->add(
                 $builder->create(
-                    'timeZone',
-                    'timezone',
+                    'timeZone', // Property
+                    'time_zone', // FormType (see Nsm\Bundle\FormBundle\Form\Type\TimeZoneType)
                     array(
                         'data' => new \DateTimeZone('Australia/Sydney')
                     )
@@ -35,11 +36,18 @@ class RegistrationType extends BaseRegistrationFormType
                 array(
                     'data' => 'en_AU'
                 )
-            )->add(
+            )
+            // The invitation code must be on this form to help validate that the person can register
+            // We may have already checked this in the claim route but it's not secure
+            ->add(
                 'invitation',
                 'invitation_code',
                 array(
-                    'mapped' => false
+                    'mapped' => false,
+                    // Enforce a invitation
+                    'constraints' => array(
+                        new NotBlank(),
+                    ),
                 )
             );
     }

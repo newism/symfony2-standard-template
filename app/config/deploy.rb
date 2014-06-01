@@ -11,12 +11,12 @@ set :linked_dirs,  [fetch(:log_path), fetch(:web_path) + "/uploads", fetch(:app_
 
 set :composer_install_flags, ' --no-interaction --optimize-autoloader'
 
+# Name used by the Web Server (i.e. www-data for Apache)
+set :webserver_user,        "www-data"
+
 # Dirs that need to be writable by the HTTP Server (i.e. cache, log dirs)
 set :file_permissions_paths, [fetch(:log_path), fetch(:cache_path)]
 set :file_permissions_users, ["www-data"]
-
-# Name used by the Web Server (i.e. www-data for Apache)
-set :webserver_user,        "www-data"
 
 # Method used to set permissions (:chmod, :acl, or :chown)
 set :permission_method,     :acl

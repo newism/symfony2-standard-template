@@ -28,8 +28,8 @@ class ProfileFormType extends BaseProfileFormType
 
         $builder->add(
             $builder->create(
-                'timeZone',
-                'timezone',
+                'timeZone', // Property
+                'time_zone', // FormType (see Nsm\Bundle\FormBundle\Form\Type\TimeZoneType)
                 array(
                     'data' => new \DateTimeZone('Australia/Sydney')
                 )

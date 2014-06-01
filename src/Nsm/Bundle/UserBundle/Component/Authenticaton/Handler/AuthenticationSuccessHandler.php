@@ -73,7 +73,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler i
      *
      * Validate and process the invite after user logs in.
      * If the invite cannot be found log the user out and redirect back to the login screen
-     * Todo: The invite should be validated before the user logs in, not after. Edit: I think this is impossible
+     * Todo: The invite should be validated before the user logs in, not after… I think this is impossible
      *
      * @param \Symfony\Component\HttpFoundation\Request                            $request
      * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
@@ -95,6 +95,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler i
             );
 
             if (null === $invitation) {
+
                 // Log the user out
                 $this->securityContext->setToken(null);
                 $request->getSession()->invalidate();

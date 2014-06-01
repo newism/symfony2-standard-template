@@ -268,7 +268,11 @@ class InvitationsController extends AbstractController
     }
 
     /**
-     * Router for claiming an invitation
+     * Router for claiming an invitation.
+     *
+     * This is the landing route for users when they recieve invitation emails.
+     * It's job is to check the invitation, check the users logged in state and redirect as needed.
+     * Once this has happened they are out of the flow and we need to rely on the login / register forms.
      *
      * @Get("/invitations/{code}/claim", name="invitation_claim")
      * @View()
@@ -306,19 +310,6 @@ class InvitationsController extends AbstractController
             return $this->handleView($view);
         }
 
-        // User is not logged in - Redirect to register screen
-        if (false === $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'fos_user_registration_register',
-                    array(
-                        'invitationCode' => $invitation->getCode(),
-                        '_targetPath' => $request->getUri()
-                    )
-                )
-            );
-        }
-
         // User logged in - Send them to a confirm page
         if (true === $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirect(
@@ -331,6 +322,24 @@ class InvitationsController extends AbstractController
                 )
             );
         }
+
+        // User is not logged in - Redirect to register screen
+        if (false === $securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'fos_user_registration_register',
+                    array(
+                        'invitationCode' => $invitation->getCode(),
+                        // @todo: Not sure why we need to send the user back here
+                        // The register form should handle creating the user and claiming the invitation
+//                        '_targetPath' => $request->getUri()
+                    )
+                )
+            );
+        }
+
+
 
         // Catch all
         throw new \Exception('Could not determine Invitation claim action');

@@ -17,7 +17,7 @@ Nsm\Bundle\UserBundle\Entity\User:
             type: string
             length: 255
         timeZone:
-            type: timezone
+            type: time_zone # See: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\TimeZoneType
             nullable: true
         locale:
             type: string

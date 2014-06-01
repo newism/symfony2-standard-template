@@ -40,13 +40,16 @@ class LoginType extends AbstractType
                     'required' => false
                 )
             )
+            // There's no need for this in the login screen.
+            // We're going to ask the user to confirm after this step
             ->add(
                 'invitation',
                 'invitation_code',
                 array(
                     'required' => false
                 )
-            );
+            )
+        ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

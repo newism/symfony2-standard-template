@@ -14,8 +14,8 @@ class InvitationClaimType extends AbstractType
     {
         $builder
             ->add(
-                'invitation_code',
-                'invitation'
+                'invitation', // property
+                'invitation_code' // form type
             );
     }
 
