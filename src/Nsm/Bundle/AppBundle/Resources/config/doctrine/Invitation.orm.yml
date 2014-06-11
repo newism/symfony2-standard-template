@@ -1,0 +1,33 @@
+Nsm\Bundle\AppBundle\Entity\Invitation:
+    type: entity
+    repositoryClass: Nsm\Bundle\AppBundle\Entity\InvitationRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        code:
+            type: string
+            length: 255
+        email:
+            type: string
+            length: 255
+        expiresAt:
+            type: datetime
+            nullable: true
+        claimedAt:
+            type: datetime
+            nullable: true
+        createdAt:
+            type: datetime
+            nullable: true
+        updatedAt:
+            type: datetime
+            nullable: true
+        deletedAt:
+            type: datetime
+            nullable: true
+    oneToOne:
+        claimedBy:
+            targetEntity: Nsm\Bundle\UserBundle\Entity\User

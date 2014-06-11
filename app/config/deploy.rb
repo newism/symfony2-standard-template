@@ -2,7 +2,6 @@
 lock '3.2.1'
 
 set :application, 'symfony2-standard-template'
-set :repo_url, 'git@github.com:newism/symfony2-standard-template.git'
 
 # Files that need to remain the same between deploys
 # set :linked_files,          []

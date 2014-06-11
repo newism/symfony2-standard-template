@@ -1,0 +1,21 @@
+{% extends 'NsmAppBundle::layout.html.twig' %}
+
+{% block content -%}
+
+    <p><a href="{{ path('project_browse') }}">Projects</a></p>
+    <h1>Add Project</h1>
+
+
+
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_end(form) }}
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('project_browse') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}

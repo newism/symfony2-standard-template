@@ -4,8 +4,8 @@ nsm_test_output:
 NsmUserBundle:
     resource: "@NsmUserBundle/Resources/config/routing.yml"
 
-NsmApiBundle:
-    resource: "@NsmApiBundle/Resources/config/routing.yml"
+NsmAppBundle:
+    resource: "@NsmAppBundle/Resources/config/routing.yml"
 
 NsmHelpBundle:
     resource: "@NsmHelpBundle/Resources/config/routing.yml"

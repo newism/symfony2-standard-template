@@ -1,0 +1,41 @@
+Nsm\Bundle\AppBundle\Entity\Project:
+    type: entity
+    repositoryClass: Nsm\Bundle\AppBundle\Entity\ProjectRepository
+
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
+            time_aware: false
+
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        description:
+            type: text
+            nullable: true
+        taskDurationSum:
+            type: decimal
+            scale: 2
+        createdAt:
+            type: datetime
+            nullable: true
+        updatedAt:
+            type: datetime
+            nullable: true
+        deletedAt:
+            type: datetime
+            nullable: true
+
+    oneToMany:
+        tasks:
+            targetEntity: Task
+            mappedBy: project
+            cascade:
+                - persist
+                - remove

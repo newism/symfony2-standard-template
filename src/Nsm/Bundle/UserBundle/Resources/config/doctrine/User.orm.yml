@@ -17,7 +17,7 @@ Nsm\Bundle\UserBundle\Entity\User:
             type: string
             length: 255
         timeZone:
-            type: time_zone # See: Nsm\Bundle\ApiBundle\Doctrine\DBAL\Types\TimeZoneType
+            type: time_zone # See: Nsm\Bundle\AppBundle\Doctrine\DBAL\Types\TimeZoneType
             nullable: true
         locale:
             type: string
@@ -40,7 +40,7 @@ Nsm\Bundle\UserBundle\Entity\User:
             nullable: true
     oneToMany:
         invitations:
-            targetEntity: Nsm\Bundle\ApiBundle\Entity\Invitation
+            targetEntity: Nsm\Bundle\AppBundle\Entity\Invitation
             mappedBy: claimedBy
             cascade:
                 - remove

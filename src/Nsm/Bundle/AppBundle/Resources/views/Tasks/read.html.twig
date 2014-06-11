@@ -1,0 +1,27 @@
+{% extends 'NsmAppBundle::layout.html.twig' %}
+
+{% block content -%}
+
+    <h1>Task</h1>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('task_browse') }}">
+                Back to the list
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('task_edit', { 'id': entity.id }) }}">
+                Edit
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('task_destroy', { 'id': entity.id }) }}">
+                Destroy
+            </a>
+        </li>
+    </ul>
+
+    {{ dump(entity) }}
+
+{% endblock %}

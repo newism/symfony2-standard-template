@@ -15,7 +15,7 @@ role :db,  %w{128.199.191.213}
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server '128.199.191.213', user: 'root', roles: %w{web app}, my_property: :my_value
+server '128.199.191.213', user: 'root', roles: %w{web app}
 
 set :deploy_to, '/var/www/symfony2-standard-template/production'
 

@@ -1,0 +1,38 @@
+Nsm\Bundle\AppBundle\Entity\Feature:
+    exclusion_policy: ALL
+    xml_root_name: feature
+    custom_accessor_order:
+        - id
+    properties:
+        title:
+            expose: true
+        description:
+            expose: true
+        activityDurationSum:
+            expose: true
+    relations:
+        -
+            rel: self
+            href:
+                route: feature_read
+                parameters:
+                    id: expr(object.getId())
+        -
+            rel: project
+            href:
+                route: project_read
+                parameters:
+                    id: expr(object.getProject().getId())
+            embedded:
+                content: expr(object.getProject())
+                xmlElementName: project
+        -
+            rel: tasks
+            href:
+                route: task_browse
+                parameters:
+                    task: expr(object.getId())
+            embedded:
+                content: expr(object.getTasks())
+                xmlElementName: tasks
+

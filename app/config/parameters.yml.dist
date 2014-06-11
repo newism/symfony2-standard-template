@@ -14,4 +14,4 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    domain:            local.website
+    domain:            local.symonfy2-standard

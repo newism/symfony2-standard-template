@@ -96,7 +96,7 @@ class DateRangeType extends AbstractType
                 // representation is not DateRange, but an array, we need to unset
                 // this option.
                 'data_class' => null,
-//                'data_class' => 'Nsm\Bundle\ApiBundle\Form\Model\DateRange',
+//                'data_class' => 'Nsm\Bundle\AppBundle\Form\Model\DateRange',
                 'required' => false
             )
         );

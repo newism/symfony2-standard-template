@@ -1,6 +1,6 @@
 <?php
 
-namespace Nsm\Bundle\ApiBundle\Form\Model;
+namespace Nsm\Bundle\FormBundle\Form\Model;
 
 class Criteria
 {

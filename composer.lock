@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ff7ab9d32fd80004a0cc0d8adce44744",
+    "hash": "3fd49370a93e7e242254b14a0d04fac2",
     "packages": [
         {
             "name": "behat/behat",
@@ -3861,9 +3861,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "symfony/symfony": 20,
         "twig/extensions": 20,
-        "sensio/distribution-bundle": 20,
         "nelmio/api-doc-bundle": 20,
         "friendsofsymfony/rest-bundle": 20,
         "jms/serializer-bundle": 20,

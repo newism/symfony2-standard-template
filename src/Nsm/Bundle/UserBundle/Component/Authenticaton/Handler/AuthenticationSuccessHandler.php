@@ -3,7 +3,7 @@
 namespace Mlf\UserBundle\Component\Authentication\Handler;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Nsm\Bundle\ApiBundle\Entity\InvitationManager;
+use Nsm\Bundle\AppBundle\Entity\InvitationManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\HttpUtils;
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
-     * @var \Nsm\Bundle\ApiBundle\Entity\InvitationManager $invitationManager
+     * @var \Nsm\Bundle\AppBundle\Entity\InvitationManager $invitationManager
      */
     private $invitationManager;
     /**

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as Serializer;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
-use Nsm\Bundle\ApiBundle\Entity\Invitation;
+use Nsm\Bundle\AppBundle\Entity\Invitation;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class User extends BaseUser

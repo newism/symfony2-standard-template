@@ -2,7 +2,7 @@
 
 namespace Nsm\Bundle\FormBundle\Form\Type;
 
-use Nsm\Bundle\ApiBundle\Form\Model\Criteria;
+use Nsm\Bundle\FormBundle\Form\Model\Criteria;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -59,13 +59,13 @@ class CriteriaType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class'         => 'Nsm\Bundle\ApiBundle\Form\Model\Criteria',
+                'data_class'         => 'Nsm\Bundle\FormBundle\Form\Model\Criteria',
                 'transformer'        => null,
                 'validator'          => null,
                 'error_bubbling'     => false,
                 'attribute_options'  => array(),
                 'expression_options' => array(),
-                'value_options' => array(),
+                'value_options'      => array(),
                 'by_reference'       => false
             )
         );

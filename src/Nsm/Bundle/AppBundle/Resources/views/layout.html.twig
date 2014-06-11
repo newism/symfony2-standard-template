@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:hx="http://purl.org/NET/hinclude">
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <link rel="stylesheet" href="/bundles/nsmform/bower_components/selectize/dist/css/selectize.default.css"/>
+    <style>
+
+        html, body {
+            font-family: sans-serif;
+        }
+
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+        }
+
+        form {
+            border: 1px solid red;
+            padding: 2px;
+        }
+
+        .ControlGroup {
+            border: 1px solid green;
+            padding: 2px;
+        }
+
+        .ControlGroup-controls {
+            border: 1px dotted green;
+            padding: 2px;
+        }
+
+        .Control {
+            border: 1px solid blue;
+            padding: 2px;
+        }
+
+        .Collection {
+            background: yellow;
+            margin: 2px;
+        }
+
+        .Collection-items {
+            background: pink;
+            margin: 2px;
+        }
+
+        .CollectionItem {
+            background: lightblue;
+            margin: 2px;
+        }
+
+        .CollectionItem-controls {
+            background: lightgreen;
+            margin: 2px;
+        }
+
+        form table .ControlGroup-controls {
+            padding: 0
+        }
+
+        form table .Control--hasSiblings {
+            float: left;
+        }
+
+        form table tbody th {
+            padding: 10px;
+            text-align: right;
+            vertical-align: top
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+        }
+
+        @media (max-width: 600px) {
+            form table,
+            form table thead,
+            form table tbody,
+            form table tfoot,
+            form table tr,
+            form table td,
+            form table th {
+                display: block;
+                text-align: left !important
+            }
+
+            form table tr {
+                margin-bottom: 20px;
+            }
+
+            form table .Control--hasSiblings {
+                float: none !important;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="Toolbar">
+
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+        <ul>
+            <li><a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+            </li>
+            {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                <li><a href="{{ path('dashboard_browse', {'_switch_user': '_exit'}) }}">Exit impersonation</a></li>
+            {% endif %}
+        </ul>
+    {% else %}
+        <ul>
+            <li><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
+            <li>
+                <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+            </li>
+            <li><a href="{{ path('hwi_oauth_connect') }}">Connect</a></li>
+        </ul>
+    {% endif %}
+
+</div>
+
+<div class="">
+
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <ul>
+            {% for item in ['project', 'task', 'activity', 'invitation'] %}
+                <li><a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="flash-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+        {{ render_hinclude(url('tip_browse', {
+        'filter': {'route': app.request.get('_route')},
+        '_template': 'embed'
+        })) }}
+
+    {% endif %}
+
+
+    {% block content %}{% endblock %}
+    {% block fos_user_content %}{% endblock %}
+    {% block hwi_oauth_content %}{% endblock %}
+
+</div>
+
+{% block javascripts %}{% endblock %}
+
+<script src="/bundles/nsmapp/bower_components/jquery/jquery.js"></script>
+<script src="/bundles/nsmapp/bower_components/selectize/dist/js/standalone/selectize.js"></script>
+<script src="/bundles/nsmapp/bower_components/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="/bundles/nsmapp/bower_components/URIjs/src/URI.js"></script>
+<script src="/bundles/nsmapp/bower_components/hinclude/hinclude.js"></script>
+
+<script>
+
+
+    $('body').on('contentcreated', function (event) {
+
+        // Fire any other events on this element
+        // But don't bubble
+        event.stopPropagation();
+
+        var $el = $(event.target);
+
+        $el.find('[data-widget=entitySearch]').each(function () {
+            var $this = $(this),
+                    options = $this.data('entitySearchOptions') || {}
+                    ;
+
+            options.selectizeOptions.render = options.selectizeOptions.render || {};
+            options.selectizeOptions.render.option = function (item, escape) {
+                return '<div>' + item.id + ' ' + item.title + '</div>';
+            };
+
+            $(this).selectize(options.selectizeOptions);
+        });
+
+        $el.find('[data-widget=dataTable]').each(function () {
+            var $this = $(this),
+                options = $this.data('dataTableOptions') || {},
+                $ths = $this.find('thead th[data-attribute]')
+            ;
+
+            var serialize = function(obj, prefix) {
+                var str = [];
+                for(var p in obj) {
+                    var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+                    str.push(typeof v == "object" ?
+                            serialize(v, k) :
+                    encodeURIComponent(k) + "=" + encodeURIComponent(v));
+                }
+                return str.join("&");
+            };
+
+            $ths.on('click', function (event) {
+                var $th = $(event.currentTarget),
+                        oldDirection = $th.data('direction') || 'desc',
+                        newDirection = oldDirection === 'desc' ? 'asc' : 'desc';
+
+                $th.data('direction', newDirection);
+
+                if (!event.shiftKey) {
+                    options.query.orderBy = {};
+                }
+
+                options.query.orderBy[$th.data('attribute')] = newDirection;
+
+                debugger;
+                console.log(options.query);
+
+                $.get(window.location.pathname, serialize(options.query));
+            });
+
+        });
+
+        $el.find('[data-form-widget=collection]').each(function () {
+
+            var $collection = $(this),
+                    prototypeString = $collection.data('prototype'),
+                    prototypeName = $collection.data('prototypeName') || '__name__',
+                    prototypeNameRegx = new RegExp(prototypeName + "(label__)?", "g"),
+                    $collectionItems = $collection.find('.Collection-items'),
+                    count = $collectionItems.children().length;
+
+            var $deleteLink = $("<span />", {
+                'class': 'js-delete',
+                'text': 'Delete'
+            });
+
+            var $addLink = $("<span />", {
+                'class': 'js-add',
+                'text': 'Add'
+            });
+
+            if ($collection.data('collectionAllowDelete')) {
+                $collection
+                        .children()
+                        .append($deleteLink.clone(true));
+            }
+
+            if ($collection.data('collectionAllowAdd')) {
+
+                $addLink.click(function (event) {
+                    event.preventDefault();
+                    var newPrototypeString = prototypeString.replace(prototypeNameRegx, count),
+                            $newPrototype = $(newPrototypeString).append($deleteLink.clone(true));
+                    $newPrototype.appendTo($collectionItems).trigger('contentcreated');
+                    count++;
+                });
+
+                $collection.append($addLink);
+            }
+
+            $collection.on('click', '.js-delete', function () {
+                event.preventDefault();
+                $(this).parent().remove();
+            });
+
+        });
+
+
+    }).trigger('contentcreated');
+
+
+</script>
+
+</body>
+</html>
+

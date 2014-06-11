@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class CollectionPrototypeDataType extends AbstractType
 {
@@ -32,6 +33,7 @@ class CollectionPrototypeDataType extends AbstractType
     {
         $resolver->setDefaults(
             array(
+                'by_reference' => false,
                 'prototype_data' => null
             )
         );

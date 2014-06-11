@@ -1,0 +1,19 @@
+parameters:
+    validator.mapping.loader.yaml_files_loader.mapping_files:
+        - "%kernel.root_dir%/../src/Nsm/Bundle/AppBundle/Resources/config/validation/Activity.yml"
+        - "%kernel.root_dir%/../src/Nsm/Bundle/AppBundle/Resources/config/validation/Project.yml"
+        - "%kernel.root_dir%/../src/Nsm/Bundle/AppBundle/Resources/config/validation/Task.yml"
+        - "%kernel.root_dir%/../src/Nsm/Bundle/AppBundle/Resources/config/validation/Invitation.yml"
+
+imports:
+    - { resource: "services/entities/Activity.yml" }
+    - { resource: "services/entities/Project.yml" }
+    - { resource: "services/entities/Task.yml" }
+    - { resource: "services/entities/Invitation.yml" }
+
+services:
+    nsm_app.event_listener.request_scope:
+        class: Nsm\Bundle\AppBundle\EventSubscriber\RequestScopeSubscriber
+        arguments: [@router, @request_stack]
+        tags:
+            - { name: kernel.event_subscriber }

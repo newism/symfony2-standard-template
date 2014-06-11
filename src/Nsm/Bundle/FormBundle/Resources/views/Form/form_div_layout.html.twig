@@ -54,7 +54,8 @@
 {% block collection %}
 
     {% set collection_attr = collection_attr|merge({
-        'data-prototype': form_row(prototype)
+        'data-prototype': form_row(prototype),
+        'data-prototype-name': prototype.vars.name
     }) %}
 
     {% set attr = collection_attr %}
