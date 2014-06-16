@@ -5,7 +5,7 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
-    <link rel="stylesheet" href="/bundles/nsmform/bower_components/selectize/dist/css/selectize.default.css"/>
+    <link rel="stylesheet" href="/bundles/nsmapp/themes/default/src/bower_components/selectize/dist/css/selectize.default.css"/>
     <style>
 
         html, body {
@@ -166,11 +166,11 @@
 
 {% block javascripts %}{% endblock %}
 
-<script src="/bundles/nsmapp/bower_components/jquery/jquery.js"></script>
-<script src="/bundles/nsmapp/bower_components/selectize/dist/js/standalone/selectize.js"></script>
-<script src="/bundles/nsmapp/bower_components/DataTables/media/js/jquery.dataTables.js"></script>
-<script src="/bundles/nsmapp/bower_components/URIjs/src/URI.js"></script>
-<script src="/bundles/nsmapp/bower_components/hinclude/hinclude.js"></script>
+<script src="/bundles/nsmapp/themes/default/src/bower_components/jquery/jquery.js"></script>
+<script src="/bundles/nsmapp/themes/default/src/bower_components/selectize/dist/js/standalone/selectize.js"></script>
+<script src="/bundles/nsmapp/themes/default/src/bower_components/DataTables/media/js/jquery.dataTables.js"></script>
+<script src="/bundles/nsmapp/themes/default/src/bower_components/URIjs/src/URI.js"></script>
+<script src="/bundles/nsmapp/themes/default/src/bower_components/hinclude/hinclude.js"></script>
 
 <script>
 
@@ -254,9 +254,9 @@
             });
 
             if ($collection.data('collectionAllowDelete')) {
-                $collection
-                        .children()
-                        .append($deleteLink.clone(true));
+                $collectionItems
+                    .children()
+                    .append($deleteLink.clone(true));
             }
 
             if ($collection.data('collectionAllowAdd')) {

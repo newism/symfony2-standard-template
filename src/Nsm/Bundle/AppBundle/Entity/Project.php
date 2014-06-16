@@ -209,4 +209,33 @@ class Project extends AbstractEntity
     {
         return $this->tasks;
     }
+    /**
+     * @var \Nsm\Bundle\ContactCardBundle\Entity\ContactCard
+     */
+    private $contactCard;
+
+
+    /**
+     * Set contactCard
+     *
+     * @param \Nsm\Bundle\ContactCardBundle\Entity\ContactCard $contactCard
+     *
+     * @return Project
+     */
+    public function setContactCard(\Nsm\Bundle\ContactCardBundle\Entity\ContactCard $contactCard = null)
+    {
+        $this->contactCard = $contactCard;
+
+        return $this;
+    }
+
+    /**
+     * Get contactCard
+     *
+     * @return \Nsm\Bundle\ContactCardBundle\Entity\ContactCard 
+     */
+    public function getContactCard()
+    {
+        return $this->contactCard;
+    }
 }

@@ -64,7 +64,7 @@ class TaskType extends AbstractType
                 'required' => false,
                 'allow_add' => true,
                 'prototype_data' => $subTask,
-                'prototype_name' => 'sub_tasks',
+                'prototype_name' => '__sub_tasks__',
                 'type' => new SubTaskType(),
                 'options' => array(
                     'display_task' => false,

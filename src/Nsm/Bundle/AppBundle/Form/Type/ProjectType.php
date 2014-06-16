@@ -4,6 +4,7 @@ namespace Nsm\Bundle\AppBundle\Form\Type;
 
 use Nsm\Bundle\AppBundle\Entity\Task;
 use Nsm\Bundle\AppBundle\Form\DataTransformer\ChoiceToValueTransformer;
+use Nsm\Bundle\ContactCardBundle\Form\Type\ContactCardType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -38,6 +39,12 @@ class ProjectType extends AbstractType
             'text'
         );
 
+
+        $builder->add(
+            'contactCard',
+            new ContactCardType()
+        );
+
         $project = $builder->getData();
 
         $task = new Task();
@@ -50,7 +57,7 @@ class ProjectType extends AbstractType
                 'required' => false,
                 'allow_add' => true,
                 'prototype_data' => $task,
-                'prototype_name' => 'tasks',
+                'prototype_name' => '__tasks__',
                 'type' => 'task',
                 'options' => array(
                     'display_project' => false

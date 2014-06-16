@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Nsm\Bundle\UserBundle\NsmUserBundle(),
             new Nsm\Bundle\CoreBundle\NsmCoreBundle(),
             new Nsm\Bundle\HelpBundle\NsmHelpBundle(),
+            new Nsm\Bundle\ContactCardBundle\NsmContactCardBundle(),
             new Nsm\Bundle\TestOutputBundle\NsmTestOutputBundle(),
 
             new Nelmio\CorsBundle\NelmioCorsBundle(),

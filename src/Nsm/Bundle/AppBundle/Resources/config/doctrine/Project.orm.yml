@@ -32,6 +32,19 @@ Nsm\Bundle\AppBundle\Entity\Project:
             type: datetime
             nullable: true
 
+    oneToOne:
+        contactCard:
+            targetEntity: Nsm\Bundle\ContactCardBundle\Entity\ContactCard
+            cascade:
+                - persist
+                - remove
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_card_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+
     oneToMany:
         tasks:
             targetEntity: Task
