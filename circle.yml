@@ -8,13 +8,13 @@ machine:
   hosts:
     local.symfony2-standard-template: 127.0.0.1
 
-database:
-  pre:
-    - mysql -u ubuntu -e "Create database symfony2_standard_template"
+#database:
+#  override:
 #    - mysql -u ubuntu symfony2_standard_template < src/craft/storage/backups/craft.sql
 
 dependencies:
   pre:
+    - mysql -u ubuntu -e "Create database symfony2_standard_template"
     - cp app/config/php/php.ini ~/.phpenv/versions/$(phpenv global)/etc/conf.d/
   post:
     - cp app/config/apache/vhost.conf /etc/apache2/sites-available
