@@ -9,7 +9,7 @@ machine:
     local.symfony2-standard-template: 127.0.0.1
 
 database:
-  override:
+  pre:
     - mysql -u ubuntu -e "Create database symfony2_standard_template"
 #    - mysql -u ubuntu symfony2_standard_template < src/craft/storage/backups/craft.sql
 
