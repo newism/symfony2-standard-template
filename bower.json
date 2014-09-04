@@ -5,8 +5,6 @@
     "Leevi Graham <leevi@newism.com.au>"
   ],
   "private": true,
-  "dependencies": {
-    "nsm-app-theme": "~0.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {}
 }

@@ -26,6 +26,5 @@ dependencies:
 test:
   pre:
     - bower install
-  post:
     - grunt build
 
