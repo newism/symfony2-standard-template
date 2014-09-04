@@ -6,7 +6,7 @@ machine:
   # services:
   #   - rabbitmq-server
   hosts:
-    local.symonfy2-standard: 127.0.0.1
+    local.symfony2-standard-template: 127.0.0.1
 
 #database:
 #  override:
