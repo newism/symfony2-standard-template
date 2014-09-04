@@ -2,7 +2,7 @@ parameters:
     database_driver:   pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
-    database_name:     symfony2-standard-template
+    database_name:     symfony2_standard_template
     database_user:     root
     database_password: ~
 
@@ -14,4 +14,4 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    domain:            local.symonfy2-standard
+    domain:            local.symonfy2-standard-template
