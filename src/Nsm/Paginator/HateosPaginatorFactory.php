@@ -50,7 +50,8 @@ class HateosPaginatorFactory {
             $pager->getPageCount(),
             $this->getPageParameterName(),
             $this->getLimitParameterName(),
-            $route->isAbsolute()
+            $route->isAbsolute(),
+            $pager->getTotalResultCount()
         );
     }
 

@@ -1,4 +1,4 @@
-set :deploy_config_path, 'app/config/deploy.rb'
+set :deploy_config_path, 'app/config/deploy/deploy.rb'
 set :stage_config_path, 'app/config/deploy'
 
 require 'capistrano/setup'

@@ -63,12 +63,12 @@ class AbstractController extends FOSRestController
     }
 
     /**
-     * @param $pager
-     * @param $route
+     * @param Paginator $pager
+     * @param           $route
      *
      * @return \Hateoas\Representation\PaginatedRepresentation
      */
-    public function createPaginatedCollection($pager, $route)
+    public function createPaginatedCollection(Paginator $pager, $route)
     {
         $pagerFactory = new HateosPaginatorFactory();
         $paginatedCollection = $pagerFactory->createRepresentation(

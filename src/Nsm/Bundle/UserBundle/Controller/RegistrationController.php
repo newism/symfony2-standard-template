@@ -53,7 +53,7 @@ class RegistrationController extends BaseRegistrationController
          * It is possible for people to just come to the registration page directly.
          *
          * If the method is safe (GET) look for an invitation code
-         * then create a fake token and bind the request
+         * then create a fake csrf token and bind the request
          * this validates the invitationCode and displays an error if required.
          *
          * Submitting the fake request means we don't have to load the invitaiton from the code manually

@@ -43,8 +43,6 @@ class ProjectSubscriber implements EventSubscriber
         $em  = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 
-        $updatedProjects = new ArrayCollection();
-
         $updatedEntities = array_merge(
             $uow->getScheduledEntityInsertions(),
             $uow->getScheduledEntityUpdates()

@@ -1,0 +1,7 @@
+{% macro svg(hash, sprite = "storage", class="Icon") %}
+    {% set href = "" %}
+    {% if sprite == "storage" %}
+        {% set href = 'xlink:href="/bower_components/nsm-app-theme/src/images/sprites/storage.svg#'~hash~'"' %}
+    {% endif %}
+    <svg class="{{ class }} {{ class }}--{{ hash }}"><use {{ href|raw }}></use></svg>
+{% endmacro %}

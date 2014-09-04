@@ -19,6 +19,7 @@ use Nsm\Bundle\CoreBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Nsm\Bundle\AppBundle\Entity\TaskQueryBuilder;
 
 /**
  * Task controller.
@@ -46,9 +47,15 @@ class TasksController extends AbstractController
     /**
      * Browse all Task entities.
      *
-     * @Get("/tasks.{_format}", name="task_browse", defaults={"_format"="~"})
+     * @Get(
+     *      "/tasks.{_format}",
+     *      name = "task_browse",
+     *      defaults = {
+     *          "_format" = "~"
+     *      }
+     * )
      *
-     * @View(templateVar="entities", serializerGroups={"task_browse"})
+     * @View(templateVar="entities", serializerGroups={"task_browse", "Default"})
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
      * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Task count limit")
      * @QueryParam(name="orderBy", array=true, default={"id"="asc"})
@@ -62,7 +69,7 @@ class TasksController extends AbstractController
      *      {"name"="orderBy", "dataType"="string", "pattern"="(title|createdAt) ASC|DESC"}
      *  })
      */
-    public function browseAction(Request $request, $page, $perPage, $orderBy)
+    public function browseAction(Request $request, $page, $perPage, $orderBy, $_format)
     {
         /** @var Form $form */
         $taskSearchForm = $this->createForm(
@@ -77,6 +84,7 @@ class TasksController extends AbstractController
         $taskSearchForm->handleRequest($request);
         $criteria = $taskSearchForm->getData();
 
+        /** @var TaskQueryBuilder $qb */
         $qb = $this->get('nsm_app.entity.task_repository')->createQueryBuilder();
         $qb->filterByCriteria($criteria);
 
@@ -114,11 +122,15 @@ class TasksController extends AbstractController
      *  output="Nsm\Bundle\AppBundle\Entity\Task"
      * )
      */
-    public function readAction($id)
+    public function readAction(Request $request, $id)
     {
         $entity = $this->findTaskOr404($id);
 
-        return $entity;
+        $view = $this->view($entity);
+        $view->setTemplate($this->getTemplate($request->query->get('_template', 'browse')));
+
+        return $view;
+
     }
 
     /**

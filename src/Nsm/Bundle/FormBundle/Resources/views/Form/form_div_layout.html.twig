@@ -1,93 +1,200 @@
 {% extends 'form_div_layout.html.twig' %}
 
+{# Form Start #}
+{% block form_start %}
+    {% set attr = form_attr %}
+    {% set method = method|upper %}
+    {% if method in ["GET", "POST"] %}
+        {% set form_method = method %}
+    {% else %}
+        {% set form_method = "POST" %}
+    {% endif %}
+    <form name="{{ form.vars.name }}"
+          method="{{ form_method|lower }}"
+          action="{{ action }}"
+          {% if multipart %} enctype="multipart/form-data"{% endif %}
+          {{ block('widget_container_attributes') }}
+    >
+    {% if form_method != method %}
+        <input type="hidden" name="_method" value="{{ method }}" />
+    {% endif %}
+
+    {# Render the token at the top #}
+    {% if form._token is defined %}
+        {{ form_widget(form._token) }}
+    {% endif %}
+
+        <div class="Form-body">
+            {% set attr = control_group_collection_attr %}
+            <table {{ block('widget_container_attributes') }}>
+                <thead class="ControlGroupCollection-header"></thead>
+                <tbody class="ControlGroupCollection-body">
+{% endblock form_start %}
+
+{# Form End #}
+{% block form_end %}
+                {% if not render_rest is defined or render_rest %}
+                    {{ form_rest(form) }}
+                {% endif %}
+                </tbody> {# end ControlGroupCollection-body #}
+                <tfoot class="ControlGroupCollection-footer"></tfoot>
+            </table> {# end ControlGroupCollection #}
+        </div> {# end Form-body #}
+        <div class="Form-footer">
+            {% if not render_rest is defined or render_rest %}
+                {% for child in form %}
+                    {% if child.rendered == false and (child.vars.block_prefixes[0] == 'button' or child.vars.block_prefixes[1] == 'button_group') %}
+                        {{ form_widget(child) }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </form>
+{% endblock form_end %}
+
+{# Form Rest #}
+{% block form_rest %}
+    {% for child in form %}
+        {% if child.rendered == false and (child.vars.block_prefixes[0] != 'button' and child.vars.block_prefixes[1] != 'button_group') %}
+            {{ form_row(child) }}
+        {% endif %}
+    {% endfor %}
+{% endblock form_rest %}
+
+{# Form Rows #}
+{% block form_rows %}
+    {% for child in form %}
+        {% if child.vars.block_prefixes[0] != 'button' and child.vars.block_prefixes[1] != 'button_group' %}
+        {{ form_row(child) }}
+        {% endif %}
+    {% endfor %}
+{% endblock form_rows %}
+
+{# Form Help #}
 {% block form_help %}
-    {% spaceless %}
     {% if help %}
         <div class="{{ is_control_group ? 'ControlGroup' : 'Control' }}-help">{{ help }}</div>
     {% endif %}
-    {% endspaceless %}
 {% endblock %}
 
+{# Form Label #}
 {% block form_label %}
-    {{ parent() }}
-    {% if required %}
-        <span class="required" title="This field is required">*</span>
+    {%  set id = _id %}
+    {% if label is not sameas(false) %}
+        {% if compound == false and id != false %}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {% endif %}
+        {% if required %}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {% endif %}
+        {% if label is empty %}
+            {% set label = name|humanize %}
+        {% endif %}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{ label|trans({}, translation_domain) }}
+            {% if required %}
+                <span class="required" title="This field is required">*</span>
+            {% endif %}
+        </label>
     {% endif %}
-{% endblock %}
+    {%  set id = "" %}
+{% endblock form_label %}
 
 {# Renders a form row. Determines if this is a control group (top level) and acts accordingly #}
 {% block form_row %}
-    {% spaceless %}
-        {% if is_control_group %}
-            {{ block('control_group') }}
-        {% elseif is_collection %}
-            {{ block('collection') }}
-        {% elseif is_collection_item %}
-            {{ block('collection_item') }}
-        {% else %}
-            {{ block('control') }}
-        {% endif %}
-    {% endspaceless %}
+    {% if is_collection_item %}
+        <!-- start collection_item -->
+        {{ block('collection_item') }}
+        <!-- end collection_item -->
+    {% elseif is_control_group or is_collection_item_control_group %}
+        <!-- start control_group -->
+        {{ block('control_group') }}
+        <!-- end control_group -->
+    {% elseif is_control %}
+        <!-- start control -->
+        {{ block('control') }}
+        <!-- end control -->
+    {% else %}
+        <!-- start form_widget -->
+        {{ form_widget(form) }}
+        <!-- end form_widget -->
+    {% endif %}
 {% endblock form_row %}
 
 {# Renders a control group #}
 {% block control_group %}
+
+    <!-- Start: control_group -->
     {% set attr = control_group_attr %}
     {% set label_attr = control_group_label_attr %}
 
-    {% spaceless %}
-        <div {{ block('widget_container_attributes') }}>
+    {% if is_collection_item_control_group %}
+        {% set controlGroupEl = "td" %}
+        {% set controlGroupHeaderEl = "div" %}
+        {% set controlGroupBodyEl = "div"  %}
+    {% else %}
+        {% set controlGroupEl = "tr" %}
+        {% set controlGroupHeaderEl = "th" %}
+        {% set controlGroupBodyEl = "td" %}
+    {% endif %}
+
+    <{{ controlGroupEl }} {{ block('widget_container_attributes') }} x>
+        <{{ controlGroupHeaderEl }} class="ControlGroup-header">
             {{ form_label(form, null, {'label_attr': label_attr}) }}
             {{ block('form_help') }}
-            {% set attr = control_attr %}
-            <div class="ControlGroup-controls">
-                <div {{ block('widget_container_attributes') }}>
+        </{{ controlGroupHeaderEl }}>
+        {% set attr = control_attr %}
+        <{{ controlGroupBodyEl }} class="ControlGroup-body">
+            <div {{ block('widget_container_attributes') }}>
+                <div class="Control-body">
                     {{ form_errors(form) }}
                     {{ form_widget(form) }}
                 </div>
             </div>
-        </div>
-    {% endspaceless %}
+        </{{ controlGroupBodyEl }}>
+    </{{ controlGroupEl }}>
+    <!-- End: control_group -->
+
 {% endblock control_group %}
 
 {# Renders a collection #}
-{% block collection %}
-
+{% block collection_widget %}
+    <!-- Start: collection_widget -->
     {% set collection_attr = collection_attr|merge({
-        'data-prototype': form_row(prototype),
-        'data-prototype-name': prototype.vars.name
+        'data-collection-prototype': form_row(prototype)
     }) %}
 
     {% set attr = collection_attr %}
-    {% set label_attr = collection_label_attr %}
-
-    {% spaceless %}
-        <div {{ block('widget_container_attributes') }}>
-            {{ form_label(form, null, {'label_attr': label_attr}) }}
-            {{ block('form_help') }}
-            <div class="Collection-items">
-                {{ form_errors(form) }}
-                {{ form_widget(form) }}
-            </div>
-        </div>
-    {% endspaceless %}
-{% endblock collection %}
+    <table {{ block('widget_container_attributes') }}>
+        <thead class="Collection-header">
+            <tr class="Collection-headerRow">
+                {% for child in prototype.children %}
+                    <th scope="row" class="Collection-headerRowItem" id="{{ _id }}_{{ child.vars.name }}_header">
+                        {{ form_label(child, null, {_id: false}) }}
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody class="Collection-body">
+            {{ block('form_rows') }}
+        </tbody>
+        <tfoot class="Collection-footer"></tfoot>
+    </table>
+    <!-- End: collection_widget -->
+{% endblock collection_widget %}
 
 {# Renders a collection item and it's controls #}
 {% block collection_item %}
+    <!-- Start: collection_item -->
     {% set attr = collection_item_attr %}
     {% set label_attr = collection_item_label_attr %}
 
-    {% spaceless %}
-        <div {{ block('widget_container_attributes') }}>
-            {{ form_label(form, null, {'label_attr': label_attr}) }}
-            {{ block('form_help') }}
-            <div class="CollectionItem-controls">
-                {{ form_errors(form) }}
-                {{ form_widget(form) }}
-            </div>
-        </div>
-    {% endspaceless %}
+    <tr {{ block('widget_container_attributes') }}>
+        {#{{ form_label(form, null, {'label_attr': label_attr}) }}#}
+        {#{{ block('form_help') }}#}
+        {{ form_widget(form) }}
+    </tr>
+    <!-- End: collection_item -->
 {% endblock collection_item %}
 
 {# Renders a control and it's controlInputs #}
@@ -96,41 +203,114 @@
     {% set attr = control_attr %}
     {% set label_attr = control_label_attr %}
 
-    {% spaceless %}
-        <div {{ block('widget_container_attributes') }}>
+    <div {{ block('widget_container_attributes') }}>
+        <div class="Control-header">
             {{ form_label(form, null, {'label_attr': label_attr}) }}
             {{ block('form_help') }}
             {{ form_errors(form) }}
+        </div>
+        <div class="Control-body">
             {{ form_widget(form) }}
         </div>
-    {% endspaceless %}
+    </div>
+
 {% endblock control %}
+
+{# Entity Search Widget #}
+{% block entity_search_widget %}
+    {% set control_input_attr = control_input_attr|merge({
+        'data-entity-search-options' : attr['data-entity-search-options'],
+        'data-widget' : attr['data-widget'],
+    }) %}
+    {{ block('choice_widget') }}
+{% endblock entity_search_widget %}
 
 
 {# Renders a compound widget. Div wrappers are added in the control and control block rows  #}
 {% block form_widget_compound %}
-    {% spaceless %}
 
-        {% if form.parent is empty %}
-            {{ form_errors(form) }}
-        {% endif %}
+    {% if form.parent is empty %}
+        {{ form_errors(form) }}
+    {% endif %}
 
-        {{ block('form_rows') }}
-        {{ form_rest(form) }}
+    {{ block('form_rows') }}
+    {{ form_rest(form) }}
 
-    {% endspaceless %}
 {% endblock form_widget_compound %}
 
-{# Custom Mapping #}
+{# Choice Widget #}
+{% block choice_widget_expanded %}
+    <div class="ChoiceList">
+    {% for child in form %}
+        <div class="ChoiceList-choice">
+            {{ form_widget(child) }}
+            {{ form_label(child, null, {"required": false}) }}
+        </div>
+    {% endfor %}
+    </div>
+{% endblock choice_widget_expanded %}
 
-{% block _tasks_entry_row %}
-    {{ form_row(form) }}
-{% endblock %}
+{# Datetime Widget #}
+{% block datetime_widget %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+        {{ form_errors(form.date) }}
+        {{ form_errors(form.time) }}
+        {{ form_widget(form.date, {'id': _id ~ "_date", 'attr': { 'class': 'datateime-date'}}) }}
+        <span class="Control-inputSeperator"> - </span>
+        {{ form_widget(form.time, {'id': _id ~ "_time", 'attr': { 'class': 'datateime-time'}}) }}
+    {% endif %}
+{% endblock datetime_widget %}
 
-{% block _feature_tasks_entry_row %}
-    {{ block('_tasks_entry_row') }}
-{% endblock _feature_tasks_entry_row %}
+{# Date Widget #}
+{% block date_widget %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+        {{ date_pattern|replace({
+        '{{ year }}':  form_widget(form.year),
+        '{{ month }}': form_widget(form.month),
+        '{{ day }}':   form_widget(form.day),
+        })|raw }}
+    {% endif %}
+{% endblock date_widget %}
 
-{% block _project_tasks_entry_row %}
-    {{ block('_tasks_entry_row') }}
-{% endblock _project_tasks_entry_row %}
+
+{# Time Widget #}
+{% block time_widget %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+        {% set vars = widget == 'text' ? { 'attr': { 'size': 1 }} : {} %}
+        {{ form_widget(form.hour, vars) }}{% if with_minutes %}<span class="Control-inputSeperator">:</span>{{ form_widget(form.minute, vars) }}{% endif %}{% if with_seconds %}<span class="Control-inputSeperator">:</span>{{ form_widget(form.second, vars) }}{% endif %}
+    {% endif %}
+{% endblock time_widget %}
+
+{# Button Group Widget #}
+{% block button_group_widget %}
+    {% set attr = control_attr %}
+    <div {{ block('widget_container_attributes') }}>
+        {{ form_errors(form) }}
+        {{ form_widget(form.action) }}
+        {{ form_widget(form.submit) }}
+    </div>
+{% endblock button_group_widget %}
+
+{# Widget Attributes #}
+{% block widget_attributes %}
+    {% set id = _id %}
+    {% set attr = control_input_attr %}
+    {{ parent() }}
+    {% set id = "" %}
+{% endblock widget_attributes %}
+
+{% block button_widget %}
+    {% spaceless %}
+        {% set attr = attr|merge({'class': (attr.class|default('') ~ ' Button Button--default Button--medium')|trim})  %}
+        {% if label is empty %}
+            {% set label = name|humanize %}
+        {% endif %}
+        <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
+    {% endspaceless %}
+{% endblock button_widget %}

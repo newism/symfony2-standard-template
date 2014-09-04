@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Util\Codes;
 use Hateoas\Configuration\Route;
+use Hateoas\HateoasBuilder;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Nsm\Bundle\AppBundle\Entity\Project;
 use Nsm\Bundle\AppBundle\Entity\Task;
@@ -49,6 +50,7 @@ class ProjectsController extends AbstractController
      *
      * @Get("/projects.{_format}", name="project_browse", defaults={"_format"="~"})
      *
+     * @View(templateVar="entities", serializerGroups={"project_browse"})
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
      * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Project count limit")
      * @QueryParam(name="orderBy", array=true, default={"id"="asc"})
@@ -87,9 +89,18 @@ class ProjectsController extends AbstractController
             array(),
             array(
                 'action' => $this->generateUrl('project_browse'),
-                'method' => 'GET'
+                'method' => 'GET',
+                'layout' => 'table'
             )
-        )->add('search', 'submit');
+        )->add(
+            'search',
+            'submit',
+            array(
+                'attr' => array(
+                    'class' => 'Button Button--default'
+                )
+            )
+        );
 
         $projectSearchForm->handleRequest($request);
         $criteria = $projectSearchForm->getData();
@@ -208,7 +219,7 @@ class ProjectsController extends AbstractController
     public function addAction(Request $request)
     {
         $entity = new Project();
-//        $entity->addTask(new Task());
+        $entity->addTask(new Task());
 
         /** @var Form $form */
         $form = $this->createForm(
@@ -219,9 +230,14 @@ class ProjectsController extends AbstractController
                 'method' => 'POST'
             )
         )
-            ->add('Save', 'submit')
-            ->add('Save and add another', 'submit')
-        ;
+            ->add(
+                'actions',
+                'button_group',
+                array(
+                    'required' => true,
+                    'mapped' => false
+                )
+            );
 
         $form->handleRequest($request);
 
@@ -230,9 +246,16 @@ class ProjectsController extends AbstractController
             $em->persist($entity);
             $em->flush();
 
-            $targetPath = ($form->get('Save and add another')->isClicked())
-                ? $this->generateUrl('project_add')
-                : $this->generateUrl('project_read', array('id' => $entity->getId()));
+            switch($form->get('actions')->get('action')->getData()) {
+                case 'save':
+                    $this->generateUrl('project_read', array('id' => $entity->getId()));
+                    break;
+                case 'save_add_another':
+                    $targetPath = $this->generateUrl('project_add');
+                    break;
+                default:
+                    throw new \Exception('Cannot determine action');
+            }
 
             return $this->redirect(
                 $targetPath,

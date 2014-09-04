@@ -51,6 +51,15 @@ class SubTaskType extends AbstractType
             )
         );
 
+        $builder->add(
+            'order',
+            'number',
+            array(
+                'required' => false,
+                'mapped' => false
+            )
+        );
+
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

@@ -45,7 +45,8 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
         /** @var AbstractQueryBuilder $qb */
         $qb = new $class($this->getEntityManager(), $this);
         $qb->select($alias)
-            ->from($this->_entityName, $alias, $indexBy);
+            ->from($this->_entityName, $alias, $indexBy)
+            ->orderBy($alias.'.id');
 
         return $qb;
     }

@@ -8,21 +8,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Routing\Router;
 
 class EntitySearchType extends AbstractType
 {
     /**
-     * @var Router $router
+     * @var \Twig_Environment
      */
-    private $router;
+    protected $twig;
 
-    /**
-     * @param Router $router
-     */
-    public function __construct(Router $router)
+    public function __construct(\Twig_Environment $twig)
     {
-        $this->router = $router;
+        $this->twig = $twig;
     }
 
     /**
@@ -38,35 +34,42 @@ class EntitySearchType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         /** @var ChoiceListInterface $choiceList */
-        $choiceList = $options['choice_list'];
-        $choices = $choiceList->getChoices();
+//        $choiceList = $options['choice_list'];
+//        $choices = $choiceList->getChoices();
+
+        $widgetOptions = array(
+            'remote' => true,
+            'entityName' => $options['class'],
+            'endpointIndex' => $options['endpoint_index'],
+            'endpointModal' => $options['endpoint_modal'],
+            'selectizeOptions' => array(
+                'valueField' => 'id',
+                'labelField' => 'title',
+                'searchField' => 'title'
+//                    // Avoid an unnessecary api call on page load
+//                    // by providing the required entity data.
+//                    'options' => array_map(
+//                        function ($item) {
+//                            return array(
+//                                "id" => $item->getId(),
+//                                "title" => (string)$item
+//                            );
+//                        },
+//                        $choices
+//                    )
+            )
+        );
+
+        if (null !== $options['template']) {
+            $template = $this->twig->loadTemplate($options['template']);
+            $widgetOptions['templates'] = array(
+                'item' => $template->renderBlock('item', array()),
+                'option' => $template->renderBlock('option', array())
+            );
+        }
 
         $view->vars['attr']['data-widget'] = 'entitySearch';
-        $view->vars['attr']['data-entity-search-options'] = json_encode(
-            array(
-                'entityName' => '',
-                'endpointIndex' => '',
-                'endpointDetails' => '',
-                'endpointModal' => '',
-                'selectizeOptions' => array(
-                    'valueField' => 'id',
-                    'labelField' => 'title',
-                    'searchField' => 'title',
-                    // Avoid an unnessecary api call on page load
-                    // by providing the required entity data.
-                    'options' => array_map(
-                        function ($item) {
-                            return array(
-                                "id" => $item->getId(),
-                                "title" => (string)$item
-                            );
-                        },
-                        $choices
-                    )
-                )
-            ),
-            JSON_HEX_QUOT
-        );
+        $view->vars['attr']['data-entity-search-options'] = json_encode($widgetOptions, JSON_HEX_QUOT | JSON_PRETTY_PRINT);
     }
 
 
@@ -79,16 +82,13 @@ class EntitySearchType extends AbstractType
 
         $resolver->setDefaults(
             array(
-                'required' => true,
-                'read_only' => false,
-                'class' => '',
-                'entity_name' => null,
                 'endpoint_index' => null,
-                'endpoint_details' => null,
                 'endpoint_modal' => null,
+                'template' => null,
                 'selectize_options' => array(),
             )
         );
+
     }
 
     /**

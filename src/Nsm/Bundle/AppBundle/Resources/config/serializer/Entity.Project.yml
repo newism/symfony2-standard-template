@@ -17,9 +17,11 @@ Nsm\Bundle\AppBundle\Entity\Project:
             href:
                 route: project_read
                 parameters:
-                    id: expr(object.getId())
+                    id: 'expr(object.getId())'
         -
             rel: tasks
+            exclusion:
+                groups: [task_details]
             href:
                 route: task_browse
                 parameters:

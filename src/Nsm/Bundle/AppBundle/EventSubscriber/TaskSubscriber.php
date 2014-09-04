@@ -44,8 +44,6 @@ class TaskSubscriber implements EventSubscriber
         $em  = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 
-        $updatedTasks = new ArrayCollection();
-
         $updatedEntities = array_merge(
             $uow->getScheduledEntityInsertions(),
             $uow->getScheduledEntityUpdates()

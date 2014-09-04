@@ -1,0 +1,29 @@
+machine:
+  php:
+    version: 5.5.11
+  node:
+    version: 0.10.28
+  # services:
+  #   - rabbitmq-server
+  hosts:
+    local.symonfy2-standard: 127.0.0.1
+
+#database:
+#  override:
+#    - mysql -u ubuntu circle_test < src/craft/storage/backups/craft.sql
+
+dependencies:
+  pre:
+    - cp app/config/php/php.ini ~/.phpenv/versions/$(phpenv global)/etc/conf.d/
+  post:
+    - cp app/config/apache/vhost.conf /etc/apache2/sites-available
+    - a2ensite vhost.conf
+    - a2enmod rewrite
+    - sudo service apache2 restart
+
+test:
+  pre:
+    - bower install
+  post:
+    - grunt build
+

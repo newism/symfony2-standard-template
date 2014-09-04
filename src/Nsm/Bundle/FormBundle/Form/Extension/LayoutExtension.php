@@ -29,100 +29,212 @@ class LayoutExtension extends AbstractTypeExtension
         $builder->setAttribute('control_input_attr', $options['control_label_attr']);
     }
 
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function formIsRoot(FormInterface $form = null)
+    {
+        return $form->isRoot();
+    }
 
     /**
      * @param FormInterface $form
      *
      * @return bool
      */
-    private function isFormPrototype(FormInterface $form)
+    private function formParentIsRoot(FormInterface $form = null)
     {
-        return ("label__" === substr($form->getConfig()->getOption('label'), -7));
+        $formParent = $form->getParent();
+
+        return (null === $formParent) ? false : $this->formIsRoot($formParent);
     }
 
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function formIsControlGroup(FormInterface $form = null)
+    {
+        return (true === $this->formParentIsRoot($form) || true === $this->formParentIsCollectionItem($form));
+    }
 
     /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function formIsCollection(FormInterface $form = null)
+    {
+        return in_array($form->getConfig()->getType()->getName(), array("nsm_collection", "collection"));
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function formIsCollectionItem(FormInterface $form = null)
+    {
+        return $form->getConfig()->getOption('collection_item', false);
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function formParentIsCollectionItem(FormInterface $form = null)
+    {
+        $formParent = $form->getParent();
+
+        return (null === $formParent) ? false : $this->formIsCollectionItem($formParent);
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function formIsCollectionItemControlGroup(FormInterface $form = null)
+    {
+        $formParent = $form->getParent();
+
+        return (null === $formParent) ? false : $this->formIsCollectionItem($formParent);
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function formIsControl(FormInterface $form = null)
+    {
+        if ($this->formIsRoot($form) || $this->formIsControlGroup($form) || $this->formIsCollection(
+                $form
+            ) || $this->formIsCollectionItem($form)
+        ) {
+            return false;
+        }
+        $formParent = $form->getParent();
+
+        return (null === $formParent) ? false : ($this->formIsControlGroup($formParent) || $this->formIsControl(
+                $formParent
+            ));
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    private function formHasSiblings(FormInterface $form = null)
+    {
+        $formParent = $form->getParent();
+
+        return (null === $formParent) ? false : $formParent->getConfig()->getCompound();
+    }
+
+    /**
+     * Determines if the form is one of the following:
+     *
      * @param FormView      $view
      * @param FormInterface $form
      * @param array         $options
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        $isRoot = false;
-        $isControlGroup = false;
-        $isCollection = false;
-        $isCollectionItem = false;
-        $isControl = false;
-        $hasSiblings = false;
-
         $formType = $form->getConfig()->getType()->getName();
-        $formTypeIsPrototype = $this->isFormPrototype($form);
 
-        $formParent = $form->getParent();
-        $formParentType = null;
-        $formParentTypeIsPrototype = false;
+        $isRoot = $this->formIsRoot($form);
+        $isControlGroup = $this->formIsControlGroup($form);
+        $isCollection = $this->formIsCollection($form);
+        $isCollectionItem = $this->formIsCollectionItem($form);
+        $isCollectionItemControlGroup = $this->formIsCollectionItemControlGroup($form);
+        $hasSiblings = $this->formHasSiblings($form);
+        $isCompound = $form->getConfig()->getCompound();;
 
-        if($formParent) {
-            $formParentType = $formParent->getConfig()->getType()->getName();
-            $formParentTypeIsPrototype = $this->isFormPrototype($formParent);
+        $isControl = $this->formisControl($form);
+
+        $id = $view->vars["id"];
+        $view->vars["_id"] = $id;
+        $view->vars["id"] = false;
+
+        if ($isRoot) {
+            $formClass = "Form";
+            $formClass .= " Form--" . $options['layout'];
+            $formClass .= " ";
+            $formClass .= (isset($options['form_attr']['class'])) ? $options['form_attr']['class'] : '';
+            $options['form_attr']['class'] = trim($formClass);
+
+            $view->vars['form_attr'] = $options['form_attr'];
+
+            $controlGroupCollectionClass = "ControlGroupCollection";
+            $controlGroupCollectionClass .= " ControlGroupCollection--" . $options['layout'];
+            $controlGroupCollectionClass .= " ";
+            $controlGroupCollectionClass .= (isset($options['control_group_collection_attr']['class'])) ? $options['control_group_collection_attr']['class'] : '';
+            $options['control_group_collection_attr']['class'] = trim($controlGroupCollectionClass);
+            $view->vars['control_group_collection_attr'] = $options['control_group_collection_attr'];
         }
 
-        switch (true) {
-            case ("nsm_collection" === $formType || "collection" === $formType) :
-                $isCollection = true;
-                break;
-            case ($formTypeIsPrototype || "nsm_collection" === $formParentType || "collection" === $formParentType) :
-                $isCollectionItem = true;
-                break;
-            case ($form->isRoot()) :
-                $isRoot = true;
-                break;
-            case (!$formParentTypeIsPrototype && true === $formParent->isRoot()) :
-                $isControlGroup = true;
-                break;
-            default :
-                $isControl   = true;
-                $hasSiblings = (count($form->getParent()->all()) > 1);
-                break;
-        }
-
-        if($isControlGroup) {
+        if ($isControlGroup) {
             /**
              * Control Group Configuration
              */
-            $controlGroupClass                      = (isset($options['control_group_attr']['class'])) ? $options['control_group_attr']['class'] : '';
-            $options['control_group_attr']['class'] = trim($controlGroupClass . " ControlGroup");
-            $view->vars['control_group_attr']       = $options['control_group_attr'];
+            $controlGroupClass = "ControlGroup";
+            $controlGroupClass .= " ControlGroup--" . (($isCompound) ? "multiControl" : "singleControl");
+            $controlGroupClass .= " ControlGroup--" . $formType;
+            $controlGroupClass .= " ControlGroup--" . $view->vars['name'];
+            $controlGroupClass .= " ";
+            $controlGroupClass .= (isset($options['control_group_attr']['class'])) ? $options['control_group_attr']['class'] : '';
+            $options['control_group_attr']['class'] = trim($controlGroupClass);
 
-            $controlGroupLabelClass                       = (isset($options['control_group_label_attr']['class'])) ? $options['control_group_label_attr']['class'] : '';
-            $options['control_group_label_attr']['class'] = trim($controlGroupLabelClass . " ControlGroup-label");
-            $view->vars['control_group_label_attr']       = $options['control_group_label_attr'];
+            $view->vars['control_group_attr'] = $options['control_group_attr'];
+
+            $controlGroupLabelClass = "ControlGroup-label";
+            $controlGroupLabelClass .= " ";
+            $controlGroupLabelClass .= (isset($options['control_group_label_attr']['class'])) ? $options['control_group_label_attr']['class'] : '';
+            $options['control_group_label_attr']['class'] = $controlGroupLabelClass;
+
+            $view->vars['control_group_label_attr'] = $options['control_group_label_attr'];
         }
 
-        if($isRoot || $isControlGroup || $isControl || $isCollection || $isCollectionItem) {
+        if ($isRoot || $isControlGroup || $isControl || $isCollection || $isCollectionItem) {
             /**
              * Control Configuration
              */
-            $controlClass = (isset($options['control_attr']['class'])) ? $options['control_attr']['class'] : '';
-            $controlClass .= " Control";
-            if ($hasSiblings) {
-                $controlClass .= " Control--hasSiblings";
-            }
+            $controlClass = " Control";
+            $controlClass .= " Control--" . $formType;
+            $controlClass .= " Control--" . $view->vars['name'];
+            $controlClass .= " ";
+            $controlClass .= (isset($options['control_attr']['class'])) ? $options['control_attr']['class'] : '';
             $options['control_attr']['class'] = trim($controlClass);
+
+            $options['control_attr']['data-control-full-name'] = $view->vars['full_name'];
+            $options['control_attr']['data-control-name'] = $view->vars['name'];
+
             $view->vars['control_attr'] = $options['control_attr'];
 
-            $controlLabelClass = (isset($options['control_label_attr']['class'])) ? $options['control_label_attr']['class'] : '';
-            $options['control_label_attr']['class'] = trim($controlLabelClass . " Control-label");
+            $controlLabelClass = "Control-label";
+            $controlLabelClass .= " ";
+            $controlLabelClass .= (isset($options['control_label_attr']['class'])) ? $options['control_label_attr']['class'] : '';
+            $options['control_label_attr']['class'] = trim($controlLabelClass);
+
             $view->vars['control_label_attr'] = $options['control_label_attr'];
 
             /**
              * Control Input Configuration
              */
-            $controlInputClass = (isset($options['control_input_attr']['class'])) ? $options['control_input_attr']['class'] : '';
-            $options['control_input_attr']['class'] = trim(
-                $controlInputClass .= " Control-input Control-input--" . $formType
-            );
-            $options['control_input_attr']['class'] = $controlInputClass;
+            $controlInputClass = " Control-input";
+            $controlInputClass .= " Control-input--" . $formType;
+            $controlInputClass .= " Control-input--" . $view->vars['name'];
+            $controlInputClass .= " ";
+            $controlInputClass .= (isset($options['control_input_attr']['class'])) ? $options['control_input_attr']['class'] : '';
+            $options['control_input_attr']['class'] = trim($controlInputClass);
+
+            $view->vars['control_input_attr'] = $options['control_input_attr'];
         }
 
         /**
@@ -133,41 +245,55 @@ class LayoutExtension extends AbstractTypeExtension
          * This would normally be fired in the collection buildForm but we're hijacking it here
          * which allows us to add extra classes to the control attributes.
          */
-        if($isCollection) {
+        if ($isCollection) {
 
-            $collectionClass = (isset($options['collection_attr']['class'])) ? $options['collection_attr']['class'] : '';
-            $options['collection_attr']['class'] = trim($collectionClass . " Collection");
+            $collectionClass = "Collection";
+            $collectionClass .= " Collection--" . ($options['layout'] ? $options['layout'] : 'stacked');
+            $collectionClass .= " ";
+            $collectionClass .= (isset($options['collection_attr']['class'])) ? $options['collection_attr']['class'] : '';
+            $options['collection_attr']['class'] = trim($collectionClass);
+
             $options['collection_attr']['data-form-widget'] = 'collection';
+            $options['collection_attr']['data-collection'] = true;
+            $options['collection_attr']['data-collection-id'] = $id;
+            $options['collection_attr']['data-collection-full-name'] = $view->vars['full_name'];
+            $options['collection_attr']['data-collection-name'] = $view->vars['name'];
             $options['collection_attr']['data-collection-allow-add'] = $options['allow_add'];
             $options['collection_attr']['data-collection-allow-delete'] = $options['allow_delete'];
+            $options['collection_attr']['data-collection-allow-sort'] = $options['allow_sort'];
+
+            if ($options['allow_sort']) {
+                $options['collection_attr']['data-collection-sort-control'] = $options['sort_control'];
+            }
 
             if ($form->getConfig()->hasAttribute('prototype')) {
                 $prototype = $form->getConfig()->getAttribute('prototype');
-                $options['collection_attr']['data-prototype-name'] = $prototype->getName();
+                $options['collection_attr']['data-collection-prototype-name'] = $prototype->getName();
                 $options['prototype'] = $prototype->createView($view);
             }
 
-            $collectionLabelClass                       = (isset($options['collection_label_attr']['class'])) ? $options['collection_label_attr']['class'] : '';
+            $collectionLabelClass = (isset($options['collection_label_attr']['class'])) ? $options['collection_label_attr']['class'] : '';
             $options['collection_label_attr']['class'] = trim($collectionLabelClass . " Collection-label");
 
             $view->vars['collection_attr'] = $options['collection_attr'];
             $view->vars['collection_label_attr'] = $options['collection_label_attr'];
         }
 
-        if($isCollectionItem) {
+        if ($isCollectionItem) {
 
-            $collectionitemClass = (isset($options['collection_item_attr']['class'])) ? $options['collection_item_attr']['class'] : '';
-            $collectionitemClass .= " CollectionItem";
+            $collectionitemClass = "CollectionItem";
+            $collectionitemClass .= " ";
+            $collectionitemClass .= (isset($options['collection_item_attr']['class'])) ? $options['collection_item_attr']['class'] : '';
             $options['collection_item_attr']['class'] = trim($collectionitemClass);
 
-            $collectionItemLabelClass = (isset($options['collection_item_label_attr']['class'])) ? $options['collection_item_label_attr']['class'] : '';
-            $options['collection_item_label_attr']['class'] = trim($collectionItemLabelClass . " CollectionItem-label");
+            $collectionItemLabelClass = "CollectionItem-label";
+            $collectionItemLabelClass .= " ";
+            $collectionItemLabelClass .= (isset($options['collection_item_label_attr']['class'])) ? $options['collection_item_label_attr']['class'] : '';
+            $options['collection_item_label_attr']['class'] = trim($collectionItemLabelClass);
 
             $view->vars['collection_item_attr'] = $options['collection_item_attr'];
             $view->vars['collection_item_label_attr'] = $options['collection_item_label_attr'];
         }
-
-
 
         /**
          * View helpers
@@ -182,7 +308,13 @@ class LayoutExtension extends AbstractTypeExtension
         $view->vars['is_control'] = $isControl;
         $view->vars['is_collection'] = $isCollection;
         $view->vars['is_collection_item'] = $isCollectionItem;
+        $view->vars['is_collection_item_control_group'] = $isCollectionItemControlGroup;
         $view->vars['has_siblings'] = $hasSiblings;
+
+        $view->vars['collection_layout'] = $isCollection ? $form->getConfig()->getOption('layout') : null;
+        $view->vars['collection_item_layout'] = $isCollectionItem ? $form->getConfig()->getOption(
+            'collection_item_layout'
+        ) : null;
     }
 
     /**
@@ -192,6 +324,8 @@ class LayoutExtension extends AbstractTypeExtension
     {
         $resolver->setDefaults(
             array(
+                'form_attr' => array(),
+                'control_group_collection_attr' => array(),
                 'control_group_attr' => array(),
                 'control_group_label_attr' => array(),
                 'control_attr' => array(),
@@ -200,7 +334,10 @@ class LayoutExtension extends AbstractTypeExtension
                 'collection_attr' => array(),
                 'collection_label_attr' => array(),
                 'collection_item_attr' => array(),
-                'collection_item_label_attr' => array()
+                'collection_item_label_attr' => array(),
+                'collection_item' => false,
+                'collection_item_layout' => null,
+                'layout' => 'stacked'
             )
         );
     }

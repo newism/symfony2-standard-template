@@ -21,31 +21,102 @@ class ProjectType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        $taskForm = $builder->create(
-//            'task',
-//            'form',
-//            array(
-//                'mapped' => false,
-//                'data_class' => 'Nsm\Bundle\AppBundle\Entity\Task'
-//            )
-//        );
-//        $taskForm->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'taskEventHandler'));
-//        $taskForm->addEventListener(FormEvents::SUBMIT, array($this, 'taskEventHandler'));
-//
-//        $builder->add($taskForm);
+        $project = $builder->getData();
+
+        $builder->add(
+            'text',
+            'text',
+            array(
+                'mapped' => false
+            )
+        );
+
+        $builder->add(
+            'textarea',
+            'textarea',
+            array(
+                'mapped' => false
+            )
+        );
+
+
+        $builder->add(
+            'choice',
+            'choice',
+            array(
+                'mapped' => false,
+                'choices' => [1,2]
+            )
+        );
+
+        $builder->add(
+            'choice-expanded-multiple',
+            'choice',
+            array(
+                'mapped' => false,
+                'expanded' => true,
+                'multiple' => true,
+                'choices' => [1,2]
+            )
+        );
+
+        $builder->add(
+            'choice-expanded',
+            'choice',
+            array(
+                'mapped' => false,
+                'expanded' => true,
+                'choices' => [1,2]
+            )
+        );
+
+        $builder->add(
+            'date',
+            'date',
+            array(
+                'mapped' => false
+            )
+        );
+
+        $builder->add(
+            'datetime',
+            'datetime',
+            array(
+                'mapped' => false
+            )
+        );
+
+        $builder->add(
+            'datetime-single',
+            'datetime',
+            array(
+                'widget' => 'single_text',
+                'mapped' => false
+            )
+        );
+
+        $builder->add(
+            'birthday',
+            'birthday',
+            array(
+                'mapped' => false
+            )
+        );
+
+        $builder->add(
+            'startedAtRange',
+            'date_range',
+            array(
+                'required' => true,
+                'help' => 'Dates are inclusive',
+                'mapped' => false
+            )
+        );
 
         $builder->add(
             'title',
             'text'
         );
-
-
-        $builder->add(
-            'contactCard',
-            new ContactCardType()
-        );
-
-        $project = $builder->getData();
 
         $task = new Task();
         $task->setProject($project);
@@ -56,12 +127,15 @@ class ProjectType extends AbstractType
             array(
                 'required' => false,
                 'allow_add' => true,
+                'allow_delete' => true,
+                'allow_sort' => true,
+                'sort_control' => 'order',
+                'type' => 'task',
                 'prototype_data' => $task,
                 'prototype_name' => '__tasks__',
-                'type' => 'task',
+                'layout' => 'table',
                 'options' => array(
                     'display_project' => false
-
                 )
             )
         );
@@ -81,56 +155,4 @@ class ProjectType extends AbstractType
     {
         return 'project';
     }
-
-    public function taskEventHandler(FormEvent $event, $eventName)
-    {
-        /** @var Task $task */
-        $task = $event->getData();
-
-        /** @var Form $form */
-        $form = $event->getForm();
-
-        if (FormEvents::PRE_SET_DATA === $eventName) {
-
-            $form->add(
-                'toggle',
-                'choice',
-                array(
-                    'label' => null,
-                    'mapped' => false,
-                    'choices' => array(
-                        'existing' => 'Select a Task',
-                        'new' => 'Create a new Task',
-                    )
-                )
-            );
-
-            $form->add(
-                'existing',
-                'entity',
-                array(
-                    'label' => 'Select a Task',
-                    'class' => 'NsmAppBundle:Task',
-                    'mapped' => false,
-                )
-            );
-
-            $form->add(
-                'new',
-                'task',
-                array(
-                    'label' => 'Create a new Task',
-                    'display_project' => false,
-                    'mapped' => false,
-                )
-            );
-        }
-
-        if (FormEvents::SUBMIT === $eventName) {
-            $newOrExisting = $form->get('toggle')->getNormData();
-            $normData = $form->get($newOrExisting)->getNormData();
-            $event->setData($normData);
-        }
-    }
-
 }

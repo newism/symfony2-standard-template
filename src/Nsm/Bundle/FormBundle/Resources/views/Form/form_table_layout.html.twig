@@ -24,47 +24,22 @@
 
     {% spaceless %}
         <tr {{ block('widget_container_attributes') }}>
-            <th scope="row">
+            <th scope="row" class="ControlGroup-header">
             {{ form_label(form, null, {'label_attr': control_group_label_attr}) }}
             {{ block('form_help') }}
             </th>
-            <td class="ControlGroup-controls">
+            <td class="ControlGroup-body">
                 {% set attr = control_attr %}
                 <div {{ block('widget_container_attributes') }}>
-                    {{ form_errors(form) }}
-                    {{ form_widget(form) }}
+                    <div class="Control-body">
+                        {{ form_errors(form) }}
+                        {{ form_widget(form) }}
+                    </div>
                 </div>
             </td>
         </tr>
     {% endspaceless %}
 {% endblock control_group %}
-
-{# Renders a collection #}
-{% block collection %}
-
-    {#{{ form_row(prototype) }}#}
-
-    {% set collection_attr = collection_attr|merge({
-        'data-prototype': form_row(prototype)
-    }) %}
-
-    {% set attr = collection_attr %}
-    {% set label_attr = collection_label_attr %}
-
-    {% spaceless %}
-        <tr {{ block('widget_container_attributes') }}>
-            <th scope="row">
-            {{ form_label(form, null, {'label_attr': label_attr}) }}
-            {{ block('form_help') }}
-            </th>
-            {% set attr = control_attr %}
-            <td class="Collection-items">
-                {{ form_errors(form) }}
-                {{ form_widget(form) }}
-            </td>
-        </tr>
-    {% endspaceless %}
-{% endblock collection %}
 
 {% block button_row %}
     {% spaceless %}

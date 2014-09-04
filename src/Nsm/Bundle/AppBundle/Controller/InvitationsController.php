@@ -318,7 +318,7 @@ class InvitationsController extends AbstractController
                     'invitation_claim_confirm',
                     array(
                         'code' => $invitation->getCode(),
-//                        '_targetPath' => $request->getUri()
+                        '_targetPath' => $request->getUri()
                     )
                 )
             );
@@ -334,7 +334,7 @@ class InvitationsController extends AbstractController
                         'invitationCode' => $invitation->getCode(),
                         // @todo: Not sure why we need to send the user back here
                         // The register form should handle creating the user and claiming the invitation
-//                        '_targetPath' => $request->getUri()
+                        '_targetPath' => $request->getUri()
                     )
                 )
             );

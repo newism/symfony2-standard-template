@@ -19,6 +19,16 @@ class TaskType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        $builder->add(
+            'order',
+            'number',
+            array(
+                'required' => false,
+                'mapped' => false
+            )
+        );
+
         if (true === $options['display_project']) {
 
             $builder->add(
@@ -66,6 +76,7 @@ class TaskType extends AbstractType
                 'prototype_data' => $subTask,
                 'prototype_name' => '__sub_tasks__',
                 'type' => new SubTaskType(),
+                'layout' => 'table',
                 'options' => array(
                     'display_task' => false,
                 )
