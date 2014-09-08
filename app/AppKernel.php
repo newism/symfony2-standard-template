@@ -30,7 +30,6 @@ class AppKernel extends Kernel
             new FOS\RestBundle\FOSRestBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
-            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
 
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 
@@ -47,11 +46,10 @@ class AppKernel extends Kernel
         }
 
         if (in_array($this->getEnvironment(), array('test'))) {
-            $bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
             $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
         }
 
-            return $bundles;
+        return $bundles;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

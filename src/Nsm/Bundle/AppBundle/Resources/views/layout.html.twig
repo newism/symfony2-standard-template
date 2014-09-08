@@ -9,13 +9,21 @@
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
-    <!-- build:css /themes/default/styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
-    <link rel="stylesheet" href="/bower_components/selectize/dist/css/selectize.css" />
-    <link rel="stylesheet" href="/bower_components/nsm-app-theme/src/styles/screen.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
+
+
+    {% if app.debug %}
+
+        <!-- build:css /themes/default/styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
+        <!-- endbower -->
+        <!-- endbuild -->
+
+    {% else %}
+
+        <link rel="stylesheet" href="{{ asset('themes/default/styles/vendor.css') }}" />
+
+    {% endif %}
 
 </head>
 <body>
@@ -218,46 +226,38 @@
 
     {% block javascripts %}{% endblock %}
 
+    {% if app.debug %}
+
     <!-- build:js /themes/default/scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="/bower_components/modernizr/modernizr.js"></script>
     <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/jquery-ui/jquery-ui.js"></script>
-    <script src="/bower_components/svg4everybody/svg4everybody.js"></script>
-    <script src="/bower_components/sifter/sifter.js"></script>
-    <script src="/bower_components/microplugin/src/microplugin.js"></script>
-    <script src="/bower_components/selectize/dist/js/selectize.js"></script>
-    <script src="/bower_components/nsm-app-theme/src/scripts/main.js"></script>
+    <script src="/bower_components/console-polyfill/index.js"></script>
+    <script src="/bower_components/jquery-ui/ui/widget.js"></script>
+    <script src="/bower_components/jquery-validation/dist/jquery.validate.js"></script>
     <!-- endbower -->
-
     <!-- endbuild -->
 
     <!-- build:js /themes/default/scripts/main.js -->
-    <script src="/bower_components/nsm-app-theme/src/scripts/widgets/collection/src/jquery.nsm.collection.js"></script>
-    <script src="/bower_components/nsm-app-theme/src/scripts/widgets/entitySearch/src/jquery.nsm.entitySearch.js"></script>
-
     <!-- endbuild -->
 
+    {% else %}
+
+    <script src="{{ asset('themes/default/scripts/vendor.js') }}"></script>
+    <script src="{{ asset('themes/default/scripts/main.js') }}"></script>
+
+    {% endif %}
+
+    <script src="{{ asset('themes/default/scripts/vendor.js') }}"></script>
 
     <script>
-
-
         $('body').on('contentcreated', function (event) {
-
             // Fire any other events on this element
             // But don't bubble
             event.stopPropagation();
-
             var $el = $(event.target);
-
-
             $el.find('[data-widget=collection]').collection();
             $el.find('[data-widget=entitySearch]').entitySearch();
-
-
         }).trigger('contentcreated');
-
-
     </script>
 
 </div>

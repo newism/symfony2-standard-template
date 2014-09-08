@@ -15,3 +15,7 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     domain:            local.symonfy2-standard-template
+
+    debug_toolbar:          true
+    debug_redirects:        false
+    use_assetic_controller: false
