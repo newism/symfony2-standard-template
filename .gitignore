@@ -23,6 +23,7 @@ nbproject
 *.sublime-workspace
 
 # Folders to ignore
+.bundle
 .hg
 .svn
 .CVS
