@@ -15,10 +15,12 @@ machine:
 dependencies:
   pre:
     - mysql -u ubuntu -e "Create database symfony2_standard_template"
-    - cp app/config/php/php.ini ~/.phpenv/versions/$(phpenv global)/etc/conf.d/
+    - cp config/php/php.ini ~/.phpenv/versions/$(phpenv global)/etc/conf.d/
   post:
-    - cp app/config/apache/vhost.conf /etc/apache2/sites-available
-    - a2ensite vhost.conf
+    - cp config/apache/dist.vhost.conf /etc/apache2/sites-available
+    - a2ensite dist.vhost.conf
+    - cp config/apache/src.vhost.conf /etc/apache2/sites-available
+    - a2ensite src.vhost.conf
     - a2enmod rewrite
     - a2enmod headers
     - sudo service apache2 restart
@@ -26,5 +28,13 @@ dependencies:
 test:
   pre:
     - bower install
-    - grunt build
+    - grunt build --target=dist
 
+deployment:
+  production:
+    branch: master
+    commands:
+      - git add ./dist -A
+      - git commit -m "Build by Newbot via CircleCI" --author="newism-newbot <team@newism.com.au>"
+      - git push origin master
+#      - cap production deploy

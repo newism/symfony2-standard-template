@@ -17,7 +17,12 @@ role :db,  %w{128.199.191.213}
 
 server '128.199.191.213', user: 'root', roles: %w{web app}
 
-set :deploy_to, '/var/www/symfony2-standard-template/production'
+set :deploy_to,         '/var/www/symfony2-standard-template/production'
+set :app_path,          'dist/app'
+set :web_path,          'dist/web'
+set :symfony_console,   'dist/bin/console'
+set :log_path,          'dist/var/logs'
+set :cache_path,        'dist/var/cache'
 
 
 # Custom SSH Options

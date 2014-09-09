@@ -7,23 +7,21 @@
     <meta charset="UTF-8"/>
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}{% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
+    <!-- build:css /themes/default/styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
 
+    <!-- build:css /themes/default/styles/screen.css -->
+    <link rel="stylesheet" href="/themes/default/styles/screen.css" media="screen, projection" type="text/css" />
+    <!-- endbuild -->
 
-    {% if app.debug %}
-
-        <!-- build:css /themes/default/styles/vendor.css -->
-        <!-- bower:css -->
-        <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
-        <!-- endbower -->
-        <!-- endbuild -->
-
-    {% else %}
-
-        <link rel="stylesheet" href="{{ asset('themes/default/styles/vendor.css') }}" />
-
-    {% endif %}
+    <!-- build:css /themes/default/styles/print.css -->
+    <link rel="stylesheet" href="/themes/default/styles/print.css" media="print" type="text/css" />
+    <!-- endbuild -->
 
 </head>
 <body>
@@ -226,8 +224,6 @@
 
     {% block javascripts %}{% endblock %}
 
-    {% if app.debug %}
-
     <!-- build:js /themes/default/scripts/vendor.js -->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
@@ -237,17 +233,8 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- build:js /themes/default/scripts/main.js -->
+    <!-- build:js /themes/default/scripts/app.js -->
     <!-- endbuild -->
-
-    {% else %}
-
-    <script src="{{ asset('themes/default/scripts/vendor.js') }}"></script>
-    <script src="{{ asset('themes/default/scripts/main.js') }}"></script>
-
-    {% endif %}
-
-    <script src="{{ asset('themes/default/scripts/vendor.js') }}"></script>
 
     <script>
         $('body').on('contentcreated', function (event) {
