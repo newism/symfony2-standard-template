@@ -52,13 +52,13 @@ test:
 
 # Deploying your code to your web servers
 # https://circleci.com/docs/configuration#deployment
-deployment:
-  production:
-    branch: master
-    commands:
-      - git config --global user.email "team@newism.com.au"
-      - git config --global user.name "newism-newbot"
-      - git add ./dist -A
-      - git commit -m "Build by Newbot via CircleCI"
-      - git push origin master
-#      - cap production deploy
+# deployment:
+#   production:
+#     branch: master
+#     commands:
+#       - git config --global user.email "team@newism.com.au"
+#       - git config --global user.name "newism-newbot"
+#       - git add ./dist -A
+#       - git commit -m "Build by Newbot via CircleCI"
+#       - git push origin master
+#       - cap production deploy
