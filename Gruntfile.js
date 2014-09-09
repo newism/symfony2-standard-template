@@ -66,6 +66,7 @@ module.exports = function (grunt) {
                         dest: '<%= target %>',
                         src: [
                             'app/**',
+                            'bin/console',
                             'src/**',
                             'var/**',
                             'web/**',
@@ -92,6 +93,15 @@ module.exports = function (grunt) {
                         }
                     }
                 ]
+            }
+        },
+
+        chmod: {
+            dist: {
+                options: {
+                    mode: '755'
+                },
+                src: ['<%= target %>/bin/console']
             }
         },
 
@@ -184,7 +194,8 @@ module.exports = function (grunt) {
         'filerev',
         'filerev_assets',
         'usemin',
-        'replace:dist'
+        'replace:dist',
+        'chmod:dist'
     ]);
 
 }
