@@ -39,7 +39,9 @@
         "behat/common-formatters": "1.2.*",
         "webignition/json-pretty-print": "@dev",
         "hasbridge/json-schema-validator": "@dev",
-        "ornicar/gravatar-bundle": "dev-master"
+        "ornicar/gravatar-bundle": "dev-master",
+
+        "nsm/doctrine-paginator": "dev-master"
 
     },
     "require-dev": {

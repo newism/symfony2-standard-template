@@ -66,10 +66,14 @@ module.exports = function (grunt) {
                         dest: '<%= target %>',
                         src: [
                             'app/**',
-                            'bin/console',
+                            'bin/**',
                             'src/**',
-                            'var/**',
+                            'var/bootstrap.php.cache',
+                            'var/SymfonyRequirements.php',
+                            'var/cache/.gitkeep',
+                            'var/logs/.gitkeep',
                             'web/**',
+                            'vendor/**',
                             '.gitignore',
                             'behat.yml',
                             'composer.json',
@@ -77,20 +81,6 @@ module.exports = function (grunt) {
                             'LICENSE',
                             'README.md'
                         ]
-                    },
-                    {
-                        expand: true,
-                        dot: true,
-                        cwd: 'src',
-                        dest: '<%= target %>',
-                        src: [
-                            'bin/**',
-                            'vendor/**'
-                        ],
-                        filter: function(){
-                            // True includes the files
-                            return (target !== "dist")
-                        }
                     }
                 ]
             }

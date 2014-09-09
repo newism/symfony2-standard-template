@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fef72a74652a69f769388b14977dde02",
+    "hash": "32036a3ed7f8336343aebb6c90cb772b",
     "packages": [
         {
             "name": "behat/behat",
@@ -2049,6 +2049,55 @@
             "time": "2014-07-21 16:35:44"
         },
         {
+            "name": "nsm/doctrine-paginator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/newism/doctrine-paginator.git",
+                "reference": "e075827b85530281dc0a6911b15c2dc50fb0cd55"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/newism/doctrine-paginator/zipball/e075827b85530281dc0a6911b15c2dc50fb0cd55",
+                "reference": "e075827b85530281dc0a6911b15c2dc50fb0cd55",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "~2.0",
+                "php": ">=5.3.0",
+                "willdurand/hateoas": "2.3.*@dev"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "2.0.*@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nsm\\": "src/Nsm"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Leevi Graham",
+                    "email": "leevi@newism.com.au",
+                    "homepage": "http://leevigraham.com",
+                    "role": "Lead developer"
+                }
+            ],
+            "description": "Simple decorator for Doctrine Paginator",
+            "homepage": "https://github.com/newism/doctrine-paginator",
+            "keywords": [
+                "database",
+                "doctrine",
+                "pagination"
+            ],
+            "time": "2014-09-09 14:10:07"
+        },
+        {
             "name": "ornicar/gravatar-bundle",
             "version": "dev-master",
             "target-dir": "Ornicar/GravatarBundle",
@@ -3348,6 +3397,7 @@
         "webignition/json-pretty-print": 20,
         "hasbridge/json-schema-validator": 20,
         "ornicar/gravatar-bundle": 20,
+        "nsm/doctrine-paginator": 20,
         "mockery/mockery": 20
     },
     "prefer-stable": false,

@@ -22,7 +22,16 @@
 
     <table>
         <caption>
-            Showing {{ pager.currentPageFirstResultOffset }} - {{ pager.currentPageLastResultOffset }} of {{ pager.totalResultCount }} results
+            <span class="Pagination-currentPageRange">
+                Displaying
+                <span class="Pagingation-currentPageOffsetStart">{{ pager.currentPageFirstResultPositionInTotalResults }}</span> -
+                <span class="Pagingation-currentPageOffsetEnd">{{ pager.currentPageLastResultPositionInTotalResults }}</span>
+            </span>
+            <span class="Pagination-totalResults">
+                of
+                <span class="Pagination-totalResultCount">{{ pager.totalResultCount }}</span>
+                results
+            </span>
         </caption>
         <thead>
             <tr>

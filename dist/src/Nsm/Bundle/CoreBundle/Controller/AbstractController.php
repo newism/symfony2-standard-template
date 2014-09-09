@@ -3,10 +3,10 @@
 namespace Nsm\Bundle\CoreBundle\Controller;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use FOS\RestBundle\Controller\FOSRestController;
-use Nsm\Bundle\CoreBundle\Entity\AbstractManager;
-use Nsm\Paginator\HateosPaginatorFactory;
-use Nsm\Paginator\Paginator;
+use Nsm\DoctrinePaginator\DoctrinePaginatorDecorator;
+use Nsm\DoctrinePaginator\HateosPaginatorFactory;
 
 /**
  * Abstract controller.
@@ -43,23 +43,15 @@ class AbstractController extends FOSRestController
      *
      * @param QueryBuilder $qb
      * @param null         $perPage
-     * @param null         $page
+     * @param null         $pageNo
      *
      * @return Paginator
      */
-    public function paginateQuery(QueryBuilder $qb, $perPage = null, $page = null)
+    public function paginateQuery(QueryBuilder $qb, $perPage = null, $pageNo = null)
     {
         $paginator = new Paginator($qb, false);
 
-        if (null !== $perPage) {
-            $paginator->setPerPage($perPage);
-        }
-
-        if (null !== $page) {
-            $paginator->setCurrentPage($page);
-        }
-
-        return $paginator;
+        return new DoctrinePaginatorDecorator($paginator, $perPage, $pageNo);
     }
 
     /**
