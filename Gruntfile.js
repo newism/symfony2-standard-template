@@ -66,7 +66,7 @@ module.exports = function (grunt) {
                         dest: '<%= target %>',
                         src: [
                             'app/**',
-                            'bin/**',
+                            'bin/console',
                             'src/**',
                             'var/bootstrap.php.cache',
                             'var/SymfonyRequirements.php',
