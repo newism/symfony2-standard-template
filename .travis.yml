@@ -1,10 +1,40 @@
 language: php
 
 php:
-  - 5.3.3
-  - 5.3
+  - 5.5
   - 5.4
 
-before_script: composer install -n
+# Run before_install commands
+# Use this to prepare the system to install prerequisites or dependencies
+# e.g. sudo apt-get update
+before_install:
+    - composer self-update
+    - npm install -g grunt-cli
+    - npm install -g bower
 
-script: phpunit -c app
+# Run install commands
+# Use this to install any prerequisites or dependencies necessary to run your build
+install:
+    - npm install
+    - bower install
+    - bundle install
+
+# Run before_script commands
+# Use this to prepare your build for testing
+# e.g. copy database configurations, environment variables, etc.
+before_script:
+    - grunt build --target=dist
+    - composer install -d dist --prefer-source --no-interaction --optimize-autoloader
+    - composer install -d src --prefer-source --no-interaction --optimize-autoloader
+
+# Run test script commands
+# Default is specific to project language
+# All commands must exit with code 0 on success. Anything else is considered failure.
+script: true
+
+# Run after_success or after_failure commands
+# after_success:
+# after_failure:
+
+# Run after_script commands
+# after_script:
