@@ -1,10 +1,23 @@
 {
-  "name": "nsm-club-evo-app",
-  "version": "0.0.0",
-  "authors": [
-    "Leevi Graham <leevi@newism.com.au>"
-  ],
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {}
+    "name": "nsm-club-evo-app",
+    "version": "0.0.0",
+    "authors": [
+        "Leevi Graham <leevi@newism.com.au>"
+    ],
+    "private": true,
+    "dependencies": {
+        "normalize-css": "~3.0.1",
+        "console-polyfill": "~0.1.1",
+        "jquery": "~2.1.1",
+        "jquery-ui": "~1.11.0",
+        "jquery-validation": "~1.13.0"
+    },
+    "devDependencies": {
+        "modernizr": "~2.8.3"
+    },
+    "overrides": {
+        "jquery-ui": {
+            "main": "ui/widget.js"
+        }
+    }
 }
