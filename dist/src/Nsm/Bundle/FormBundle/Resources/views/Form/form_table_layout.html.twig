@@ -1,0 +1,52 @@
+{% extends 'NsmFormBundle:Form:form_div_layout.html.twig' %}
+
+{% block form_start %}
+    {% spaceless %}
+        {{ parent() }}
+        <table>
+            <tbody>
+    {% endspaceless %}
+
+{% endblock form_start %}
+
+{% block form_end %}
+    {% spaceless %}
+            </tbody>
+        </table>
+        {{ parent() }}
+    {% endspaceless %}
+{% endblock form_end %}
+
+{# Renders a control group #}
+{% block control_group %}
+    {% set attr = control_group_attr %}
+    {% set label_attr = control_group_label_attr %}
+
+    {% spaceless %}
+        <tr {{ block('widget_container_attributes') }}>
+            <th scope="row" class="ControlGroup-header">
+            {{ form_label(form, null, {'label_attr': control_group_label_attr}) }}
+            {{ block('form_help') }}
+            </th>
+            <td class="ControlGroup-body">
+                {% set attr = control_attr %}
+                <div {{ block('widget_container_attributes') }}>
+                    <div class="Control-body">
+                        {{ form_errors(form) }}
+                        {{ form_widget(form) }}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {% endspaceless %}
+{% endblock control_group %}
+
+{% block button_row %}
+    {% spaceless %}
+        <tr>
+            <td colspan="2">
+                {{ form_widget(form) }}
+            </td>
+        </tr>
+    {% endspaceless %}
+{% endblock button_row %}

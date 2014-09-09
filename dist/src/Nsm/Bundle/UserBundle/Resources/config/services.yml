@@ -1,0 +1,39 @@
+parameters:
+
+    nsm_user.model.class: Nsm\Bundle\UserBundle\Entity\User
+    nsm_user.component.authentication.handler.class: Nsm\Bundle\UserBundle\Component\Authentication\Handler\AuthenticationSuccessHandler
+
+    nsm_user.form.login.name: "login"
+    nsm_user.form.login.type.class: Nsm\Bundle\UserBundle\Form\Type\LoginType
+
+    nsm_user.form.registration.name: "registration"
+    nsm_user.form.registration.type.class: Nsm\Bundle\UserBundle\Form\Type\RegistrationType
+
+    nsm_user.form.profile.name: "profile"
+    nsm_user.form.profile.type.class: Nsm\Bundle\UserBundle\Form\Type\ProfileFormType
+
+    nsm_user.event_subscriber.user_subscriber.class: Nsm\Bundle\UserBundle\EventSubscriber\UserSubscriber
+
+services:
+
+    nsm_user.form.login.type:
+        class: %nsm_user.form.login.type.class%
+        tags: [{ name: "form.type", alias: "nsm_user_login_form" }]
+
+    nsm_user.login.form:
+        class: "Symfony\Component\Form\Form"
+        arguments: [null, @nsm_user.form.login.type]
+        factory_method: "createNamed"
+        factory_service: "form.factory"
+
+    nsm_user.form.registration.type:
+        class: %nsm_user.form.registration.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: "form.type", alias: "nsm_user_registration_form" }
+
+    nsm_user.event_subscriber.user_subscriber:
+        class: %nsm_user.event_subscriber.user_subscriber.class%
+        arguments: [@security.context, @database_connection, %locale%]
+        tags:
+            - { name: kernel.event_subscriber }

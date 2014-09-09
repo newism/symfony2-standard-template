@@ -1,0 +1,23 @@
+{% extends 'NsmAppBundle::layout.html.twig' %}
+
+{% block meta_title "Add Project / Projects" %}
+
+{% block page_breadcrumb %}
+    <div class="Page-breadcrumbs">
+        <a href='{{ path('project_browse') }}'>Projects</a>
+    </div>
+{% endblock %}
+
+{% block page_title %}
+    <div class="Page-title">
+        <h1>Add Project</h1>
+    </div>
+{% endblock %}
+
+{% block page_actions %}{% endblock %}
+
+{% block page_body -%}
+
+    {{ form(form) }}
+
+{% endblock %}

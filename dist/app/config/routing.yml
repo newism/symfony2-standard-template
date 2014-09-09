@@ -1,0 +1,17 @@
+nsm_test_output:
+    resource: "@NsmTestOutputBundle/Resources/config/routing.yml"
+
+NsmUserBundle:
+    resource: "@NsmUserBundle/Resources/config/routing.yml"
+
+NsmAppBundle:
+    resource: "@NsmAppBundle/Resources/config/routing.yml"
+
+NsmHelpBundle:
+    resource: "@NsmHelpBundle/Resources/config/routing.yml"
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
+

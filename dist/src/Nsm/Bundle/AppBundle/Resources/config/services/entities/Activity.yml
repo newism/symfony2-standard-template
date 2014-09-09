@@ -1,0 +1,29 @@
+parameters:
+
+    nsm_app.entity.activity.class: Nsm\Bundle\AppBundle\Entity\Activity
+    nsm_app.entity.activity_manager.class: Nsm\Bundle\AppBundle\Entity\ActivityManager
+    nsm_app.entity.activity_repository.class: Nsm\Bundle\AppBundle\Entity\ActivityRepository
+    nsm_app.event_subscriber.activity_subscriber.class: Nsm\Bundle\AppBundle\EventSubscriber\ActivitySubscriber
+
+services:
+
+    nsm_app.entity.activity_repository:
+        class: %nsm_app.entity.activity_repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments:
+            - %nsm_app.entity.activity.class%
+
+    nsm_app.entity.activity_manager:
+        class: %nsm_app.entity.activity_manager.class%
+        arguments:
+            - %nsm_app.entity.activity.class%
+            - @doctrine.orm.entity_manager
+
+    nsm_app.event_subscriber.activity_subscriber:
+        class: %nsm_app.event_subscriber.activity_subscriber.class%
+        arguments:
+            - @service_container
+        tags:
+            - {name: "doctrine.event_subscriber", connection: "default"}
+

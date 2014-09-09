@@ -1,0 +1,29 @@
+parameters:
+
+    nsm_app.entity.tip.class: Nsm\Bundle\HelpBundle\Entity\Tip
+    nsm_app.entity.tip_manager.class: Nsm\Bundle\HelpBundle\Entity\TipManager
+    nsm_app.entity.tip_repository.class: Nsm\Bundle\HelpBundle\Entity\TipRepository
+    nsm_app.event_subscriber.tip_subscriber.class: Nsm\Bundle\HelpBundle\EventSubscriber\TipSubscriber
+
+services:
+
+    nsm_app.entity.tip_repository:
+        class: %nsm_app.entity.tip_repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments:
+            - %nsm_app.entity.tip.class%
+
+    nsm_app.entity.tip_manager:
+        class: %nsm_app.entity.tip_manager.class%
+        arguments:
+            - %nsm_app.entity.tip.class%
+            - @doctrine.orm.entity_manager
+
+    nsm_app.event_subscriber.tip_subscriber:
+        class: %nsm_app.event_subscriber.tip_subscriber.class%
+        arguments:
+            - @service_container
+        tags:
+            - {name: "doctrine.event_subscriber", connection: "default"}
+

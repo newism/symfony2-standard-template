@@ -1,0 +1,13 @@
+Nsm\Bundle\AppBundle\Entity\Project:
+    properties:
+        title:
+            - NotBlank: ~
+        taskDurationSum:
+            - GreaterThanOrEqual:
+                value: 0
+        createdAt:
+            - Date: ~
+        updatedAt:
+            - Date: ~
+        deletedAt:
+            - Date: ~

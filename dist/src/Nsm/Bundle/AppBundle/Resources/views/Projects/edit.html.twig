@@ -1,0 +1,25 @@
+{% extends 'NsmAppBundle::layout.html.twig' %}
+
+{% block content -%}
+
+    <p><a href="{{ path('project_browse') }}">Projects</a> / Edit</p>
+    <h1>{{ entity.title }}</h1>
+
+
+    <ul>
+        <li>
+            <a href="{{ path('project_edit', { 'id': entity.id }) }}">
+                Edit
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('project_destroy', { 'id': entity.id }) }}">
+                Destroy
+            </a>
+        </li>
+    </ul>
+
+
+    {{ form(form) }}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'NsmAppBundle::layout.html.twig' %}
+
+{% block content -%}
+    <h1>Tip edit</h1>
+
+    {{ form(form) }}
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('tip_browse') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}

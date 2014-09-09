@@ -1,0 +1,42 @@
+parameters:
+
+    nsm_app.entity.invitation.class: Nsm\Bundle\AppBundle\Entity\Invitation
+    nsm_app.entity.invitation_manager.class: Nsm\Bundle\AppBundle\Entity\InvitationManager
+    nsm_app.entity.invitation_repository.class: Nsm\Bundle\AppBundle\Entity\InvitationRepository
+    nsm_app.event_subscriber.invitation_subscriber.class: Nsm\Bundle\AppBundle\EventSubscriber\InvitationSubscriber
+    nsm_app.form.type.invitation_code_type.class: Nsm\Bundle\AppBundle\Form\Type\InvitationCodeType
+    nsm_app.form.data_transformer.invitaton_to_code_transformer.class: Nsm\Bundle\AppBundle\Form\DataTransformer\InvitationToCodeTransformer
+
+services:
+
+    nsm_app.entity.invitation_repository:
+        class: %nsm_app.entity.invitation_repository.class%
+        factory_service: "doctrine.orm.entity_manager"
+        factory_method: "getRepository"
+        arguments:
+            - %nsm_app.entity.invitation.class%
+
+    nsm_app.entity.invitation_manager:
+        class: %nsm_app.entity.invitation_manager.class%
+        arguments:
+            - %nsm_app.entity.invitation.class%
+            - @doctrine.orm.entity_manager
+
+    nsm_app.event_subscriber.task_subscriber:
+        class: %nsm_app.event_subscriber.task_subscriber.class%
+        arguments:
+            - @service_container
+        tags:
+            - {name: "doctrine.event_subscriber", connection: "default"}
+
+    nsm_app.form.data_transformer.invitaton_to_code_transformer:
+        class: %nsm_app.form.data_transformer.invitaton_to_code_transformer.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+
+    nsm_app.form.type.invitaton_code_type:
+        class: %nsm_app.form.type.invitation_code_type.class%
+        arguments:
+            - @nsm_app.form.data_transformer.invitaton_to_code_transformer
+        tags:
+            - {name: "form.type", alias: "invitation_code"}

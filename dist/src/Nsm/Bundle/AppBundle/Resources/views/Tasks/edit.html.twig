@@ -1,0 +1,16 @@
+{% extends 'NsmAppBundle::layout.html.twig' %}
+
+{% block content -%}
+
+    <h1>Task edit</h1>
+
+    {{ form(form) }}
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('task_browse') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}

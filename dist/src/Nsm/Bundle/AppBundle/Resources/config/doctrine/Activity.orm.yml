@@ -1,0 +1,28 @@
+Nsm\Bundle\AppBundle\Entity\Activity:
+    type: entity
+    repositoryClass: Nsm\Bundle\AppBundle\Entity\ActivityRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        description:
+            type: text
+            nullable: true
+        createdAt:
+            type: datetime
+            nullable: true
+        updatedAt:
+            type: datetime
+            nullable: true
+        deletedAt:
+            type: datetime
+            nullable: true
+    manyToOne:
+        task:
+            targetEntity: Task
+            inversedBy: activities
