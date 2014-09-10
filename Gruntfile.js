@@ -40,7 +40,7 @@ module.exports = function (grunt) {
         // Automatically inject Bower components into the HTML file
         wiredep: {
             src: {
-                src: ['src/Nsm/Bundle/AppBundle/Resources/views/layout.html.twig'],
+                src: ['src/src/Nsm/Bundle/AppBundle/Resources/views/layout.html.twig'],
                 ignorePath: '../../../../../../web',
                 exclude: ['/src/web/bower_components/modernizr/modernizr.js']
             }
