@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Routing\Router;
 
 class EntitySearchType extends AbstractType
 {
@@ -16,9 +17,15 @@ class EntitySearchType extends AbstractType
      */
     protected $twig;
 
-    public function __construct(\Twig_Environment $twig)
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    public function __construct(\Twig_Environment $twig, Router $router)
     {
         $this->twig = $twig;
+        $this->router = $router;
     }
 
     /**
@@ -40,8 +47,8 @@ class EntitySearchType extends AbstractType
         $widgetOptions = array(
             'remote' => true,
             'entityName' => $options['class'],
-            'endpointIndex' => $options['endpoint_index'],
-            'endpointModal' => $options['endpoint_modal'],
+            'endpointIndex' => null,
+            'endpointModal' => null,
             'selectizeOptions' => array(
                 'valueField' => 'id',
                 'labelField' => 'title',
@@ -59,6 +66,16 @@ class EntitySearchType extends AbstractType
 //                    )
             )
         );
+
+        // Generate the endpoint index url
+        if (null !== $options['endpoint_index']) {
+            $widgetOptions['endpointIndex'] = call_user_func_array(array($this->router, "generate"), $options['endpoint_index']);
+        }
+
+        // Generate the modal url
+        if (null !== $options['endpoint_modal']) {
+            $widgetOptions['endpointModal'] = call_user_func_array(array($this->router, "generate"), $options['endpoint_modal']);
+        }
 
         if (null !== $options['template']) {
             $template = $this->twig->loadTemplate($options['template']);
