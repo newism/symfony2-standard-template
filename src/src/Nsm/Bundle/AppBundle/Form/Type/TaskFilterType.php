@@ -27,7 +27,7 @@ class TaskFilterType extends AbstractType
                 'label' => 'Project - Remote',
                 'class' => 'NsmAppBundle:Project',
                 'multiple' => true,
-                'endpoint_index' => '/projects',
+                'endpoint_index' => '/projects.json',
                 'template' => 'NsmAppBundle:Projects:_selectize/default.html.twig'
             );
 

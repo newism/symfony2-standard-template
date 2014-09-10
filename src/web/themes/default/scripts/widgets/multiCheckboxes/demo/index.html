@@ -1,0 +1,52 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Multi-checkbox Demo</title>
+    <style>
+        table, th, td {
+            border-collapse: collapse;
+            border: 1px solid lightpink
+        }
+
+        thead {
+            background: red;
+        }
+
+        .is-selected {
+            background: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+<div class="Content">
+    <table>
+        <thead>
+        <tr>
+            <td><input type="checkbox"/></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><input type="checkbox"/></td>
+        </tr>
+        <tr>
+            <td><input type="checkbox"/></td>
+        </tr>
+        <tr>
+            <td><input type="checkbox"/></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/jquery-ui/ui/widget.js"></script>
+<script src="../src/jquery.nsm.multiCheckboxes.js"></script>
+
+<script>
+    $('Table').multiCheckboxes();
+</script>

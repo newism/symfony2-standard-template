@@ -60,7 +60,7 @@ class AbstractController extends FOSRestController
      *
      * @return \Hateoas\Representation\PaginatedRepresentation
      */
-    public function createPaginatedCollection(Paginator $pager, $route)
+    public function createPaginatedCollection(DoctrinePaginatorDecorator $pager, $route)
     {
         $pagerFactory = new HateosPaginatorFactory();
         $paginatedCollection = $pagerFactory->createRepresentation(

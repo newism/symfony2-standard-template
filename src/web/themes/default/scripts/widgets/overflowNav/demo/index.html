@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style type='text/css'>
+        .Nav--block {
+        }
+
+        .Nav--block span {
+            display: block
+        }
+
+        .Nav--block span.current {
+            background: blue;
+        }
+
+        .Nav--horizontal {
+            background: red;
+            overflow: hidden;
+            padding: 10px 0;
+            white-space: nowrap;
+        }
+
+        .Nav--horizontal span {
+            background: #ff0;
+            display: inline-block;
+            padding: 5px;
+        }
+
+        .Nav--horizontal span.current {
+            background: blue;
+        }
+    </style>
+</head>
+
+<body>
+<div class="Nav--horizontal">
+    <span>Lorem 1</span>
+    <span>Lorem ipsum dolor</span>
+    <span>sit amet</span>
+    <span>adipisicing</span>
+    <span class="current">consectetur  elit</span>
+    <span>accusantium eum</span>
+</div>
+
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/jquery-ui/ui/widget.js"></script>
+<script src="../bower_components/velocity/jquery.velocity.min.js"></script>
+<script src="../bower_components/velocity/velocity.ui.min.js"></script>
+<script src="../bower_components/jquery-nsm-flyout/src/jquery.nsm.flyout.js"></script>
+
+<script src="../src/jquery.nsm.overflowNav.js"></script>
+
+<script>
+    $('.Nav--horizontal').overflowNav();
+</script>
+
+</body>
+
+
+</html>

@@ -12,6 +12,7 @@
     <!-- build:css /themes/default/styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
+    <link rel="stylesheet" href="/bower_components/selectize/dist/css/selectize.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -34,7 +35,8 @@
                 <div class="Toolbar-itemGroup">
                     <div class="Toolbar-item">
                         <div class="Toolbar-branding">
-                            <img src="http://www.clubevolution.com.au.do.newismdev.com/theme/images/icons/1c18b2c8.club-evolution-239x63.png" style=" vertical-align: bottom; height: 36px; display:block" />
+                            Symonfy2 Standard Template
+                            {#<img src="http://www.clubevolution.com.au.do.newismdev.com/theme/images/icons/1c18b2c8.club-evolution-239x63.png" style=" vertical-align: bottom; height: 36px; display:block" />#}
                         </div>
                     </div>
                     <div class="Toolbar-itemSpace"></div>
@@ -99,8 +101,6 @@
                             </svg>
                         </span>
                     </div>
-
-
 
                 {% else %}
                 <div class="ActionList ActionList--right">
@@ -228,12 +228,26 @@
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/console-polyfill/index.js"></script>
+    <script src="/bower_components/jquery-ui/ui/core.js"></script>
     <script src="/bower_components/jquery-ui/ui/widget.js"></script>
+    <script src="/bower_components/jquery-ui/ui/mouse.js"></script>
+    <script src="/bower_components/jquery-ui/ui/sortable.js"></script>
     <script src="/bower_components/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="/bower_components/sifter/sifter.js"></script>
+    <script src="/bower_components/microplugin/src/microplugin.js"></script>
+    <script src="/bower_components/selectize/dist/js/selectize.js"></script>
+    <script src="/bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="/bower_components/velocity/jquery.velocity.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js /themes/default/scripts/app.js -->
+    <script src="/themes/default/scripts/widgets/flyout/src/jquery.nsm.flyout.js"></script>
+    <script src="/themes/default/scripts/widgets/buttonFlyout/src/jquery.nsm.buttonFlyout.js"></script>
+    <script src="/themes/default/scripts/widgets/collection/src/jquery.nsm.collection.js"></script>
+    <script src="/themes/default/scripts/widgets/entitySearch/src/jquery.nsm.entitySearch.js"></script>
+    <script src="/themes/default/scripts/widgets/multiCheckboxes/src/jquery.nsm.multiCheckboxes.js"></script>
+    <script src="/themes/default/scripts/widgets/overflowNav/src/jquery.nsm.overflowNav.js"></script>
     <!-- endbuild -->
 
     <script>
@@ -242,8 +256,12 @@
             // But don't bubble
             event.stopPropagation();
             var $el = $(event.target);
-            $el.find('[data-widget=collection]').collection();
-            $el.find('[data-widget=entitySearch]').entitySearch();
+
+            $el.find('.FlyoutTrigger').flyoutTrigger();
+            $el.find('.Collection').collection();
+            $el.find('.Control--button_group').buttonFlyout();
+            $el.find('.Control-input--entity_search').entitySearch();
+
         }).trigger('contentcreated');
     </script>
 

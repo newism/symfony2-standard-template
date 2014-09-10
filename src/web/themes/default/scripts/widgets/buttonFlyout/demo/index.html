@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Button Group Demo</title>
+</head>
+
+<body>
+<form>
+<div class="Content">
+    <div data-control-full-name="project[actions]"
+         data-control-name="actions"
+         class="Control Control--button_group Control--actions"
+    >
+        <select id="project_actions_action"
+                name="project[actions][action]"
+                 class="Control-input Control-input--choice Control-input--action"
+        >
+            <option value="save">Save</option>
+            <option value="save_as_draft">Save as Draft</option>
+        </select>
+        <button type="submit" id="project_actions_submit" name="project[actions][submit]">Submit</button>
+    </div>
+</div>
+</form>
+
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/jquery-ui/ui/widget.js"></script>
+<script src="../bower_components/velocity/jquery.velocity.min.js"></script>
+<script src="../bower_components/velocity/velocity.ui.min.js"></script>
+<script src="../bower_components/jquery-nsm-flyout/src/jquery.nsm.flyout.js"></script>
+
+<script src="../src/jquery.nsm.buttonFlyout.js"></script>
+
+<script>
+    $('.Control--button_group').buttonFlyout();
+</script>
+

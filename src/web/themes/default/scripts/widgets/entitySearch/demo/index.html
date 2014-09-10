@@ -1,0 +1,81 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Entity Search Demo</title>
+
+    <style type="text/css">
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" href="../bower_components/selectize/dist/css/selectize.css"/>
+
+</head>
+
+<body>
+
+<div class="ControlGroup ControlGroup--singleControl ControlGroup--entity_search ControlGroup--project">
+    <div scope="row" class="ControlGroup-header">
+        <label class="ControlGroup-label  required" for="filter_project">
+            Project
+            <span class="required" title="This field is required">*</span>
+        </label>
+    </div>
+    <div class="ControlGroup-body">
+        <div class="Control Control--entity_search Control--project"
+             data-control-full-name="filter[project][]"
+             data-control-name="project"
+        >
+            <div class="Control-body">
+                <select id="filter_project"
+                        name="filter[project][]"
+                        placeholder="Search for projects"
+                        required="required"
+                        class="js-Widget js-Widget-jquery-nsm-entitySearch Control-input Control-input--entity_search Control-input--project"
+                        multiple="multiple"
+                        data-widget="entitySearch"
+                        data-entity-search-options="{
+                                &quot;remote&quot;: true,
+                                &quot;entityName&quot;: &quot;NsmAppBundle:Project&quot;,
+                                &quot;endpointIndex&quot;: &quot;./projects.json&quot;,
+                                &quot;endpointModal&quot;: null,
+                                &quot;selectizeOptions&quot;: {
+                                    &quot;valueField&quot;: &quot;id&quot;,
+                                    &quot;labelField&quot;: &quot;title&quot;,
+                                    &quot;searchField&quot;: &quot;title&quot;
+                                },
+                                &quot;templates&quot;: {
+                                    &quot;item&quot;: &quot;&lt;div&gt; #&lt;%- id %&gt; - &lt;%- title %&gt;&lt;/div&gt;&quot;,
+                                    &quot;option&quot;: &quot;&lt;div&gt; #&lt;%- id %&gt; - &lt;%- title %&gt;&lt;/div&gt;&quot;
+                                }
+                            }"
+                        >
+                    <option value="1" selected>Another Project</option>
+                    <option value="2" selected>Another Project</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/jquery-ui/ui/widget.js"></script>
+<script src="../bower_components/sifter/sifter.js"></script>
+<script src="../bower_components/microplugin/src/microplugin.js"></script>
+<script src="../bower_components/selectize/dist/js/selectize.js"></script>
+<script src="../bower_components/lodash/dist/lodash.js"></script>
+<script src="../src/jquery.nsm.entitySearch.js"></script>
+<script>
+    $('body').on('contentcreated', function (event) {
+        event.stopPropagation();
+        var $el = $(event.target);
+        $el.find('.Control-input--entity_search').entitySearch();
+    }).trigger('contentcreated');
+</script>
+
+</body>
+
+</html>

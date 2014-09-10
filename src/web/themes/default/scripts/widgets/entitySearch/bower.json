@@ -1,0 +1,22 @@
+{
+    "name": "jquery-nsm-entitySearch",
+    "main": "src/jquery.nsm.entitySearch.js",
+    "version": "0.0.0",
+    "homepage": "",
+    "authors": [
+        "Leevi Graham <leevi@newism.com.au>"
+    ],
+    "license": "MIT",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "jquery-ui": "~1.11.0",
+        "selectize": "~0.11.0",
+        "underscore": "~1.7.0",
+        "lodash": "~2.4.1"
+    }
+}

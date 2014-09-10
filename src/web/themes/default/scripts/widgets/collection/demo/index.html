@@ -1,0 +1,300 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Collection Demo</title>
+    <style type="text/css">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .Collection {
+            display: table;
+            border-spacing: 2px;
+            border: 1px solid red;
+        }
+
+        .Collection-header {
+            display: table-header-group;
+            border: 1px solid green;
+        }
+
+        .Collection-body {
+            display: table-row-group;
+            border: 1px solid blue;
+        }
+
+        .Collection-footer {
+            display: table-footer-group;
+            border: 1px solid yellow;
+        }
+
+        .Collection-header > *,
+        .Collection-body > *,
+        .Collection-footer > * {
+            display: table-row;
+            border: 1px solid pink;
+        }
+
+        .Collection-header > * > *,
+        .Collection-body > * > *,
+        .Collection-footer > * > * {
+            display: table-cell;
+            border: 1px solid purple;
+        }
+
+        .js-sortHelper {
+            background: lightpink;
+            width: 100px;
+            height: 100px;
+            opacity: .85
+        }
+
+        .js-sortPlaceholder {
+            background: lightblue;
+            width: 100%;
+            height: 50px;
+            opacity: .85
+        }
+
+    </style>
+</head>
+
+<body>
+<form name="project" method="post" action="/projects" class="Form Form--stacked">
+    <div class="Form-body">
+        <div class="ControlGroup ControlGroup--notCompound ControlGroup--title">
+            <div class="ControlGroup-header"><label class="ControlGroup-label required" for="project_title">
+                Title
+                <span class="required" title="This field is required">*</span></label></div>
+            <div class="ControlGroup-body">
+                <div data-control-full-name="project[title]" data-control-name="title" class="Control Control--title">
+                    <div class="Control-body"><input type="text" id="project_title" name="project[title]"
+                                                     required="required"
+                                                     class="Control-input Control-input--text Control-input--title"
+                            /></div>
+                </div>
+            </div>
+        </div>
+        <div class="ControlGroup ControlGroup--notCompound ControlGroup--tasks">
+            <div class="ControlGroup-header">
+                <label class="ControlGroup-label">Tasks</label>
+            </div>
+            <div class="ControlGroup-body">
+                <div class="Collection Collection--stacked" data-form-widget="collection"
+                     data-collection="data-collection" data-collection-id="project_tasks"
+                     data-collection-full-name="project[tasks]" data-collection-name="tasks"
+                     data-collection-allow-add="data-collection-allow-add"
+                     data-collection-allow-delete="data-collection-allow-delete"
+                     data-collection-allow-sort="data-collection-allow-sort" data-collection-sort-control="order"
+                     data-collection-prototype-name="__tasks__"
+                     data-collection-prototype="    &lt;div class=&quot;CollectionItem&quot;&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--order&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label&quot; for=&quot;project_tasks___tasks___order&quot;&gt;
+                Order
+                            &lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div data-control-full-name=&quot;project[tasks][__tasks__][order]&quot; data-control-name=&quot;order&quot; class=&quot;Control Control--order&quot;&gt;&lt;div class=&quot;Control-body&quot;&gt;&lt;input type=&quot;text&quot;             id=&quot;project_tasks___tasks___order&quot; name=&quot;project[tasks][__tasks__][order]&quot; class=&quot;Control-input Control-input--number Control-input--order&quot;
+ /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--title&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label required&quot; for=&quot;project_tasks___tasks___title&quot;&gt;
+                Title
+                                    &lt;span class=&quot;required&quot; title=&quot;This field is required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div data-control-full-name=&quot;project[tasks][__tasks__][title]&quot; data-control-name=&quot;title&quot; class=&quot;Control Control--title&quot;&gt;&lt;div class=&quot;Control-body&quot;&gt;&lt;input type=&quot;text&quot;             id=&quot;project_tasks___tasks___title&quot; name=&quot;project[tasks][__tasks__][title]&quot; required=&quot;required&quot; class=&quot;Control-input Control-input--text Control-input--title&quot;
+ /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--tags&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label required&quot; for=&quot;project_tasks___tasks___tags&quot;&gt;
+                Tags
+                                    &lt;span class=&quot;required&quot; title=&quot;This field is required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div data-control-full-name=&quot;project[tasks][__tasks__][tags]&quot; data-control-name=&quot;tags&quot; class=&quot;Control Control--tags&quot;&gt;&lt;div class=&quot;Control-body&quot;&gt;&lt;input type=&quot;text&quot;             id=&quot;project_tasks___tasks___tags&quot; name=&quot;project[tasks][__tasks__][tags]&quot; required=&quot;required&quot; class=&quot;Control-input Control-input--text Control-input--tags&quot;
+ /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--description&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label&quot; for=&quot;project_tasks___tasks___description&quot;&gt;
+                Description
+                            &lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div data-control-full-name=&quot;project[tasks][__tasks__][description]&quot; data-control-name=&quot;description&quot; class=&quot;Control Control--description&quot;&gt;&lt;div class=&quot;Control-body&quot;&gt;&lt;textarea             id=&quot;project_tasks___tasks___description&quot; name=&quot;project[tasks][__tasks__][description]&quot; class=&quot;Control-input Control-input--textarea Control-input--description&quot;
+&gt;&lt;/textarea&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--subTasks&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label&quot;&gt;
+                Sub tasks
+                            &lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div class=&quot;Collection Collection--stacked&quot; data-form-widget=&quot;collection&quot; data-collection=&quot;data-collection&quot; data-collection-id=&quot;project_tasks___tasks___subTasks&quot; data-collection-full-name=&quot;project[tasks][__tasks__][subTasks]&quot; data-collection-name=&quot;subTasks&quot; data-collection-allow-add=&quot;data-collection-allow-add&quot;  data-collection-allow-sort=&quot;data-collection-allow-sort&quot; data-collection-sort-control=&quot;order&quot; data-collection-prototype-name=&quot;__sub_tasks__&quot; data-collection-prototype=&quot;    &amp;lt;div class=&amp;quot;CollectionItem&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup ControlGroup--notCompound ControlGroup--title&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup-header&amp;quot;&amp;gt;&amp;lt;label class=&amp;quot;ControlGroup-label required&amp;quot; for=&amp;quot;project_tasks___tasks___subTasks___sub_tasks___title&amp;quot;&amp;gt;
+                Title
+                                    &amp;lt;span class=&amp;quot;required&amp;quot; title=&amp;quot;This field is required&amp;quot;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;/label&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup-body&amp;quot;&amp;gt;&amp;lt;div data-control-full-name=&amp;quot;project[tasks][__tasks__][subTasks][__sub_tasks__][title]&amp;quot; data-control-name=&amp;quot;title&amp;quot; class=&amp;quot;Control Control--title&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;Control-body&amp;quot;&amp;gt;&amp;lt;input type=&amp;quot;text&amp;quot;             id=&amp;quot;project_tasks___tasks___subTasks___sub_tasks___title&amp;quot; name=&amp;quot;project[tasks][__tasks__][subTasks][__sub_tasks__][title]&amp;quot; required=&amp;quot;required&amp;quot; class=&amp;quot;Control-input Control-input--text Control-input--title&amp;quot;
+ /&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup ControlGroup--notCompound ControlGroup--tags&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup-header&amp;quot;&amp;gt;&amp;lt;label class=&amp;quot;ControlGroup-label required&amp;quot; for=&amp;quot;project_tasks___tasks___subTasks___sub_tasks___tags&amp;quot;&amp;gt;
+                Tags
+                                    &amp;lt;span class=&amp;quot;required&amp;quot; title=&amp;quot;This field is required&amp;quot;&amp;gt;*&amp;lt;/span&amp;gt;&amp;lt;/label&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup-body&amp;quot;&amp;gt;&amp;lt;div data-control-full-name=&amp;quot;project[tasks][__tasks__][subTasks][__sub_tasks__][tags]&amp;quot; data-control-name=&amp;quot;tags&amp;quot; class=&amp;quot;Control Control--tags&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;Control-body&amp;quot;&amp;gt;&amp;lt;input type=&amp;quot;text&amp;quot;             id=&amp;quot;project_tasks___tasks___subTasks___sub_tasks___tags&amp;quot; name=&amp;quot;project[tasks][__tasks__][subTasks][__sub_tasks__][tags]&amp;quot; required=&amp;quot;required&amp;quot; class=&amp;quot;Control-input Control-input--text Control-input--tags&amp;quot;
+ /&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup ControlGroup--notCompound ControlGroup--description&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup-header&amp;quot;&amp;gt;&amp;lt;label class=&amp;quot;ControlGroup-label&amp;quot; for=&amp;quot;project_tasks___tasks___subTasks___sub_tasks___description&amp;quot;&amp;gt;
+                Description
+                            &amp;lt;/label&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup-body&amp;quot;&amp;gt;&amp;lt;div data-control-full-name=&amp;quot;project[tasks][__tasks__][subTasks][__sub_tasks__][description]&amp;quot; data-control-name=&amp;quot;description&amp;quot; class=&amp;quot;Control Control--description&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;Control-body&amp;quot;&amp;gt;&amp;lt;textarea             id=&amp;quot;project_tasks___tasks___subTasks___sub_tasks___description&amp;quot; name=&amp;quot;project[tasks][__tasks__][subTasks][__sub_tasks__][description]&amp;quot; class=&amp;quot;Control-input Control-input--textarea Control-input--description&amp;quot;
+&amp;gt;&amp;lt;/textarea&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup ControlGroup--notCompound ControlGroup--order&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup-header&amp;quot;&amp;gt;&amp;lt;label class=&amp;quot;ControlGroup-label&amp;quot; for=&amp;quot;project_tasks___tasks___subTasks___sub_tasks___order&amp;quot;&amp;gt;
+                Order
+                            &amp;lt;/label&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&amp;quot;ControlGroup-body&amp;quot;&amp;gt;&amp;lt;div data-control-full-name=&amp;quot;project[tasks][__tasks__][subTasks][__sub_tasks__][order]&amp;quot; data-control-name=&amp;quot;order&amp;quot; class=&amp;quot;Control Control--order&amp;quot;&amp;gt;&amp;lt;div class=&amp;quot;Control-body&amp;quot;&amp;gt;&amp;lt;input type=&amp;quot;text&amp;quot;             id=&amp;quot;project_tasks___tasks___subTasks___sub_tasks___order&amp;quot; name=&amp;quot;project[tasks][__tasks__][subTasks][__sub_tasks__][order]&amp;quot; class=&amp;quot;Control-input Control-input--number Control-input--order&amp;quot;
+ /&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&quot;&gt;&lt;div class=&quot;Collection-header&quot;&gt;&lt;div class=&quot;Collection-headerRow&quot;&gt;&lt;div class=&quot;Collection-headerRowItem&quot; id=&quot;project_tasks___tasks___subTasks_title_header&quot;&gt;&lt;label class=&quot;required&quot;&gt;
+                Title
+                                    &lt;span class=&quot;required&quot; title=&quot;This field is required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;Collection-headerRowItem&quot; id=&quot;project_tasks___tasks___subTasks_tags_header&quot;&gt;&lt;label class=&quot;required&quot;&gt;
+                Tags
+                                    &lt;span class=&quot;required&quot; title=&quot;This field is required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;Collection-headerRowItem&quot; id=&quot;project_tasks___tasks___subTasks_description_header&quot;&gt;&lt;label&gt;
+                Description
+                            &lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;Collection-headerRowItem&quot; id=&quot;project_tasks___tasks___subTasks_order_header&quot;&gt;&lt;label&gt;
+                Order
+                            &lt;/label&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;Collection-body&quot;&gt;&lt;/div&gt;&lt;div class=&quot;Collection-footer&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;">
+                    <div class="Collection-header">
+                        <div class="Collection-headerRow">
+                            <div class="Collection-headerRowItem" id="project_tasks_order_header"><label>
+                                Order
+                            </label></div>
+                            <div class="Collection-headerRowItem" id="project_tasks_title_header"><label
+                                    class="required">
+                                Title
+                                <span class="required" title="This field is required">*</span></label></div>
+                            <div class="Collection-headerRowItem" id="project_tasks_tags_header"><label
+                                    class="required">
+                                Tags
+                                <span class="required" title="This field is required">*</span></label></div>
+                            <div class="Collection-headerRowItem" id="project_tasks_description_header"><label>
+                                Description
+                            </label></div>
+                            <div class="Collection-headerRowItem" id="project_tasks_subTasks_header"><label>
+                                Sub tasks
+                            </label></div>
+                        </div>
+                    </div>
+                    <div class="Collection-body">
+                        <div class="CollectionItem">
+                            <div class="ControlGroup ControlGroup--notCompound ControlGroup--order">
+                                <div class="ControlGroup-header"><label class="ControlGroup-label"
+                                                                        for="project_tasks_0_order">
+                                    Order
+                                </label></div>
+                                <div class="ControlGroup-body">
+                                    <div data-control-full-name="project[tasks][0][order]" data-control-name="order"
+                                         class="Control Control--order">
+                                        <div class="Control-body"><input type="text" id="project_tasks_0_order"
+                                                                         name="project[tasks][0][order]"
+                                                                         class="Control-input Control-input--number Control-input--order"
+                                                /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ControlGroup ControlGroup--notCompound ControlGroup--title">
+                                <div class="ControlGroup-header"><label class="ControlGroup-label"
+                                                                        for="project_tasks_0_title">
+                                    Title
+                                </label></div>
+                                <div class="ControlGroup-body">
+                                    <div data-control-full-name="project[tasks][0][title]" data-control-name="title"
+                                         class="Control Control--title">
+                                        <div class="Control-body"><input type="text" id="project_tasks_0_title"
+                                                                         name="project[tasks][0][title]"
+                                                                         class="Control-input Control-input--text Control-input--title"
+                                                /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ControlGroup ControlGroup--notCompound ControlGroup--tags">
+                                <div class="ControlGroup-header"><label class="ControlGroup-label"
+                                                                        for="project_tasks_0_tags">
+                                    Tags
+                                </label></div>
+                                <div class="ControlGroup-body">
+                                    <div data-control-full-name="project[tasks][0][tags]" data-control-name="tags"
+                                         class="Control Control--tags">
+                                        <div class="Control-body"><input type="text" id="project_tasks_0_tags"
+                                                                         name="project[tasks][0][tags]"
+                                                                         class="Control-input Control-input--text Control-input--tags"
+                                                /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ControlGroup ControlGroup--notCompound ControlGroup--description">
+                                <div class="ControlGroup-header"><label class="ControlGroup-label"
+                                                                        for="project_tasks_0_description">
+                                    Description
+                                </label></div>
+                                <div class="ControlGroup-body">
+                                    <div data-control-full-name="project[tasks][0][description]"
+                                         data-control-name="description" class="Control Control--description">
+                                        <div class="Control-body"><textarea id="project_tasks_0_description"
+                                                                            name="project[tasks][0][description]"
+                                                                            class="Control-input Control-input--textarea Control-input--description"
+                                                ></textarea></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ControlGroup ControlGroup--notCompound ControlGroup--subTasks">
+                                <div class="ControlGroup-header"><label class="ControlGroup-label">
+                                    Sub tasks
+                                </label></div>
+                                <div class="ControlGroup-body">
+                                    <div class="Collection Collection--stacked" data-form-widget="collection"
+                                         data-collection="data-collection" data-collection-id="project_tasks_0_subTasks"
+                                         data-collection-full-name="project[tasks][0][subTasks]"
+                                         data-collection-name="subTasks"
+                                         data-collection-allow-add="data-collection-allow-add"
+                                         data-collection-allow-sort="data-collection-allow-sort"
+                                         data-collection-sort-control="order"
+                                         data-collection-prototype-name="__sub_tasks__"
+                                         data-collection-prototype="    &lt;div class=&quot;CollectionItem&quot;&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--title&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label required&quot; for=&quot;project_tasks_0_subTasks___sub_tasks___title&quot;&gt;
+                Title
+                                    &lt;span class=&quot;required&quot; title=&quot;This field is required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div data-control-full-name=&quot;project[tasks][0][subTasks][__sub_tasks__][title]&quot; data-control-name=&quot;title&quot; class=&quot;Control Control--title&quot;&gt;&lt;div class=&quot;Control-body&quot;&gt;&lt;input type=&quot;text&quot;             id=&quot;project_tasks_0_subTasks___sub_tasks___title&quot; name=&quot;project[tasks][0][subTasks][__sub_tasks__][title]&quot; required=&quot;required&quot; class=&quot;Control-input Control-input--text Control-input--title&quot;
+ /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--tags&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label required&quot; for=&quot;project_tasks_0_subTasks___sub_tasks___tags&quot;&gt;
+                Tags
+                                    &lt;span class=&quot;required&quot; title=&quot;This field is required&quot;&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div data-control-full-name=&quot;project[tasks][0][subTasks][__sub_tasks__][tags]&quot; data-control-name=&quot;tags&quot; class=&quot;Control Control--tags&quot;&gt;&lt;div class=&quot;Control-body&quot;&gt;&lt;input type=&quot;text&quot;             id=&quot;project_tasks_0_subTasks___sub_tasks___tags&quot; name=&quot;project[tasks][0][subTasks][__sub_tasks__][tags]&quot; required=&quot;required&quot; class=&quot;Control-input Control-input--text Control-input--tags&quot;
+ /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--description&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label&quot; for=&quot;project_tasks_0_subTasks___sub_tasks___description&quot;&gt;
+                Description
+                            &lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div data-control-full-name=&quot;project[tasks][0][subTasks][__sub_tasks__][description]&quot; data-control-name=&quot;description&quot; class=&quot;Control Control--description&quot;&gt;&lt;div class=&quot;Control-body&quot;&gt;&lt;textarea             id=&quot;project_tasks_0_subTasks___sub_tasks___description&quot; name=&quot;project[tasks][0][subTasks][__sub_tasks__][description]&quot; class=&quot;Control-input Control-input--textarea Control-input--description&quot;
+&gt;&lt;/textarea&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup ControlGroup--notCompound ControlGroup--order&quot;&gt;&lt;div class=&quot;ControlGroup-header&quot;&gt;&lt;label class=&quot;ControlGroup-label&quot; for=&quot;project_tasks_0_subTasks___sub_tasks___order&quot;&gt;
+                Order
+                            &lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;ControlGroup-body&quot;&gt;&lt;div data-control-full-name=&quot;project[tasks][0][subTasks][__sub_tasks__][order]&quot; data-control-name=&quot;order&quot; class=&quot;Control Control--order&quot;&gt;&lt;div class=&quot;Control-body&quot;&gt;&lt;input type=&quot;text&quot;             id=&quot;project_tasks_0_subTasks___sub_tasks___order&quot; name=&quot;project[tasks][0][subTasks][__sub_tasks__][order]&quot; class=&quot;Control-input Control-input--number Control-input--order&quot;
+ /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;">
+                                        <div class="Collection-header">
+                                            <div class="Collection-headerRow">
+                                                <div class="Collection-headerRowItem"
+                                                     id="project_tasks_0_subTasks_title_header"><label class="required">
+                                                    Title
+                                                    <span class="required"
+                                                          title="This field is required">*</span></label></div>
+                                                <div class="Collection-headerRowItem"
+                                                     id="project_tasks_0_subTasks_tags_header"><label class="required">
+                                                    Tags
+                                                    <span class="required"
+                                                          title="This field is required">*</span></label></div>
+                                                <div class="Collection-headerRowItem"
+                                                     id="project_tasks_0_subTasks_description_header"><label>
+                                                    Description
+                                                </label></div>
+                                                <div class="Collection-headerRowItem"
+                                                     id="project_tasks_0_subTasks_order_header"><label>
+                                                    Order
+                                                </label></div>
+                                            </div>
+                                        </div>
+                                        <div class="Collection-body"></div>
+                                        <div class="Collection-footer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Collection-footer"></div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="submit" id="project_save" name="project[save]">Save</button>
+        </div>
+        <div>
+            <button type="submit" id="project_save_and_add_another" name="project[save_and_add_another]">Save and add
+                another
+            </button>
+        </div>
+        <input type="hidden" id="project__token" name="project[_token]"
+               class="Control-input Control-input--hidden Control-input--_token"
+               value="32yZfa0a8balzhN8xN0MJ_H3v4PdPmyQKy_UsMBqywE"/></div>
+</form>
+
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/jquery-ui/ui/core.js"></script>
+<script src="../bower_components/jquery-ui/ui/widget.js"></script>
+<script src="../bower_components/jquery-ui/ui/mouse.js"></script>
+<script src="../bower_components/jquery-ui/ui/sortable.js"></script>
+<script src="../bower_components/velocity/jquery.velocity.min.js"></script>
+<script src="../bower_components/velocity/velocity.ui.min.js"></script>
+<script src="../src/jquery.nsm.collection.js"></script>
+
+<script>
+    $('body').on('contentcreated', function (event) {
+        event.stopPropagation();
+        var $el = $(event.target);
+        $el.find('.Collection').collection();
+    }).trigger('contentcreated');
+</script>

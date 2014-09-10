@@ -1,0 +1,312 @@
+{
+    "page": 1,
+    "limit": 10,
+    "pages": 1,
+    "total": 6,
+    "_links": {
+        "self": {"href": "\/projects.json?page=1&limit=10"},
+        "first": {"href": "\/projects.json?page=1&limit=10"},
+        "last": {"href": "\/projects.json?page=1&limit=10"}
+    },
+    "_embedded": {
+        "items": [
+            {
+                "id": 1,
+                "task_duration_sum": 0,
+                "description": null,
+                "title": "Club Evolution",
+                "_links": {"self": {"href": "\/projects.json\/1"}, "tasks": {"href": "\/tasks?project=1"}},
+                "_embedded": {
+                    "tasks": [
+                        {
+                            "id": 6,
+                            "activity_duration_sum": 0,
+                            "description": "asfgasfgasfg",
+                            "title": "sfgasfg",
+                            "_links": {
+                                "self": {"href": "\/tasks\/6"},
+                                "project": {"href": "\/projects.json\/1"},
+                                "activities": {"href": "\/activities?task=6"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 1,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Club Evolution",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/1"},
+                                        "tasks": {"href": "\/tasks?project=1"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "activity_duration_sum": 0,
+                            "description": "asfgasfgasfg",
+                            "title": "sfgasfg",
+                            "_links": {
+                                "self": {"href": "\/tasks\/7"},
+                                "project": {"href": "\/projects.json\/1"},
+                                "activities": {"href": "\/activities?task=7"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 1,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Club Evolution",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/1"},
+                                        "tasks": {"href": "\/tasks?project=1"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "activity_duration_sum": 0,
+                            "description": "asfgasfgasfg",
+                            "title": "sfgasfg",
+                            "_links": {
+                                "self": {"href": "\/tasks\/8"},
+                                "project": {"href": "\/projects.json\/1"},
+                                "activities": {"href": "\/activities?task=8"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 1,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Club Evolution",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/1"},
+                                        "tasks": {"href": "\/tasks?project=1"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        },
+                        {
+                            "id": 9,
+                            "activity_duration_sum": 0,
+                            "description": "asfgasfgasfg",
+                            "title": "sfgasfg",
+                            "_links": {
+                                "self": {"href": "\/tasks\/9"},
+                                "project": {"href": "\/projects.json\/1"},
+                                "activities": {"href": "\/activities?task=9"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 1,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Club Evolution",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/1"},
+                                        "tasks": {"href": "\/tasks?project=1"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "activity_duration_sum": 0,
+                            "description": "asfgasfgasfg",
+                            "title": "sfgasfg",
+                            "_links": {
+                                "self": {"href": "\/tasks\/10"},
+                                "project": {"href": "\/projects.json\/1"},
+                                "activities": {"href": "\/activities?task=10"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 1,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Club Evolution",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/1"},
+                                        "tasks": {"href": "\/tasks?project=1"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        },
+                        {
+                            "id": 11,
+                            "activity_duration_sum": 0,
+                            "description": "zcxvzxcvxcvzxcvzxcvzxcvzxcv",
+                            "title": "zcvzxcvzxcvzxc",
+                            "_links": {
+                                "self": {"href": "\/tasks\/11"},
+                                "project": {"href": "\/projects.json\/1"},
+                                "activities": {"href": "\/activities?task=11"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 1,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Club Evolution",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/1"},
+                                        "tasks": {"href": "\/tasks?project=1"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "id": 2,
+                "task_duration_sum": 0,
+                "description": null,
+                "title": "Another Project",
+                "_links": {"self": {"href": "\/projects.json\/2"}, "tasks": {"href": "\/tasks?project=2"}},
+                "_embedded": {"tasks": []}
+            },
+            {
+                "id": 6,
+                "task_duration_sum": 0,
+                "description": null,
+                "title": "2",
+                "_links": {"self": {"href": "\/projects.json\/6"}, "tasks": {"href": "\/tasks?project=6"}},
+                "_embedded": {"tasks": []}
+            },
+            {
+                "id": 7,
+                "task_duration_sum": 0,
+                "description": null,
+                "title": "Test",
+                "_links": {"self": {"href": "\/projects.json\/7"}, "tasks": {"href": "\/tasks?project=7"}},
+                "_embedded": {
+                    "tasks": [
+                        {
+                            "id": 12,
+                            "activity_duration_sum": 0,
+                            "description": null,
+                            "title": "New Task",
+                            "_links": {
+                                "self": {"href": "\/tasks\/12"},
+                                "project": {"href": "\/projects.json\/7"},
+                                "activities": {"href": "\/activities?task=12"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 7,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Test",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/7"},
+                                        "tasks": {"href": "\/tasks?project=7"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        },
+                        {
+                            "id": 13,
+                            "activity_duration_sum": 0,
+                            "description": null,
+                            "title": "Test",
+                            "_links": {
+                                "self": {"href": "\/tasks\/13"},
+                                "project": {"href": "\/projects.json\/7"},
+                                "activities": {"href": "\/activities?task=13"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 7,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Test",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/7"},
+                                        "tasks": {"href": "\/tasks?project=7"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "activity_duration_sum": 0,
+                            "description": "test",
+                            "title": "test",
+                            "_links": {
+                                "self": {"href": "\/tasks\/14"},
+                                "project": {"href": "\/projects.json\/7"},
+                                "activities": {"href": "\/activities?task=14"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 7,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Test",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/7"},
+                                        "tasks": {"href": "\/tasks?project=7"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "id": 8,
+                "task_duration_sum": 0,
+                "description": null,
+                "title": "Test",
+                "_links": {"self": {"href": "\/projects.json\/8"}, "tasks": {"href": "\/tasks?project=8"}},
+                "_embedded": {"tasks": []}
+            },
+            {
+                "id": 9,
+                "task_duration_sum": 0,
+                "description": null,
+                "title": "Test 2",
+                "_links": {"self": {"href": "\/projects.json\/9"}, "tasks": {"href": "\/tasks?project=9"}},
+                "_embedded": {
+                    "tasks": [
+                        {
+                            "id": 5,
+                            "activity_duration_sum": 0,
+                            "description": "asfgasfgasfgasfgasfg",
+                            "title": "asfgasfgasfg",
+                            "_links": {
+                                "self": {"href": "\/tasks\/5"},
+                                "project": {"href": "\/projects.json\/9"},
+                                "activities": {"href": "\/activities?task=5"}
+                            },
+                            "_embedded": {
+                                "project": {
+                                    "id": 9,
+                                    "task_duration_sum": 0,
+                                    "description": null,
+                                    "title": "Test 2",
+                                    "_links": {
+                                        "self": {"href": "\/projects.json\/9"},
+                                        "tasks": {"href": "\/tasks?project=9"}
+                                    },
+                                    "_embedded": {"tasks": null}
+                                }, "activities": []
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
