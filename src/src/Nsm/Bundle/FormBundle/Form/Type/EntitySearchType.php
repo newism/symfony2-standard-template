@@ -2,13 +2,17 @@
 
 namespace Nsm\Bundle\FormBundle\Form\Type;
 
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Router;
+use Twig_Template;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface;
 
 class EntitySearchType extends AbstractType
 {
@@ -22,10 +26,22 @@ class EntitySearchType extends AbstractType
      */
     protected $router;
 
-    public function __construct(\Twig_Environment $twig, Router $router)
+    /**
+     * @var Serializer
+     */
+    protected $serializer;
+
+    /**
+     * @var array
+     */
+    protected $serializationGroups = array('Default', 'entitySearch');
+
+    public function __construct(\Twig_Environment $twig, Router $router, SerializerInterface $serializer, array $serializerGroups = null)
     {
         $this->twig = $twig;
         $this->router = $router;
+        $this->serializer = $serializer;
+        $this->serializationGroups = $serializerGroups;
     }
 
     /**
@@ -41,54 +57,69 @@ class EntitySearchType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         /** @var ChoiceListInterface $choiceList */
-//        $choiceList = $options['choice_list'];
-//        $choices = $choiceList->getChoices();
+        $choiceList = $options['choice_list'];
+        $choices = $choiceList->getChoices();
+        $view->vars['choices'] = null;
+
+        $serializationContext = SerializationContext::create();
+        $serializationContext->setGroups($this->serializationGroups);
+        $serializationContext->setSerializeNull(true);
+
+        $choiceData = $this->serializer->serialize(array_values($choices), 'json', $serializationContext);
 
         $widgetOptions = array(
-            'remote' => true,
+            'remote' => $options['remote'],
             'entityName' => $options['class'],
-            'endpointIndex' => null,
-            'endpointModal' => null,
+            'selectedOptions' => (array) $view->vars['value'],
             'selectizeOptions' => array(
                 'valueField' => 'id',
                 'labelField' => 'title',
-                'searchField' => 'title'
-//                    // Avoid an unnessecary api call on page load
-//                    // by providing the required entity data.
-//                    'options' => array_map(
-//                        function ($item) {
-//                            return array(
-//                                "id" => $item->getId(),
-//                                "title" => (string)$item
-//                            );
-//                        },
-//                        $choices
-//                    )
+                'searchField' => 'title',
+                'options' => json_decode($choiceData, true),
             )
         );
 
+
         // Generate the endpoint index url
         if (null !== $options['endpoint_index']) {
-            $widgetOptions['endpointIndex'] = call_user_func_array(array($this->router, "generate"), $options['endpoint_index']);
+            if(false === isset($options['endpoint_index'][1])) {
+                $options['endpoint_index'][1] = array();
+            }
+            $options['endpoint_index'][1]['serialization_groups'] = $this->serializationGroups;
+            $widgetOptions['endpointIndex'] = call_user_func_array(
+                array($this->router, "generate"),
+                $options['endpoint_index']
+            );
         }
 
         // Generate the modal url
         if (null !== $options['endpoint_modal']) {
-            $widgetOptions['endpointModal'] = call_user_func_array(array($this->router, "generate"), $options['endpoint_modal']);
+            $widgetOptions['endpointModal'] = call_user_func_array(
+                array($this->router, "generate"),
+                $options['endpoint_modal']
+            );
         }
 
+        // If there is a template defined
+        // Load the template and pull out the blocks
         if (null !== $options['template']) {
+            /** @var Twig_Template $template */
             $template = $this->twig->loadTemplate($options['template']);
             $widgetOptions['templates'] = array(
                 'item' => $template->renderBlock('item', array()),
-                'option' => $template->renderBlock('option', array())
+                'option' => $template->renderBlock('option', array()),
+                'option_create' => $template->renderBlock('option_create', array()),
+                'optgroup_header' => $template->renderBlock('optgroup_header', array()),
+                'optgroup' => $template->renderBlock('optgroup', array())
             );
         }
 
         $view->vars['attr']['data-widget'] = 'entitySearch';
-        $view->vars['attr']['data-entity-search-options'] = json_encode($widgetOptions, JSON_HEX_QUOT | JSON_PRETTY_PRINT);
+        $view->vars['attr']['data-entity-search-options'] = json_encode(
+            $widgetOptions,
+            JSON_HEX_QUOT | JSON_PRETTY_PRINT
+        );
     }
-
 
     /**
      * {@inheritdoc}
@@ -99,6 +130,7 @@ class EntitySearchType extends AbstractType
 
         $resolver->setDefaults(
             array(
+                'remote' => true,
                 'endpoint_index' => null,
                 'endpoint_modal' => null,
                 'template' => null,
