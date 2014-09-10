@@ -2,6 +2,7 @@
 
 namespace Nsm\Bundle\AppBundle\Form\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Nsm\Bundle\AppBundle\Entity\ProjectRepository;
 use Nsm\Bundle\AppBundle\Entity\TaskRepository;
 use Symfony\Component\Form\AbstractType;
@@ -58,6 +59,9 @@ class TaskFilterType extends AbstractType
             );
         };
 
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, $projectFormEventHandler);
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, $projectFormEventHandler);
+
         // Add the form type
         $builder->add(
             'project_local_multiple',
@@ -68,7 +72,7 @@ class TaskFilterType extends AbstractType
                 'class' => 'NsmAppBundle:Project',
                 'multiple' => true,
                 'required' => false,
-                'template' => 'NsmAppBundle:Projects:_selectize/default.html.twig'
+                'template' => 'NsmAppBundle:Projects:_selectize/default.html.twig',
             )
         );
 
@@ -81,12 +85,9 @@ class TaskFilterType extends AbstractType
                 'class' => 'NsmAppBundle:Project',
                 'multiple' => false,
                 'required' => false,
-                'template' => 'NsmAppBundle:Projects:_selectize/default.html.twig'
+                'template' => 'NsmAppBundle:Projects:_selectize/default.html.twig',
             )
         );
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, $projectFormEventHandler);
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, $projectFormEventHandler);
 
         $builder->add(
             'id',

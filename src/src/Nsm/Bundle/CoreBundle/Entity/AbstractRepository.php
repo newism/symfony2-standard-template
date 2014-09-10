@@ -87,8 +87,8 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
      */
     public function transformCollectionToIdArray($collection)
     {
-        if(!$collection instanceof \Iterator) {
-            throw new \Exception('Collection is not instance of Iterator');
+        if(!$collection instanceof \IteratorAggregate) {
+            throw new \Exception('Collection is not instance of IteratorAggregate');
         }
 
         $ids = array();
