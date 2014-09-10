@@ -58,7 +58,7 @@ class ButtonGroupType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-//        $view->vars['control_attr']['data-button-flyout-options'] = json_encode(array());
+        $view->vars['control_attr']['data-widget'] = 'buttonGroup';
     }
 
     /**

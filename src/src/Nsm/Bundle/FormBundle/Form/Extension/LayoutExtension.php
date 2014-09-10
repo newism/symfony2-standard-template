@@ -253,7 +253,7 @@ class LayoutExtension extends AbstractTypeExtension
             $collectionClass .= (isset($options['collection_attr']['class'])) ? $options['collection_attr']['class'] : '';
             $options['collection_attr']['class'] = trim($collectionClass);
 
-            $options['collection_attr']['data-form-widget'] = 'collection';
+            $options['collection_attr']['data-widget'] = 'collection';
             $options['collection_attr']['data-collection'] = true;
             $options['collection_attr']['data-collection-id'] = $id;
             $options['collection_attr']['data-collection-full-name'] = $view->vars['full_name'];

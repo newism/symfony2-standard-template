@@ -6,9 +6,9 @@
 <head>
     <meta charset="UTF-8"/>
     <title>{% block title %}Welcome!{% endblock %}</title>
-    {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
+    {% block stylesheets %}
     <!-- build:css /themes/default/styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
@@ -23,6 +23,7 @@
     <!-- build:css /themes/default/styles/print.css -->
     <link rel="stylesheet" href="/themes/default/styles/print.css" media="print" type="text/css" />
     <!-- endbuild -->
+    {% endblock %}
 
 </head>
 <body>
@@ -30,152 +31,40 @@
 
     <div class="App-header">
 
-            <div class="Toolbar Toolbar--dark" style="justify-content: space-between;">
-
-                <div class="Toolbar-itemGroup">
-                    <div class="Toolbar-item">
-                        <div class="Toolbar-branding">
-                            Symonfy2 Standard Template
-                            {#<img src="http://www.clubevolution.com.au.do.newismdev.com/theme/images/icons/1c18b2c8.club-evolution-239x63.png" style=" vertical-align: bottom; height: 36px; display:block" />#}
-                        </div>
-                    </div>
-                    <div class="Toolbar-itemSpace"></div>
-                    <div class="Toolbar-item">
-                        <span class="Button Button--icon">
-                            <svg viewBox="0 0 24 24" style="pointer-events: none; width: 24px; height: 24px; display: inline-block; fill: white">
-                                <g id="menu">
-                                    <path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"></path>
-                                </g>
-                            </svg>
-                            <svg viewBox="0 0 12 24" style="pointer-events: none; width: 12px; height: 24px; display: inline-block; fill: white">
-                                <g id="arrow-drop-down">
-                                    <polygon points="1,9 6,14 11,9"></polygon>
-                                </g>
-                            </svg>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="Toolbar-itemGroup">
-
-                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-
-                    <div class="Toolbar-item">
-                        <span class="Button Button--icon">
-                                <svg viewBox="0 0 24 24" style="pointer-events: none; width: 24px; height: 24px; display: inline-block; fill: white">
-                                <g id="search">
-                                    <path d="M15.5,14h-0.8l-0.3-0.3c1-1.1,1.6-2.6,1.6-4.2C16,5.9,13.1,3,9.5,3C5.9,3,3,5.9,3,9.5S5.9,16,9.5,16c1.6,0,3.1-0.6,4.2-1.6l0.3,0.3v0.8l5,5l1.5-1.5L15.5,14z M9.5,14C7,14,5,12,5,9.5S7,5,9.5,5C12,5,14,7,14,9.5S12,14,9.5,14z"></path>
-                                </g>
-                            </svg>
-                        </span>
-                    </div>
-
-                    <div class="MenuGroup" style="display:none">
-                        <ul>
-                            <li>
-                                <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
-                            </li>
-                        </ul>
-                        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                            <ul>
-                                <li>
-                                    <a href="{{ path('dashboard_browse', {'_switch_user': '_exit'}) }}">Exit impersonation</a>
-                                </li>
-                            </ul>
-                        {% endif %}
-                    </div>
-
-                    <div class="Toolbar-item">
-                        <span class="Button Button--icon">
-                            <img src="{{ gravatar(app.user.email) }}" style="height:24px; width:24px; border-radius: 100px" />
-                        </span>
-                    </div>
-
-                    <div class="Toolbar-item">
-                        <span class="Button Button--icon">
-                            <svg viewBox="0 0 24 24" style="pointer-events: none; width: 24px; height: 24px; display: inline-block; fill: white">
-                                <g id="help">
-                                    <path d="M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10c5.5,0,10-4.5,10-10S17.5,2,12,2z M13,19h-2v-2h2V19z M15.1,11.3l-0.9,0.9C13.4,12.9,13,13.5,13,15h-2v-0.5c0-1.1,0.4-2.1,1.2-2.8l1.2-1.3C13.8,10.1,14,9.6,14,9c0-1.1-0.9-2-2-2c-1.1,0-2,0.9-2,2H8c0-2.2,1.8-4,4-4c2.2,0,4,1.8,4,4C16,9.9,15.6,10.7,15.1,11.3z"></path>
-                                    <div class="Toolbar-itemGroupSpace"></div>
-                                </g>
-                            </svg>
-                        </span>
-                    </div>
-
-                {% else %}
-                <div class="ActionList ActionList--right">
-                    <a class="ActionList-item" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-                    <a class="ActionList-item" href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
-                    <a class="ActionList-item" href="{{ path('hwi_oauth_connect') }}">Connect</a>
-                {% endif %}
-                </div>
-
-                </div>
-
-
-
-
-                {#<div class="App-branding">#}
-                {#<img src="http://placehold.it/150x48" />#}
-            {#</div>#}
-            {#<div class="App-navTrigger">#}
-            {#</div>#}
-            {#<div class="HelpNav">#}
-                {#<span class="HelpNav-flyoutTrigger">Help</span>#}
-                {#<div class="MenuGroup">#}
-                    {#<ul class="Menu">#}
-                        {#<li>Help</li>#}
-                    {#</ul>#}
-                {#</div>#}
-            {#</div>#}
-            {#<div class="AccountNav">#}
-            {#{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}#}
-                {#{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}#}
-                {#<div class="MenuGroup" style="display:none">#}
-                    {#<ul>#}
-                        {#<li>#}
-                            {#<a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>#}
-                        {#</li>#}
-                    {#</ul>#}
-                    {#{% if is_granted('ROLE_PREVIOUS_ADMIN') %}#}
-                    {#<ul>#}
-                        {#<li>#}
-                            {#<a href="{{ path('dashboard_browse', {'_switch_user': '_exit'}) }}">Exit impersonation</a>#}
-                        {#</li>#}
-                    {#</ul>#}
-                    {#{% endif %}#}
-                {#</div>#}
-            {#{% else %}#}
-                {#<ul style="display:none">#}
-                    {#<li>#}
-                        {#<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>#}
-                    {#</li>#}
-                    {#<li>#}
-                        {#<a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>#}
-                    {#</li>#}
-                    {#<li><a href="{{ path('hwi_oauth_connect') }}">Connect</a></li>#}
-                {#</ul>#}
-            {#{% endif %}#}
-            {#</div>#}
-            {#<div class="ScopeBreadcrumb">#}
-                {#Distributor Group Title / Distributor Title#}
-            {#</div>#}
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <img src="{{ gravatar(app.user.email) }}" style="height:24px; width:24px; border-radius: 100px" />
+                <p>{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</p>
+                <ul>
+                    <li>
+                        <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                    </li>
+                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                    <li>
+                        <a href="{{ path('dashboard_browse', {'_switch_user': '_exit'}) }}">Exit impersonation</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            {% else %}
+            <ul>
+                <li><a class="ActionList-item" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
+                <li><a class="ActionList-item" href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a></li>
+                <li><a class="ActionList-item" href="{{ path('hwi_oauth_connect') }}">Connect</a></li>
+            </ul>
+            {% endif %}
         </div>
     </div>
 
     <div class="App-body">
 
-        <!--
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         <div class="App-nav">
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                <ul>
-                    {% for item in ['project', 'task', 'activity', 'invitation'] %}
-                        <li><a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a></li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+            <ul>
+                {% for item in ['project', 'task', 'activity', 'invitation'] %}
+                    <li><a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
-        -->
+        {% endif %}
 
         <div class="Page">
 
@@ -222,8 +111,7 @@
     </div>
     <div class="App-footer"></div>
 
-    {% block javascripts %}{% endblock %}
-
+    {% block javascripts %}
     <!-- build:js /themes/default/scripts/vendor.js -->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
@@ -258,12 +146,14 @@
             var $el = $(event.target);
 
             $el.find('.FlyoutTrigger').flyoutTrigger();
-            $el.find('.Collection').collection();
-            $el.find('.Control--button_group').buttonFlyout();
-            $el.find('.Control-input--entity_search').entitySearch();
+
+            $el.find('[data-widget~="buttonGroup"]').buttonFlyout();
+            $el.find('[data-widget~="entitySearch"]').entitySearch();
+            $el.find('[data-widget~="collection"]').collection();
 
         }).trigger('contentcreated');
     </script>
+    {% endblock %}
 
 </div>
 </body>
