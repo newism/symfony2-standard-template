@@ -18,49 +18,28 @@ class TaskFilterType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $projectFormEventHandler = function (FormEvent $event, $eventName) {
+        // Base options
+        $options = array(
+            'label' => 'Project - Remote',
+            'class' => 'NsmAppBundle:Project',
+            'multiple' => true,
+            'endpoint_index' => array('project_browse', array('_format' => 'json')),
+            'template' => 'NsmAppBundle:Projects:_selectize/default.html.twig',
+            'load_entities' => false
+        );
 
-            $form = $event->getForm();
-            $data = $event->getData();
-
-            // Base options
-            $options = array(
-                'label' => 'Project - Remote',
-                'class' => 'NsmAppBundle:Project',
-                'multiple' => true,
-                'endpoint_index' => array('project_browse', array('_format' => 'json')),
-                'template' => 'NsmAppBundle:Projects:_selectize/default.html.twig'
-            );
-
-            $projects = isset($data['project']) ? $data['project'] : null;
-
-            // If the projects are null then load empty choices
-            if (null === $projects) {
-                $options['choices'] = array();
-
-                // Otherwise load a query builder
-            } else {
-
-                // Add the query builder to limit the valid options
-                $options['query_builder'] = function (ProjectRepository $repo) use ($projects) {
-                    $qb = $repo->createQueryBuilder('Project');
-                    $qb->where($qb->expr()->in('Project.id', ':projects'));
-                    $qb->setParameter('projects', $projects);
-
-                    return $qb;
-                };
-            }
-
-            // Add the form type
-            $form->add(
-                'project',
-                'entity_search',
-                $options
-            );
+        // Add the query builder to limit the valid options
+        $options['query_builder'] = function (ProjectRepository $repo) {
+            $qb = $repo->createQueryBuilder('Project');
+            return $qb;
         };
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, $projectFormEventHandler);
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, $projectFormEventHandler);
+        // Add the form type
+        $builder->add(
+            'project',
+            'entity_search',
+            $options
+        );
 
         // Add the form type
         $builder->add(

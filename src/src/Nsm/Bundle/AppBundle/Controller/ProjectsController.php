@@ -63,27 +63,6 @@ class ProjectsController extends AbstractController
      */
     public function browseAction(Request $request, $page, $perPage, $orderBy)
     {
-        /** @var Form $form */
-//        $projectSearchForm = $this->createFormBuilder(array(
-//            'page' => 1,
-//            'perPage' => 50,
-//            'orderBy' => array(
-//                'id' => 'desc'
-//            ),
-//            'filter' => array()
-//        ))
-//        ->add('page', 'number')
-//        ->add('perPage', 'number')
-//        ->add('orderBy', new OrderByType(), array(
-//                'attributes' => array(
-//                    'id',
-//                    'title'
-//                )
-//            ))
-//        ->add('filter', new ProjectFilterType())
-//        ->getForm();
-
-
         $projectSearchForm = $this->createForm(
             new ProjectFilterType(),
             array(),
