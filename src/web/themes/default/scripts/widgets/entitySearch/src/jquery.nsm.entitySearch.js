@@ -42,6 +42,7 @@
 
             widget.options = $.extend(widget.options, widget.element.data('entitySearchOptions'));
 
+
             /**
              * Load more options based on the search query param
              * @param query
@@ -87,6 +88,7 @@
                 if(templateString) {
                     // Set the compiled template as the render
                     // The template will recieve data as a parameter
+                    // @see: http://lodash.com/docs#template
                     widget.options.selectizeOptions.render[templateName] = _.template(templateString);
                 }
             }
@@ -94,6 +96,11 @@
             /**
              * Initialise selectize
              */
+
+            // This must be placed above the selectize init call
+            // becuase selectize removes all the <options> on init.
+            selectedValues = widget.options.selectedOptions || this.element.val();
+
             this.element.selectize(this.options.selectizeOptions);
             widget.selectize = this.element[0].selectize;
 
@@ -102,7 +109,6 @@
             // the "options" selectize option.
             // Previously we we're calling the _loadOptions method to load the selectedValues
             // data directly from the server.
-            selectedValues = widget.options.selectedOptions || this.element.val();
             widget.selectize.addItems(selectedValues);
             widget.selectize.refreshItems();
         },
