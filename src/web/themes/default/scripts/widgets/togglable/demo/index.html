@@ -1,0 +1,37 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Togglable Demo</title>
+</head>
+
+<body>
+<div class="Content">
+    <div data-widget="togglable" data-togglable-options="{
+            &quot;trigger&quot;:&quot;button&quot;,
+            &quot;active&quot;:true
+        }">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium adipisci dicta esse, excepturi facilis incidunt laudantium nobis quaerat vitae voluptas? Delectus illum itaque iusto modi nobis placeat provident sapiente voluptates?</p>
+        <button class="DataGrid-filter-toggle-205227467">Toggle</button>
+    </div>
+    <button class="DataGrid-filter-toggle-205227467">Toggle</button>
+
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/jquery-ui/ui/core.js"></script>
+<script src="../bower_components/jquery-ui/ui/widget.js"></script>
+<script src="../bower_components/jquery-ui/ui/mouse.js"></script>
+<script src="../bower_components/jquery-ui/ui/draggable.js"></script>
+<script src="../bower_components/velocity/jquery.velocity.min.js"></script>
+<script src="../bower_components/velocity/velocity.ui.min.js"></script>
+<script src="../src/jquery.nsm.togglable.js"></script>
+
+<script>
+    $('body').on('contentcreated', function (event) {
+        event.stopPropagation();
+        var $el = $(event.target),
+            $togglable = $el.find('[data-widget~="togglable"]').togglable();
+    }).trigger('contentcreated');
+
+</script>

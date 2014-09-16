@@ -130,6 +130,8 @@ class ActivityFilterType extends AbstractType
     {
         $resolver->setDefaults(
             array(
+                'label' => 'Search Actvities',
+                'layout' => 'table',
                 'csrf_protection' => false,
                 'required' => true
             )

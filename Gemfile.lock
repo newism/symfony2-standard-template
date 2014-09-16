@@ -30,6 +30,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
     rake (10.3.2)
+    sass (3.4.3)
     sshkit (1.4.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -45,3 +46,4 @@ DEPENDENCIES
   capistrano (~> 3.1)
   capistrano-symfony (~> 0.1)!
   hipchat
+  sass (~> 3.4)

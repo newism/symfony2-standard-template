@@ -10,7 +10,6 @@
          * Options
          */
         options: {
-
             endpointIndex: null,
             endpointDetails: null,
             searchQueryParam: 'titleLike',

@@ -1,69 +1,25 @@
 {% extends 'NsmAppBundle::layout.html.twig' %}
-{% form_theme search_form 'NsmFormBundle:Form:form_table_layout.html.twig' %}
+{% form_theme searchForm 'NsmFormBundle:Form:form_table_layout.html.twig' %}
 
 {% set entities = pager.getCurrentPageResults %}
 
 {% block content -%}
     <h1>Feature list</h1>
 
-    {{ form_start(search_form, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
+    {{ form_start(searchForm, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
     <table>
         <tbody>
-        {{ form_row(search_form.id) }}
-        {{ form_row(search_form.title) }}
-        {{ form_row(search_form.project) }}
+        {{ form_row(searchForm.id) }}
+        {{ form_row(searchForm.title) }}
+        {{ form_row(searchForm.project) }}
         </tbody>
     </table>
     <div class="Form-actions">
-        {{ form_row(search_form.search) }}
+        {{ form_row(searchForm.search) }}
     </div>
-    {{ form_end(search_form) }}
+    {{ form_end(searchForm) }}
 
-    <table>
-        <caption>
-            <span class="Pagination-currentPageRange">
-                Displaying
-                <span class="Pagingation-currentPageOffsetStart">{{ pager.currentPageFirstResultPositionInTotalResults }}</span> -
-                <span class="Pagingation-currentPageOffsetEnd">{{ pager.currentPageLastResultPositionInTotalResults }}</span>
-            </span>
-            <span class="Pagination-totalResults">
-                of
-                <span class="Pagination-totalResultCount">{{ pager.totalResultCount }}</span>
-                results
-            </span>
-        </caption>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('feature_read', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.title }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('task_add', { 'featureId': entity.id }) }}">create task</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('feature_read', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('feature_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('feature_destroy', { 'id': entity.id }) }}">destroy</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
 
         <ul>
         <li>

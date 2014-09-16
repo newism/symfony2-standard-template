@@ -16,7 +16,6 @@
     "dependencies": {
         "jquery-ui": "~1.11.0",
         "selectize": "~0.11.0",
-        "underscore": "~1.7.0",
         "lodash": "~2.4.1"
     }
 }

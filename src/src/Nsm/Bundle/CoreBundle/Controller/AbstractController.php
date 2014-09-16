@@ -51,7 +51,7 @@ class AbstractController extends FOSRestController
     {
         $paginator = new Paginator($qb, false);
 
-        return new DoctrinePaginatorDecorator($paginator, $perPage, $pageNo);
+        return new DoctrinePaginatorDecorator($paginator, (int) $perPage, (int) $pageNo);
     }
 
     /**

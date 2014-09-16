@@ -1,0 +1,45 @@
+{% import '_macros.html.twig' as macros %}
+
+<div class="Page">
+
+    <div class="Page-alerts">
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="flash-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <div class="Page-tips">
+            {{ render_hinclude(url('tip_browse', {
+                'filter': {'route': app.request.get('_route')},
+                '_template': 'embed'
+            })) }}
+        </div>
+    {% endif %}
+
+    <div class="Page-header">
+        <div class="Page-header-main">
+            {% block page_breadcrumb %}{% endblock %}
+            {% block page_title %}{% endblock %}
+        </div>
+        <div class="Page-header-actions">
+            {% block page_actions %}{% endblock %}
+        </div>
+    </div>
+
+    <div class="Page-body">
+        {% block page_body %}{% endblock %}
+        {% block fos_user_content %}{% endblock %}
+        {% block hwi_oauth_content %}{% endblock %}
+    </div>
+
+    <div class="Page-footer">
+        {% block page_footer %}{% endblock %}
+    </div>
+
+</div>
+

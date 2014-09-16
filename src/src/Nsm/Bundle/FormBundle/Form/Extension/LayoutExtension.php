@@ -164,7 +164,7 @@ class LayoutExtension extends AbstractTypeExtension
 
         if ($isRoot) {
             $formClass = "Form";
-            $formClass .= " Form--" . $options['layout'];
+//            $formClass .= " Form--" . $options['layout'];
             $formClass .= " ";
             $formClass .= (isset($options['form_attr']['class'])) ? $options['form_attr']['class'] : '';
             $options['form_attr']['class'] = trim($formClass);

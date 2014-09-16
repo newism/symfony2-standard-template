@@ -27,17 +27,14 @@ class ProjectFilterType extends AbstractType
                 'required' => false
             )
         );
-
-//        $builder->add(
-//            'text',
-//            'criteria'
-//        );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
+                'label' => 'Search Projects',
+                'layout' => 'table',
                 'data_class' => null,
                 'csrf_protection' => false
             )

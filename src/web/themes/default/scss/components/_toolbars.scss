@@ -1,0 +1,32 @@
+.Toolbar {
+    @include materialShadow(1);
+
+    display: flex;
+    flex-wrap: wrap;
+    padding: 4px;
+    position: relative;
+    align-items: center;
+}
+
+.Toolbar.bordered {
+    padding: 3px;
+    border: 1px solid transparent;
+}
+
+.ToolbarGroup {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.ToolbarGroup:last-of-type {
+    margin-right: 0
+}
+
+.ToolbarGroup > * {
+    background: red;
+}
+
+.ToolbarGroup > * + * {
+    margin-left: 4px;
+}

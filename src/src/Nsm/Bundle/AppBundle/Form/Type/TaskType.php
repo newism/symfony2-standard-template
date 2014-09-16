@@ -46,7 +46,10 @@ class TaskType extends AbstractType
 
         $builder->add(
             'title',
-            'text'
+            'text',
+            array(
+                'help' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquid autem consequatur, cumque dolor dolorem eaque explicabo hic, ipsam labore maxime minima molestias nihil nobis nostrum officiis quos similique voluptatem.'
+            )
         );
 
         $builder->add(

@@ -26,6 +26,8 @@ class InvitationFilterType extends AbstractType
     {
         $resolver->setDefaults(
             array(
+                'label' => 'Search Invitations',
+                'layout' => 'table',
                 'data_class' => null,
                 'csrf_protection' => false
             )

@@ -1,0 +1,47 @@
+<table class="Table Table--data Table--bordered">
+    <thead>
+    <tr>
+        <th class="TableCell-id">Id</th>
+        <th>Title</th>
+        <th>StartedAt</th>
+        <th>EndedAt</th>
+        <th class="TableCell--icon"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('activity_read', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.title }}</td>
+            <td>{{ entity.dateRange.start is defined ? entity.dateRange.start|date('r') }}</td>
+            <td>{{ entity.dateRange.end is defined ? entity.dateRange.end|date('r') }}</td>
+            <td>
+                <span class="Button"
+                      data-widget="flyoutTrigger"
+                      data-flyout-trigger-options="{{ {"flyout": "#CollectionRow-options-flyout-" ~ entity.id}|json_encode(24) }}"
+                        >
+                    <svg class="Button-icon" viewBox="0 0 24 24">
+                        <g id="menu">
+                            <path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"></path>
+                        </g>
+                    </svg>
+                </span>
+
+                <div class="Flyout" id="CollectionRow-options-flyout-{{ entity.id }}">
+                    <ul class="Menu">
+                        <li>
+                            <a href="{{ path('activity_read', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('activity_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('activity_destroy', { 'id': entity.id }) }}">destroy</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

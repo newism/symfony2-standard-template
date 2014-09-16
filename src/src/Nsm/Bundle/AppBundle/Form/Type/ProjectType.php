@@ -133,7 +133,7 @@ class ProjectType extends AbstractType
                 'type' => 'task',
                 'prototype_data' => $task,
                 'prototype_name' => '__tasks__',
-                'layout' => 'table',
+                'layout' => 'stacked',
                 'options' => array(
                     'display_project' => false
                 )
@@ -146,6 +146,7 @@ class ProjectType extends AbstractType
     {
         $resolver->setDefaults(
             array(
+                'layout' => 'stacked',
                 'data_class' => 'Nsm\Bundle\AppBundle\Entity\Project'
             )
         );

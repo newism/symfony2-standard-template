@@ -11,6 +11,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Util\Codes;
 use Hateoas\Configuration\Route;
 use Hateoas\HateoasBuilder;
+use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Nsm\Bundle\AppBundle\Entity\Project;
 use Nsm\Bundle\AppBundle\Entity\Task;
@@ -50,9 +51,8 @@ class ProjectsController extends AbstractController
      *
      * @Get("/projects.{_format}", name="project_browse", defaults={"_format"="~"})
      *
-     * @View(templateVar="entities", serializerGroups={"project_browse"})
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
-     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Project count limit")
+     * @QueryParam(name="perPage", requirements="\d+", default="2", strict=true, description="Project count limit")
      * @QueryParam(name="orderBy", array=true, default={"id"="asc"})
      * @ApiDoc(
      *  resource=true,
@@ -61,15 +61,15 @@ class ProjectsController extends AbstractController
      *      {"name"="orderBy", "dataType"="string", "pattern"="(title|createdAt) ASC|DESC"}
      *  })
      */
-    public function browseAction(Request $request, $page, $perPage, $orderBy)
+    public function browseAction(Request $request, $page, $perPage)
     {
+
         $projectSearchForm = $this->createForm(
             new ProjectFilterType(),
             array(),
             array(
                 'action' => $this->generateUrl('project_browse'),
-                'method' => 'GET',
-                'layout' => 'table'
+                'method' => 'GET'
             )
         )->add(
             'search',
@@ -89,23 +89,34 @@ class ProjectsController extends AbstractController
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
 
-        $responseData = array();
+        $view = $this->view();
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
-            $responseData['pager'] = $pager;
-            $responseData['search_form'] = $projectSearchForm->createView();
+
+            $templateData = array();
+            $templateData['pager'] = $pager;
+            $templateData['searchForm'] = $projectSearchForm->createView();
+            $view->setData($templateData);
+
+            $template = $request->query->get('_template', $this->getTemplate('browse'));
+            $view->setTemplate($template);
+
         } else {
+
+            $serializationGroups = $request->query->get("_serialization_groups", array("project_browse"));
+            $serializationContext = SerializationContext::create();
+            $serializationContext->setGroups($serializationGroups);
+            $serializationContext->setSerializeNull(true);
+
+            $view->setSerializationContext($serializationContext);
 
             $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
                 new Route('project_browse', array())
             );
 
-            $responseData = $paginatedCollection;
+            $view->setData($paginatedCollection);
         }
-
-        $view = $this->view($responseData);
-        $view->setTemplate($this->getTemplate($request->query->get('_template', 'browse')));
 
         return $view;
     }
@@ -177,8 +188,10 @@ class ProjectsController extends AbstractController
             'form' => $form
         );
 
+        $template = $request->query->has('_template') ? $request->query->get('_template') : $this->getTemplate('edit');
+
         $view = $this->view($responseData);
-        $view->setTemplate($this->getTemplate($request->query->get('_template', 'browse')));
+        $view->setTemplate($template);
 
         return $view;
     }
@@ -247,8 +260,10 @@ class ProjectsController extends AbstractController
             'form' => $form,
         );
 
+        $template = $request->query->has('_template') ? $request->query->get('_template') : $this->getTemplate('add');
+
         $view = $this->view($responseData);
-        $view->setTemplate($this->getTemplate($request->query->get('_template', 'add')));
+        $view->setTemplate($template);
 
         return $view;
 

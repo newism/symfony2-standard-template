@@ -1,0 +1,267 @@
+{% import '_macros.html.twig' as macros %}
+
+<!DOCTYPE html>
+<html prefix="hx: http://purl.org/NET/hinclude">
+<head>
+
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    {% block stylesheets %}
+
+    {# https://www.google.com/fonts#UsePlace:use/Collection:Open+Sans #}
+    <link href='http://fonts.googleapis.com/css?family=Roboto:900,400,700,500,300' rel='stylesheet' type='text/css'>
+
+    <!-- build:css /themes/default/styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
+    <link rel="stylesheet" href="/bower_components/selectize/dist/css/selectize.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css /themes/default/styles/screen.css -->
+    <link rel="stylesheet" href="/themes/default/styles/screen.css" media="screen, projection" type="text/css" />
+    <!-- endbuild -->
+
+    <!-- build:css /themes/default/styles/print.css -->
+    <link rel="stylesheet" href="/themes/default/styles/print.css" media="print" type="text/css" />
+    <!-- endbuild -->
+    {% endblock %}
+
+</head>
+<body>
+<div id="App">
+
+    <div id="App-header">
+        <div id="Appbar" class="Toolbar">
+            <div id="App-branding" class="ToolbarGroup">
+                <div class="Button Button--icon" style="background: lightpink" onclick="$('#App-body').toggleClass('move-left');">
+                    <svg class="Button-icon" viewBox="0 0 24 24">
+                        <g id="menu"><path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"></path></g>
+                    </svg>
+                </div>
+                <div class="Button" style="background: lighblue">
+                    <span class="Button-label">Club Evo</span>
+                </div>
+            </div>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+                <div class="ToolbarGroup" style="margin-left: auto;">
+                    <form class="ToolbarForm" style="display:table">
+                        <div class="Form-body">
+                            <div class="ControlGroup ControlGroup--multiControl ControlGroup--birthday ControlGroup--birthday">
+                                <div class="ControlGroup-header"
+                                     style="display:none"
+                                >
+                                    <label class="ControlGroup-label  required">
+                                        Birthday
+                                        <span class="required" title="This field is required">*</span>
+                                    </label>
+                                </div>
+                                <div class="ControlGroup-body">
+                                    <div class="Control Control--birthday Control--birthday"
+                                         data-control-full-name="project[birthday]"
+                                         data-control-name="birthday"
+                                    >
+                                        <div class="Control-body">
+                                            <select id="project_birthday_day"
+                                                    name="project[birthday][day]"
+                                                    class="Control-input Control-input--choice Control-input--day"
+                                            >
+                                                <option value="1">Key Tags</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ControlGroup ControlGroup--singleControl ControlGroup--datetime ControlGroup--datetime-single">
+                                <div class="ControlGroup-header" style="display:none;">
+                                    <label class="ControlGroup-label  required" for="project_datetime-single">
+                                        Datetime-single
+                                        <span class="required" title="This field is required">*</span>
+                                    </label>
+                                </div>
+                                <div class="ControlGroup-body">
+                                    <div class="Control Control--datetime Control--datetime-single" data-control-full-name="project[datetime-single]" data-control-name="datetime-single">
+                                        <div class="Control-body">
+                                            <input type="datetime" id="project_datetime-single" name="project[datetime-single]" required="required" class="Control-input Control-input--datetime Control-input--datetime-single">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Form-footer">
+                            <button type="submit" id="filter_search" name="filter[search]" class="Button">
+                                <span class="Button-label">Search</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="AccountNav" class="ToolbarGroup">
+                    {#<div class="ButtonGroup">#}
+                        {#<span class="Button" data-widget="flyoutTrigger" data-flyout-trigger-options='{"flyout": "#AccountNav-flyout"}'>#}
+                            {#<img class="Button-icon AccountNav-avatar" src="{{ gravatar(app.user.email) }}" />#}
+                        {#</span>#}
+                        {#<span class="Button" data-widget="flyoutTrigger" data-flyout-trigger-options='{"flyout": "#AccountNav-flyout"}'>#}
+                            {#<span class="Button-label AccountNav-username">{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</span>#}
+                        {#</span>#}
+                    {#</div>#}
+                    <span class="Button" data-widget="flyoutTrigger" data-flyout-trigger-options='{"flyout": "#AccountNav-flyout"}'>
+                        <img class="Button-icon AccountNav-avatar" src="{{ gravatar(app.user.email) }}" />
+                        {#<span class="Button-label AccountNav-username">{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</span>#}
+                        <svg class="Button-icon" viewBox="0 0 24 24">
+                            <g id="arrow-drop-down"><polygon points="7,10 12,15 17,10 "></polygon></g>
+                        </svg>
+                    </span>
+                    <div id="AccountNav-flyout" class="Flyout">
+                        <ul class="Menu">
+                            <li>
+                                <a href="{{ path('fos_user_profile_show') }}">
+                                    {{ app.user.username }}
+                                    <small>{{ 'profile.show'|trans({}, 'FOSUserBundle') }}</small>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('fos_user_profile_edit') }}">{{ 'profile.edit'|trans({}, 'FOSUserBundle') }}</a>
+                            </li>
+                        </ul>
+                        <ul class="Menu">
+                            <li>
+                                <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                            </li>
+                            {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                            <li>
+                                <a href="{{ path('dashboard_browse', {'_switch_user': '_exit'}) }}">Exit impersonation</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            {% else %}
+                <div id="GuestNav" class="ToolbarGroup" style="margin-left: auto;">
+                    <a class="Button" href="{{ path('fos_user_security_login') }}">
+                        <span class="Button-label">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</span>
+                    </a>
+                    <a class="Button" href="{{ path('fos_user_registration_register') }}">
+                        <span class="Button-label">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</span>
+                    </a>
+                    <a class="Button" href="{{ path('hwi_oauth_connect') }}">
+                        <span class="Button-label">Connect</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="App-body">
+
+        <div id="App-nav" class="SidebarNav SidebarNav--left">
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <ul>
+                {% for item in ['project', 'task', 'activity', 'invitation'] %}
+                    <li><a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        </div>
+
+        <div class="Page">
+
+            <div class="Page-alerts">
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="flash-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <div class="Page-tips">
+                    {{ render_hinclude(url('tip_browse', {
+                    'filter': {'route': app.request.get('_route')},
+                    '_template': 'embed'
+                    })) }}
+                </div>
+            {% endif %}
+
+            <div class="Page-header">
+                <div class="Page-header-main">
+                    {% block page_breadcrumb %}{% endblock %}
+                    {% block page_title %}{% endblock %}
+                </div>
+                <div class="Page-header-actions">
+                    {% block page_actions %}{% endblock %}
+                </div>
+            </div>
+
+            <div class="Page-body">
+                {% block page_body %}{% endblock %}
+                {% block fos_user_content %}{% endblock %}
+                {% block hwi_oauth_content %}{% endblock %}
+            </div>
+
+            <div class="Page-footer">
+                {% block page_footer %}{% endblock %}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="App-footer"></div>
+
+    {% block javascripts %}
+    <!-- build:js /themes/default/scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/console-polyfill/index.js"></script>
+    <script src="/bower_components/jquery-ui/ui/core.js"></script>
+    <script src="/bower_components/jquery-ui/ui/widget.js"></script>
+    <script src="/bower_components/jquery-ui/ui/mouse.js"></script>
+    <script src="/bower_components/jquery-ui/ui/sortable.js"></script>
+    <script src="/bower_components/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="/bower_components/sifter/sifter.js"></script>
+    <script src="/bower_components/microplugin/src/microplugin.js"></script>
+    <script src="/bower_components/selectize/dist/js/selectize.js"></script>
+    <script src="/bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="/bower_components/velocity/jquery.velocity.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js /themes/default/scripts/app.js -->
+    <script src="/themes/default/scripts/widgets/flyoutTrigger/src/jquery.nsm.flyoutTrigger.js"></script>
+    <script src="/themes/default/scripts/widgets/buttonFlyout/src/jquery.nsm.buttonFlyout.js"></script>
+    <script src="/themes/default/scripts/widgets/collection/src/jquery.nsm.collection.js"></script>
+    <script src="/themes/default/scripts/widgets/entitySearch/src/jquery.nsm.entitySearch.js"></script>
+    <script src="/themes/default/scripts/widgets/multiCheckboxes/src/jquery.nsm.multiCheckboxes.js"></script>
+    <script src="/themes/default/scripts/widgets/overflowNav/src/jquery.nsm.overflowNav.js"></script>
+    <script src="/themes/default/scripts/widgets/togglable/src/jquery.nsm.togglable.js"></script>
+    <script src="/themes/default/scripts/widgets/dataGrid/src/jquery.nsm.dataGrid.js"></script>
+    <!-- endbuild -->
+
+    <script>
+        $('body').on('contentcreated', function (event) {
+            // Fire any other events on this element
+            // But don't bubble
+            event.stopPropagation();
+            var $el = $(event.target);
+
+            $el.find('[data-widget~="buttonGroup"]').buttonFlyout();
+            $el.find('[data-widget~="entitySearch"]').entitySearch();
+            $el.find('[data-widget~="collection"]').collection();
+            $el.find('[data-widget~="flyoutTrigger"]').flyoutTrigger();
+            $el.find('[data-widget~="togglable"]').togglable();
+            $el.find('[data-widget~="dataGrid"]').dataGrid();
+
+        }).trigger('contentcreated');
+    </script>
+    {% endblock %}
+
+</div>
+</body>
+</html>
+

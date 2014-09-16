@@ -99,7 +99,7 @@ class EntitySearchType extends AbstractType
             if (false === isset($options['endpoint_index'][1])) {
                 $options['endpoint_index'][1] = array();
             }
-            $options['endpoint_index'][1]['serialization_groups'] = $this->serializationGroups;
+            $options['endpoint_index'][1]['_serialization_groups'] = $this->serializationGroups;
             $widgetOptions['endpointIndex'] = call_user_func_array(
                 array($this->router, "generate"),
                 $options['endpoint_index']

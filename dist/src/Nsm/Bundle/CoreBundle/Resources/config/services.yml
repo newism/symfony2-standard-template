@@ -1,7 +1,0 @@
-parameters:
-#    nsm_core.example.class: Nsm\Bundle\CoreBundle\Example
-
-services:
-#    nsm_core.example:
-#        class: %nsm_core.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

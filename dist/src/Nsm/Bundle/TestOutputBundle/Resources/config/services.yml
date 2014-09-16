@@ -1,7 +1,0 @@
-parameters:
-#    nsm_test_output.example.class: Nsm\Bundle\TestOutputBundle\Example
-
-services:
-#    nsm_test_output.example:
-#        class: %nsm_test_output.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

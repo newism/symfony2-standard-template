@@ -5,18 +5,18 @@
 {% block content -%}
     <h1>Tip list</h1>
 
-    {{ form_start(search_form, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
+    {{ form_start(searchForm, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
     <table>
         <tbody>
-        {{ form_row(search_form.id) }}
-        {{ form_row(search_form.title) }}
-        {{ form_row(search_form.route) }}
+        {{ form_row(searchForm.id) }}
+        {{ form_row(searchForm.title) }}
+        {{ form_row(searchForm.route) }}
         </tbody>
     </table>
     <div class="Form-actions">
-        {{ form_row(search_form.search) }}
+        {{ form_row(searchForm.search) }}
     </div>
-    {{ form_end(search_form) }}
+    {{ form_end(searchForm) }}
 
     <table data-widget="dataTable" data-data-table-options="{{ {
         'serverSide': true,

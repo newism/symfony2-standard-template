@@ -34,15 +34,15 @@
             },
 
             templates: {
-                addTrigger: '<button>Add</button>',
+                addTrigger: '<button class="Button">Add</button>',
                 prototype: false,
 
-                deleteHeader: '<th />',
-                deleteFooter: '<th />',
-                deleteTrigger: '<th><button>Delete</button></th>',
+                deleteHeader: '<th class="Collection-headerRowItem">',
+                deleteFooter: '<td />',
+                deleteTrigger: '<td class="ControlGroup"><button class="Button">Delete</button></td>',
 
                 sortHeader: '<th/>',
-                sortFooter: '<th/>',
+                sortFooter: '<td/>',
                 sortHandle: '<span>Sort</span>',
                 sortHelper: '<tr/>',
                 sortPlaceHolder: '<div />'
@@ -156,7 +156,7 @@
          */
         _createAddCollectionItemTrigger: function () {
             this.addCollectionItemTrigger = $(this.options.templates.addTrigger).addClass(this.options.classes.addTrigger);
-            this.addCollectionItemTrigger.insertAfter(this.element);
+            this.addCollectionItemTrigger.insertAfter(this.element.parent());
             this._on(this.addCollectionItemTrigger, {
                 click: '_onAddCollectionItemTriggerClick'
             });

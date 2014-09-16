@@ -1,3 +1,0 @@
-nsm_test_output_homepage:
-    path:  /tests
-    defaults: { _controller: NsmTestOutputBundle:Default:index }

@@ -1,0 +1,77 @@
+$base-spacing: 1rem;
+
+// Fractional sizes
+$fractional-spacing-sizes: (
+        smaller: .25,
+        small: .5,
+        default: 1,
+        large: 2,
+        larger: 3
+);
+
+$positions: (top, right, bottom, left);
+
+@each $name, $modifier in $fractional-spacing-sizes {
+
+    @each $position in $positions{
+        %pad-#{$position}-#{$name} {
+            padding-#{$position}: $base-spacing * $modifier;
+        }
+
+        %inset-#{$position}-#{$name} {
+            margin-#{$position}: $base-spacing * $modifier;
+        }
+
+        %outset-#{$position}-#{$name} {
+            margin-#{$position}: $base-spacing * $modifier * -1;
+        }
+
+    }
+
+    %pad-#{$name} {
+        padding: $base-spacing * $modifier;
+    }
+
+    %pad-vertical-#{$name} {
+        padding-top: $base-spacing * $modifier;
+        padding-bottom: $base-spacing * $modifier;
+    }
+
+    %pad-horizontal-#{$name} {
+        padding-left: $base-spacing * $modifier;
+        padding-right: $base-spacing * $modifier;
+    }
+
+    %inset-#{$name} {
+        margin: $base-spacing * $modifier;
+    }
+
+    %inset-vertical-#{$name} {
+        margin-top: $base-spacing * $modifier;
+        margin-bottom: $base-spacing * $modifier;
+    }
+
+    %inset-horizontal-#{$name} {
+        margin-left: $base-spacing * $modifier;
+        margin-right: $base-spacing * $modifier;
+    }
+
+    %outset-#{$name} {
+        margin: $base-spacing * $modifier;
+    }
+
+    %outset-vertical-#{$name} {
+        margin-top: $base-spacing * $modifier * -1;
+        margin-bottom: $base-spacing * $modifier * -1;
+    }
+
+    %outset-horizontal-#{$name} {
+        margin-left: $base-spacing * $modifier * -1;
+        margin-right: $base-spacing * $modifier * -1;
+    }
+}
+
+.flush {
+    padding: 0;
+    margin: 0
+}

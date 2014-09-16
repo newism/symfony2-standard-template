@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Util\Codes;
 use Hateoas\Configuration\Route;
+use JMS\Serializer\SerializationContext;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Nsm\Bundle\AppBundle\Entity\Activity;
 use Nsm\Bundle\AppBundle\Entity\ActivityRepository;
@@ -48,9 +49,8 @@ class ActivitiesController extends AbstractController
      *
      * @Get("/activities.{_format}", name="activity_browse", defaults={"_format"="~"})
      *
-     * @View(templateVar="entities", serializerGroups={"activity_browse"})
      * @QueryParam(name="page", requirements="\d+", default="1", strict=true, description="Page of the overview.")
-     * @QueryParam(name="perPage", requirements="\d+", default="10", strict=true, description="Activity count limit")
+     * @QueryParam(name="perPage", requirements="\d+", default="5", strict=true, description="Activity count limit")
      * @QueryParam(name="orderBy", array=true, default={"id"="asc"})
      * @ApiDoc(
      *  resource=true,
@@ -82,26 +82,36 @@ class ActivitiesController extends AbstractController
 
         $pager = $this->paginateQuery($qb, $perPage, $page);
 
-        $responseData = array();
+        $view = $this->view();
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
-            $responseData['pager'] = $pager;
-            $responseData['search_form'] = $activitySearchForm->createView();
+
+            $templateData = array();
+            $templateData['pager'] = $pager;
+            $templateData['searchForm'] = $activitySearchForm->createView();
+            $view->setData($templateData);
+
+            $template = $request->query->has('_template') ? $request->query->get('_template') : $this->getTemplate('browse');
+            $view->setTemplate($template);
+
         } else {
+
+            $serializationGroups = $request->query->get("_serialization_groups", array("activity_browse"));
+            $serializationContext = SerializationContext::create();
+            $serializationContext->setGroups($serializationGroups);
+            $serializationContext->setSerializeNull(true);
+
+            $view->setSerializationContext($serializationContext);
 
             $paginatedCollection = $this->createPaginatedCollection(
                 $pager,
                 new Route('activity_browse', array())
             );
 
-            $responseData = $paginatedCollection;
+            $view->setData($paginatedCollection);
         }
 
-        $view = $this->view($responseData);
-        $view->setTemplate($this->getTemplate($request->query->get('_template', 'browse')));
-
-        return $view;
-    }
+        return $view;    }
 
     /**
      * Edits an existing Activity entity.

@@ -1,0 +1,367 @@
+.InputGroup {
+    display: flex;
+}
+
+.InputGroup > *:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -1px;
+}
+
+.InputGroup > *:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.InputGroup > *:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+
+
+%textControl {
+    background-color: white;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.30);
+    border-radius: 0;
+    box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.10);
+    box-sizing: border-box !important;
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    outline: none;
+    padding: 7px 7px;
+    vertical-align: bottom;
+    width: 100%;
+    &:focus {
+        outline: none;
+        border-color:palette("lightBlue", "600");
+    }
+}
+
+%selectControl {
+    @extend %textControl;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-position: right 50%;
+    background-repeat: no-repeat;
+    background-image: url("/themes/default/images/icons/select-toggle.svg");
+    padding-right: 30px;
+}
+
+%ghostInput {
+
+    padding: 0 !important;
+
+    > .ControlGroup-body {
+
+        padding: 0 !important;
+
+        > .Control {
+            input,
+            textarea,
+            select,
+            textarea {
+                box-shadow: none;
+                border-color: transparent;
+                margin: 0;
+                position: relative;
+                &:focus {
+                    outline: 1px solid palette("lightBlue", "500");
+                    outline-offset: 0;
+                }
+            }
+        }
+    }
+}
+
+label .required {
+    color: palette("red", "500");
+}
+
+/**
+ * Form
+ */
+.Form {
+    margin: 0;
+}
+
+.Form-header {}
+
+.Form-title {}
+
+.Form-footer {
+    padding-top: 8px;
+    text-align: right;
+}
+
+/**
+ * Control Group Collection
+ */
+
+//.ControlGroupCollection--table {
+//    @extend %Table;
+//    @extend %Table--bordered;
+//    > .ControlGroupCollection-body {
+//        @extend %Table-body;
+//        > .ControlGroup {
+//            @extend %TableRow;
+//            > .ControlGroup-header {
+//                @extend %TableCell;
+//                @extend %TableCell--header;
+//                > .ControlGroup-label {
+//                    font-size: 14px;
+//                    line-height: normal;
+//                }
+//                > .ControlGroup-help {
+//                    font-size: 12px;
+//                }
+//            }
+//            > .ControlGroup-body {
+//                @extend %TableCell;
+//                @extend %TableCell--data !optional;
+//            }
+//            &.ControlGroup--singleControl {
+//                @extend %ghostInput;
+//                .ControlGroup-body {
+//                    padding: 0;
+//                }
+//            }
+//        }
+//    }
+//}
+//
+
+.ControlGroupCollection--stacked {
+    display: block;
+    > .ControlGroupCollection-body {
+        display: block;
+        > .ControlGroup {
+            display: block;
+            > .ControlGroup-header {
+                display: block;
+                > .ControlGroup-label {
+                    font-size: 18px;
+                    line-height: 20px;
+                }
+                > .ControlGroup-help {
+                    font-size: 14px;
+                }
+            }
+            > .ControlGroup-body {
+                display: block;
+            }
+            > .ControlGroup-footer {
+                display: block;
+            }
+        }
+    }
+}
+
+/**
+ * Control Group
+ */
+.ControlGroup {
+    margin-bottom: 36px;
+}
+
+.ControlGroup--singleControl {
+}
+
+.ControlGroup--multiControl {
+}
+
+.ControlGroup-header {
+    margin-bottom: 16px;
+}
+
+.ControlGroup-label {
+    color: #333;
+    display: block;
+    font-weight: bold;
+}
+
+.ControlGroup-help {
+    color: #555;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+.ControlGroup-body {
+}
+
+.ControlGroup-footer {
+}
+
+.ToolbarForm {
+
+    .ControlGroup,
+    .Form-footer{
+        display: table-cell;
+        padding: 0;
+        margin: 0;
+        vertical-align: bottom;
+    }
+
+    .ControlGroup-header {
+        display: none;
+    }
+}
+
+/**
+ * Control
+ */
+.Control {
+    position: relative;
+}
+
+.Control-header {
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 4px;
+    position: relative;
+}
+
+.Control-label {
+    color: #333;
+    display: block;
+}
+
+.Control-help {
+    font-size: 12px;
+    position: absolute;
+    top: 0;
+    right: 0
+}
+
+.Control-body {
+}
+
+.Control-footer {
+}
+
+.Control-body > .Control {
+    display: inline-block;
+    vertical-align: top;
+    width: auto;
+    margin-right: 8px;
+}
+
+/**
+ * ControlInput
+ */
+.Control-input {
+}
+
+.Control-input--text,
+.Control-input--password,
+.Control-input--search,
+.Control-input--datetime,
+.Control-input--number,
+.Control-input--textarea {
+    @extend %textControl;
+}
+
+.Control-input--choice {
+    @extend %selectControl;
+}
+
+.Control-input--radio {
+}
+
+.Control-inputSeperator,
+.Control--datetime select,
+.Control--date select,
+.Control--birthday select {
+    vertical-align: middle;
+    display: inline-block;
+    width: auto;
+    margin-right: 4px;
+    &:last-child {
+        margin-right: 0
+    }
+}
+
+/**
+ * Collection
+ */
+
+.Control--nsm_collection > .Control-body{  }
+
+.Collection {
+}
+
+.Collection--stacked {
+
+    display: block;
+
+    > .Collection-header {
+
+        display: none;
+
+    }
+    > .Collection-body {
+
+        display: block;
+
+        > .CollectionItem {
+
+            border: 1px solid #B2B2B2;
+            display: block;
+            padding: 20px;
+            margin-bottom: 8px;
+
+            > .ControlGroup {
+
+                display: block;
+
+                > .ControlGroup-header {
+
+                    display: block;
+                    margin-bottom: 12px;
+
+                    > .ControlGroup-label {
+                        font-size: 16px;
+                        line-height: 20px;
+                    }
+
+                    > .ControlGroup-help {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.ChoiceList {  }
+
+.ChoiceList-choice {
+    display: inline-block;
+    position: relative;
+    margin-right: 20px;
+
+    > input {
+        position: absolute;
+        left: 14px;
+        top: 12px;
+    }
+
+    > input[type=checkbox] {
+        top: 13px;
+    }
+
+    > input:checked + label {
+        background: palette("green", "50");
+    }
+
+    > label {
+        @extend %textControl;
+        cursor: pointer;
+        padding-left: 35px;
+    }
+}
+

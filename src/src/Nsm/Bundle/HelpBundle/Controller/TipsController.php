@@ -72,7 +72,7 @@ class TipsController extends AbstractController
 
         if (true === $this->getViewHandler()->isFormatTemplating($request->getRequestFormat())) {
             $responseData['pager'] = $pager;
-            $responseData['search_form'] = $tipSearchForm->createView();
+            $responseData['searchForm'] = $tipSearchForm->createView();
         } else {
 
             $paginatedCollection = $this->createPaginatedCollection(

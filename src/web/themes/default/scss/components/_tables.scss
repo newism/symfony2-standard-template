@@ -1,0 +1,308 @@
+/*
+Table
+
+.Table--bordered - Bordered. Adds horizontal Table row borders
+.Table--data.Panel - Data wrapped in a panel. Table--data inherists Table--border styling.
+.Table--description
+.Table--striped - Striped Table rows
+.Table--summary
+.Table--tight.Table--data.Panel - Data wrapped in a panel. Table--data inherists Table--border styling.
+
+Styleguide Table
+*/
+$table-border-secondary-colour: #ddd;
+
+td, th {
+    text-align: left;
+}
+
+%Table {
+    display: table;
+    width: 100%;
+    border: none;
+}
+
+%Table-header {
+    display: table-header-group;
+}
+
+%Table-body {
+    display: table-row-group;
+}
+
+%Table-footer {
+    display: table-footer-group;
+}
+
+%TableRow {
+    display: table-row;
+}
+
+%TableRow--info {
+}
+
+%TableRow--success {
+}
+
+%TableRow--warning {
+}
+
+%TableRow--danger {
+}
+
+%TableCell {
+    display: table-cell;
+}
+
+%TableCell--header {}
+
+%TableCell--data {
+}
+
+%TableCell--info {
+}
+
+%TableCell--success {
+}
+
+%TableCell--warning {
+}
+
+%TableCell--danger {
+}
+
+.Table {
+
+    @extend %Table;
+
+    tr {
+        @extend %TableRow;
+    }
+
+    th, td {
+        @extend %TableCell;
+    }
+
+    th {
+        @extend %TableCell--header !optional;
+    }
+
+    td {
+        @extend %TableCell--data !optional;
+    }
+}
+
+.Table--data {
+    > thead > tr,
+    > tbody > tr,
+    > tfoot > tr {
+        > th,
+        > td {
+        }
+    }
+}
+
+.Table--description {
+}
+
+.Table--striped {
+    > tbody > tr:nth-child(2n+1) {
+    }
+}
+
+.Table--summary {
+}
+
+.Table--tight {
+    > thead > tr,
+    > tbody > tr,
+    > tfoot > tr {
+        > th,
+        > td {
+        }
+    }
+}
+
+.Table--small {
+    > thead > tr,
+    > tbody > tr,
+    > tfoot > tr {
+        > th,
+        > td {
+        }
+    }
+}
+
+/*
+TableRow
+
+.TableRow{}
+.TableRow--info{}
+.TableRow--success{}
+.TableRow--warning{}
+.TableRow--danger{}
+
+Styleguide TableRow
+*/
+.TableRow {
+}
+
+.TableRow--info {
+    background: palette("lightBlue", "50") !important;
+}
+
+.TableRow--success {
+    background: palette("lightGreen", "50") !important;
+}
+
+.TableRow--warning {
+    background: palette("orange", "50") !important;
+}
+
+.TableRow--danger {
+    background: palette("red", "50") !important;
+}
+
+/*
+TableCell
+
+.TableCell{}
+.TableCell--info{}
+.TableCell--success{}
+.TableCell--warning{}
+.TableCell--danger{}
+
+Styleguide TableCell
+*/
+.Table {
+
+    .TableCell {
+    }
+
+    .TableCell--info {
+        background: palette("lightBlue", "50") !important;
+    }
+
+    .TableCell--success {
+        background: palette("lightGreen", "50") !important;
+    }
+
+    .TableCell--warning {
+        background: palette("orange", "50") !important;
+    }
+
+    .TableCell--danger {
+        background: palette("red", "50") !important;
+    }
+
+    .TableCell--fill {
+        width: 100%;
+    }
+
+    .TableCell--tight {
+        text-align: center;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        width: 40px;
+    }
+
+    .TableCell--icon {
+        text-align: center;
+        padding: 0 !important;
+        width: 1px;
+    }
+
+    .TableCell--expanded {
+        background: rgb(245, 245, 245);
+    }
+}
+
+.Table--data,
+.Collection--table,
+.ControlGroupCollection--table {
+
+    border: 1px solid black;
+    font-size: 14px;
+    line-height: 18px;
+    width: 100%;
+
+    > thead > tr,
+    > tbody > tr,
+    > tfoot > tr {
+        > th, > td {
+            border-right: 1px solid red;
+            padding: 8px 8px;
+            vertical-align: top;
+
+            &:last-child{
+                border-right: none;
+            }
+        }
+    }
+
+    > thead {
+        > tr {
+            > th, > td {
+                border-bottom: 1px solid red;
+            }
+            > th {
+                background: pink;
+            }
+            > td {
+            }
+        }
+        > tr:last-child {
+            > th, > td {
+                border-bottom: 1px solid green;
+            }
+            > th {
+            }
+            > td {
+            }
+        }
+    }
+    > tbody {
+        > tr {
+            > th, > td {
+                border-bottom: 1px solid blue;
+            }
+            > th {
+                background: lightblue;
+            }
+            > td {
+            }
+        }
+        > tr:last-child {
+            > th, > td {
+                border-bottom: none;
+            }
+            > th {
+            }
+            > td {
+            }
+        }
+    }
+    > tfoot {
+        > tr:first-child {
+            > th, > td {
+                border-top: 3px solid green;
+                border-width: 3px;
+            }
+            > th {
+            }
+            > td {
+            }
+        }
+        > tr {
+            > th, > td {
+                border-top: 1px solid green;
+            }
+            > th {
+            }
+            > td {
+            }
+        }
+    }
+}
+
+.Collection--table > tbody > tr > td > .ControlGroup-header { display: none }

@@ -28,12 +28,19 @@ module.exports = function (grunt) {
 
         // Watches files for changes and runs tasks based on the changed files
         watch: {
+            options: {
+                livereload: true,
+            },
             gruntfile: {
                 files: ['Gruntfile.js']
             },
             bower: {
                 files: ['bower.json'],
                 tasks: ['wiredep']
+            },
+            sass: {
+                files: ['src/web/themes/default/scss/{,*/}*.scss'],
+                tasks: ['sass', 'autoprefixer:src']
             }
         },
 
@@ -167,7 +174,40 @@ module.exports = function (grunt) {
                     src: ['<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout.html.twig']
                 }]
             }
+        },
+
+        // Compile Scss
+        sass: {
+            src: {
+                options: {
+                    style: 'expanded',
+                    bundleExec: true
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'src/web/themes/default/scss',
+                    src: ['{,*/}*.scss'],
+                    dest: 'src/web/themes/default/styles',
+                    ext: '.css'
+                }]
+            }
+        },
+
+        // Add vendor prefixed styles
+        autoprefixer: {
+            options: {
+                browsers: ['last 3 version']
+            },
+            src: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/web/themes/default/styles',
+                    src: '{,*/}*.css',
+                    dest: 'src/web/themes/default/styles'
+                }]
+            }
         }
+
     })
     ;
 

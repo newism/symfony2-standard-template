@@ -1,0 +1,34 @@
+/*
+Fractional width units
+
+$fractions - Map of fractions
+$suffix - appended to the classname
+$prefix - prepended to the classname
+*/
+@mixin FractionalWidths($fractions, $suffix: "", $prefix: "unit-") {
+    @each $fraction in $fractions {
+
+        @for $i from 1 through $fraction {
+
+            .#{$prefix}#{$i}of#{$fraction}#{$suffix} {
+                width: percentage($i / $fraction);
+            }
+
+            .#{$prefix}pull#{$i}of#{$fraction}#{$suffix} {
+                right: percentage($i / $fraction);
+            }
+
+            .#{$prefix}push#{$i}of#{$fraction}#{$suffix} {
+                left: percentage($i / $fraction);
+            }
+        }
+    }
+}
+
+@include FractionalWidths(12);
+
+@each $breakpointName, $breakpointValue in $mq-breakpoints {
+    @include mq($from: $breakpointName) {
+        @include FractionalWidths(12, "-at-" + $breakpointName);
+    }
+}

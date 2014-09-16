@@ -1,0 +1,26 @@
+.Menu {
+    margin: 0;
+    padding: 8px 0;
+    list-style-type: none;
+    width: 192px;
+}
+.Menu + .Menu {
+    border-top: 1px solid #ccc;
+}
+
+.Menu > * {
+    
+    line-height: 24px;
+    margin: 0;
+    padding: 4px 0;
+
+    & > * {
+        display: block;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    &:hover {
+        background: #eee;
+    }
+}

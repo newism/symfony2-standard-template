@@ -1,0 +1,67 @@
+<div class="DataGrid-results">
+
+    <div class="DataGrid-results-header">
+        <div class="DataGrid-results-header-main">
+            <div class="DataGrid-paginationSummary">
+                    <span class="Pagination-currentPageRange">
+                        Displaying
+                        <span class="Pagingation-currentPageOffsetStart">{{ pager.currentPageFirstResultPositionInTotalResults }}</span> -
+                        <span class="Pagingation-currentPageOffsetEnd">{{ pager.currentPageLastResultPositionInTotalResults }}</span>
+                    </span>
+                    <span class="Pagination-totalResults">
+                        of
+                        <span class="Pagination-totalResultCount">{{ pager.totalResultCount }}</span>
+                        results
+                    </span>
+                {% set exportFlyoutId = random() %}
+                <button class="Button"
+                        style="vertical-align: baseline"
+                        data-widget="flyoutTrigger"
+                        data-flyout-trigger-options="{{ {
+                            "flyout": "#Export-options-flyout-" ~ exportFlyoutId
+                        }|json_encode(24) }}"
+                >
+                    <span class="Button-label">Export</span>
+                    <span class="Button-icon">
+                        <svg class="Button-icon" viewBox="0 0 24 24">
+                            <g id="arrow-drop-down"><polygon points="7,10 12,15 17,10 "></polygon></g>
+                        </svg>
+                    </span>
+                </button>
+                <div class="Flyout" id="Export-options-flyout-{{ exportFlyoutId }}">
+                    <ul class="Menu">
+                        <li><a href="#">Excel .xlsx</a></li>
+                        <li><a href="#">Comma Seperated Values .xlsx</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="DataGrid-results-body">
+
+        <div class="DataGrid-results-data">
+
+            {% include "NsmAppBundle:"~collectionTemplate~".html.twig" with {
+                "entities": pager.currentPageResults,
+                "dataGridId": dataGridId
+            } only %}
+
+        </div>
+
+        <div class="Pagination ButtonGroup">
+            {% if pager.hasPreviousPage %}
+                <a class="Button" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({page: pager.previousPageNumber})) }}">
+                    <span class="Button-label">Previous Page</span>
+                </a>
+            {% endif %}
+            {% if pager.hasNextPage %}
+                <a class="Button" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({page: pager.nextPageNumber})) }}">
+                    <span class="Button-label">Next Page</span>
+                </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
