@@ -1,0 +1,43 @@
+.Page {
+    box-sizing: border-box;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.Page-header {
+    border-bottom: 1px dotted $border-primary-colour;
+    margin-top: 54px;
+    margin-bottom: 32px;
+    padding-bottom: 7px;
+    display: table;
+    vertical-align: bottom;
+    width: 100%;
+}
+
+.Page-header-main {
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+.Page-header-actions{
+    display: table-cell;
+    vertical-align: bottom;
+    text-align: right;
+
+    .Button {
+        @extend %Button--link;
+    }
+}
+
+.Page-title {
+    color: palette("grey", "900");
+    margin: 0;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 36px;
+}
+
+.Page-breadcrumbs {
+    margin-bottom: 8px
+}
+

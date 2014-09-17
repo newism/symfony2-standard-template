@@ -40,6 +40,21 @@ Load a colour from the palette
     &:active{ @include materialShadow(3); }
 }
 /**/
+body {
+  color: #616161;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:focus {
+  outline: 1px solid #03a9f4;
+}
+
 .Grid.Grid--withGutters > .Grid-cell {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -865,6 +880,7 @@ https://github.com/suitcss/grid/blob/master/grid.css
   display: inline-flex;
 }
 
+.DataGrid-exportButton,
 .Button {
   -webkit-appearance: none;
   color: inherit;
@@ -889,19 +905,7 @@ https://github.com/suitcss/grid/blob/master/grid.css
   display: -ms-inline-flexbox;
   display: inline-flex;
   vertical-align: middle;
-}
-
-.Button:active,
-.Button.bordered {
-  border-color: #ccc;
-}
-.Button:active:hover,
-.Button.bordered:hover {
-  border-color: #999;
-}
-
-.Button.rounded {
-  border-radius: 3px;
+  font-weight: bold;
 }
 
 .Button-label {
@@ -919,14 +923,30 @@ https://github.com/suitcss/grid/blob/master/grid.css
   width: auto;
 }
 
+.Button--submit, .Pagination .Button,
+.Button--bordered {
+  border: 1px solid #bdbdbd;
+}
+
+.DataGrid-exportButton, .Page-header-actions .Button,
+.Button--link {
+  background: white;
+}
+
+.Button--submit, .Pagination .Button,
+.Button--rounded {
+  border-radius: 5px;
+}
+
+.DataGrid-exportButton,
 .Button--small {
   padding: 2px;
 }
-
+.DataGrid-exportButton .Button-label,
 .Button--small .Button-label {
   line-height: 18px;
 }
-
+.DataGrid-exportButton .Button-icon,
 .Button--small .Button-icon {
   height: 18px;
 }
@@ -935,11 +955,19 @@ https://github.com/suitcss/grid/blob/master/grid.css
   line-height: 24px;
   padding: 11px;
 }
-
 .Button--large .Button-icon {
   height: 24px;
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.Button--submit {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: white;
+  background-image: -webkit-linear-gradient(#f5f5f5, #e0e0e0);
+  background-image: linear-gradient(#f5f5f5, #e0e0e0);
+  box-shadow: inset 0 1px 1px white;
 }
 
 .ButtonGroup {
@@ -961,16 +989,26 @@ https://github.com/suitcss/grid/blob/master/grid.css
   border-bottom-right-radius: 0;
 }
 
-.ButtonGroup .Button:first-child {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+.ButtonGroup .Button:hover {
+  position: relative;
+  z-index: 1;
+}
+
+.DataGrid-results-header {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.DataGrid-exportButton {
+  vertical-align: baseline;
 }
 
 .Flyout {
   position: relative;
   z-index: 1;
   background: white;
-  border: 1px solid #eee;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   display: none;
 }
 .Flyout:before {
@@ -1023,9 +1061,9 @@ https://github.com/suitcss/grid/blob/master/grid.css
 .Control-input--datetime,
 .Control-input--number,
 .Control-input--textarea, .ChoiceList-choice > label {
-  background-color: white;
+  background-color: transparent;
   background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.26);
   border-radius: 0;
   box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
   box-sizing: border-box !important;
@@ -1034,7 +1072,7 @@ https://github.com/suitcss/grid/blob/master/grid.css
   line-height: 20px;
   margin: 0;
   outline: none;
-  padding: 7px 7px;
+  padding: 7px 11px;
   vertical-align: bottom;
   width: 100%;
 }
@@ -1057,6 +1095,35 @@ https://github.com/suitcss/grid/blob/master/grid.css
   padding-right: 30px;
 }
 
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl {
+  padding: 0 !important;
+}
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body {
+  padding: 0 !important;
+}
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control input, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control input,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control select,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control select,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea {
+  box-shadow: none;
+  border-color: transparent;
+  margin: 0;
+  position: relative;
+}
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control input:focus, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control input:focus,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea:focus,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea:focus,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control select:focus,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control select:focus,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea:focus,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea:focus {
+  outline: 1px solid #03a9f4;
+  outline-offset: 0;
+}
+
 label .required {
   color: #e51c23;
 }
@@ -1066,6 +1133,10 @@ label .required {
  */
 .Form {
   margin: 0;
+}
+
+.Form-body {
+  background: white;
 }
 
 .Form-footer {
@@ -1114,18 +1185,20 @@ label .required {
 }
 
 .ControlGroup-label {
-  color: #333;
   display: block;
   font-weight: bold;
 }
 
 .ControlGroup-help {
-  color: #555;
+  color: #757575;
   font-size: 14px;
   line-height: 20px;
   font-weight: 400;
 }
 
+.ToolbarForm .Form-body {
+  background: none;
+}
 .ToolbarForm .ControlGroup,
 .ToolbarForm .Form-footer {
   display: table-cell;
@@ -1152,11 +1225,11 @@ label .required {
 }
 
 .Control-label {
-  color: #333;
   display: block;
 }
 
 .Control-help {
+  color: #757575;
   font-size: 12px;
   position: absolute;
   top: 0;
@@ -1202,10 +1275,12 @@ label .required {
   display: block;
 }
 .Collection--stacked > .Collection-body > .CollectionItem {
-  border: 1px solid #B2B2B2;
+  border: 1px solid #e0e0e0;
   display: block;
-  padding: 20px;
+  padding: 19px;
   margin-bottom: 8px;
+  margin-left: 36px;
+  margin-right: 36px;
 }
 .Collection--stacked > .Collection-body > .CollectionItem > .ControlGroup {
   display: block;
@@ -1243,29 +1318,92 @@ label .required {
   padding-left: 35px;
 }
 
+.Form--filter table > tbody > tr > th {
+  border-right: none;
+  text-align: right;
+  vertical-align: middle;
+}
+
 .Menu {
   margin: 0;
-  padding: 8px 0;
+  padding: 0;
   list-style-type: none;
-  width: 192px;
+  font-size: 14px;
 }
-
-.Menu + .Menu {
-  border-top: 1px solid #ccc;
-}
-
-.Menu > * {
+.Menu > .Menu-item {
   line-height: 24px;
   margin: 0;
-  padding: 4px 0;
+  padding: 0;
 }
-.Menu > * > * {
+.Menu > .Menu-item:hover {
+  background: #fafafa;
+}
+.Menu > .Menu-item > .Menu-item-link {
   display: block;
-  padding-left: 24px;
-  padding-right: 24px;
 }
-.Menu > *:hover {
-  background: #eee;
+.Menu > .Menu-item > .Menu-item-link > .Menu-item-link-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  padding: 12px;
+  background: lightpink;
+}
+.Menu > .Menu-item > .Menu-item-link > .Menu-item-link-label {
+  display: none;
+}
+.Menu + .Menu {
+  border-top: 1px solid #eeeeee;
+}
+
+.Pagination {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.Pagination-totalResults {
+  opacity: .5;
+}
+
+.Panel-header {
+  display: table;
+  vertical-align: bottom;
+  width: 100%;
+}
+
+.Panel-header-main {
+  display: table-cell;
+  vertical-align: bottom;
+}
+
+.Panel-title {
+  font-size: 16px;
+  line-height: 36px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.Panel-header-actions {
+  display: table-cell;
+  vertical-align: bottom;
+  text-align: right;
+}
+
+.Panel--search {
+  background: #fffde7;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 32px;
+}
+.Panel--search .Panel-header {
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.12);
+}
+.Panel--search .Panel-header-main {
+  padding-left: 12px;
+}
+.Panel--search .Panel-header-actions .Button-icon {
+  opacity: .25;
+}
+.Panel--search .Panel-body {
+  padding: 12px;
 }
 
 /*
@@ -1336,40 +1474,47 @@ TableCell
 
 Styleguide TableCell
 */
-.Table .TableCell--info {
+.TableCell--info {
   background: #e1f5fe !important;
 }
-.Table .TableCell--success {
+
+.TableCell--success {
   background: #f1f8e9 !important;
 }
-.Table .TableCell--warning {
+
+.TableCell--warning {
   background: #fff3e0 !important;
 }
-.Table .TableCell--danger {
+
+.TableCell--danger {
   background: #fde0dc !important;
 }
-.Table .TableCell--fill {
+
+.TableCell--fill {
   width: 100%;
 }
-.Table .TableCell--tight {
+
+.TableCell--tight {
   text-align: center;
   padding-left: 0 !important;
   padding-right: 0 !important;
   width: 40px;
 }
-.Table .TableCell--icon {
+
+.TableCell--icon {
   text-align: center;
   padding: 0 !important;
   width: 1px;
 }
-.Table .TableCell--expanded {
-  background: whitesmoke;
+
+.TableCell--expanded {
+  background: #f5f5f5;
 }
 
 .Table--data,
 .Collection--table,
 .ControlGroupCollection--table {
-  border: 1px solid black;
+  border: 1px solid #bdbdbd;
   font-size: 14px;
   line-height: 18px;
   width: 100%;
@@ -1391,7 +1536,7 @@ Styleguide TableCell
 .ControlGroupCollection--table > tbody > tr > td,
 .ControlGroupCollection--table > tfoot > tr > th,
 .ControlGroupCollection--table > tfoot > tr > td {
-  border-right: 1px solid red;
+  border-right: 1px solid #e0e0e0;
   padding: 8px 8px;
   vertical-align: top;
 }
@@ -1419,31 +1564,31 @@ Styleguide TableCell
 .Collection--table > thead > tr > td,
 .ControlGroupCollection--table > thead > tr > th,
 .ControlGroupCollection--table > thead > tr > td {
-  border-bottom: 1px solid red;
+  border-bottom: 1px solid #e0e0e0;
 }
 .Table--data > thead > tr > th,
 .Collection--table > thead > tr > th,
 .ControlGroupCollection--table > thead > tr > th {
-  background: pink;
+  background: #eeeeee;
 }
 .Table--data > thead > tr:last-child > th, .Table--data > thead > tr:last-child > td,
 .Collection--table > thead > tr:last-child > th,
 .Collection--table > thead > tr:last-child > td,
 .ControlGroupCollection--table > thead > tr:last-child > th,
 .ControlGroupCollection--table > thead > tr:last-child > td {
-  border-bottom: 1px solid green;
+  border-bottom: 1px solid #bdbdbd;
 }
 .Table--data > tbody > tr > th, .Table--data > tbody > tr > td,
 .Collection--table > tbody > tr > th,
 .Collection--table > tbody > tr > td,
 .ControlGroupCollection--table > tbody > tr > th,
 .ControlGroupCollection--table > tbody > tr > td {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #e0e0e0;
 }
 .Table--data > tbody > tr > th,
 .Collection--table > tbody > tr > th,
 .ControlGroupCollection--table > tbody > tr > th {
-  background: lightblue;
+  background: #f5f5f5;
 }
 .Table--data > tbody > tr:last-child > th, .Table--data > tbody > tr:last-child > td,
 .Collection--table > tbody > tr:last-child > th,
@@ -1458,7 +1603,6 @@ Styleguide TableCell
 .ControlGroupCollection--table > tfoot > tr:first-child > th,
 .ControlGroupCollection--table > tfoot > tr:first-child > td {
   border-top: 3px solid green;
-  border-width: 3px;
 }
 .Table--data > tfoot > tr > th, .Table--data > tfoot > tr > td,
 .Collection--table > tfoot > tr > th,
@@ -1531,62 +1675,161 @@ Styleguide TableCell
   margin-right: 0;
 }
 
-.ToolbarGroup > * {
-  background: red;
-}
-
 .ToolbarGroup > * + * {
   margin-left: 4px;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
+#App-toolbar {
+  background: #03a9f4;
+  background-image: -webkit-linear-gradient(#03a9f4, #039be5);
+  background-image: linear-gradient(#03a9f4, #039be5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.26);
 }
 
 #App-body {
   position: relative;
+  display: table;
+  width: 100%;
 }
 
-#App-body.move-left {
-  -webkit-transform: translate3d(300px, 0, 0);
-          transform: translate3d(300px, 0, 0);
+#App-branding {
+  color: #fff;
+  line-height: 36px;
+  font-size: 16px;
+  margin-left: 8px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.26);
 }
 
-#App-body.move-right {
-  -webkit-transform: translate3d(300px, 0, 0);
-          transform: translate3d(300px, 0, 0);
+.Page {
+  display: table-cell;
+  vertical-align: top;
+  width: auto;
 }
 
 .SidebarNav {
-  background: red;
-  position: absolute;
-  top: 0;
-  bottom: 0;
+  display: table-cell;
+  vertical-align: top;
   width: 300px;
+  border-right: 1px solid #e0e0e0;
 }
-
-.SidebarNav--left {
-  left: -300px;
+.SidebarNav .SidebarNav-toggle {
+  padding: 6px;
+  border-bottom: 1px solid #e0e0e0;
 }
-
-.SidebarNav--right {
-  right: -300px;
+.SidebarNav .SidebarNav-toggle svg {
+  width: 24px;
+  height: 24px;
+}
+.SidebarNav ul, .SidebarNav li, .SidebarNav a, .SidebarNav svg {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: block;
+}
+.SidebarNav .SidebarNav-menu.is-collapsed {
+  display: none !important;
+}
+.SidebarNav .SidebarNav-menu-item {
+  font-size: 14px;
+  background: white;
+  position: relative;
+}
+.SidebarNav .SidebarNav-menu-item-link {
+  display: table;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-bottom-color: #eeeeee;
+}
+.SidebarNav .SidebarNav-menu-item-link:hover {
+  background: #f5f5f5;
+}
+.SidebarNav .SidebarNav-menu-item-label,
+.SidebarNav .SidebarNav-menu-item-icon,
+.SidebarNav .SidebarNav-menu-item-toggle {
+  vertical-align: top;
+  display: table-cell;
+}
+.SidebarNav .SidebarNav-menu-item-label {
+  line-height: 20px;
+  padding: 8px 8px 8px 0;
+}
+.SidebarNav .SidebarNav-menu-item-icon,
+.SidebarNav .SidebarNav-menu-item-toggle {
+  width: 36px;
+}
+.SidebarNav .SidebarNav-menu-item-icon:before {
+  display: block;
+  content: url("http://www.mademoiselle-dentelle.fr/wp-content/themes/dentelle/assets/img/icon_coeur_hover.svg");
+  width: 24px;
+  height: 24px;
+  padding: 6px;
+}
+.SidebarNav .SidebarNav-menu-item-toggle svg {
+  display: block;
+  padding: 6px;
+  height: 24px;
+  width: 24px;
+}
+.SidebarNav .SidebarNav-menu--level2 {
+  background: white;
+}
+.SidebarNav .SidebarNav-menu--level2 > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
+  padding-left: 36px;
+}
+.SidebarNav .SidebarNav-menu--level3 > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
+  padding-left: 72px;
+  padding-right: 36px;
+}
+.SidebarNav.is-collapsed, .SidebarNav.is-collapsed .SidebarNav-menu--level1 {
+  width: 36px;
+}
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item > .SidebarNav-menu-item-link > .SidebarNav-menu-item-label, .SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item > .SidebarNav-menu-item-link > .SidebarNav-menu-item-toggle, .SidebarNav.is-collapsed .SidebarNav-menu--level2 {
+  display: none;
+}
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover {
+  width: 300px;
+  z-index: 1;
+}
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover > .SidebarNav-menu-item-link {
+  border: 1px solid #e0e0e0;
+  border-left-color: transparent;
+}
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover > .SidebarNav-menu-item-link > .SidebarNav-menu-item-label,
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover > .SidebarNav-menu-item-link > .SidebarNav-menu-item-toggle {
+  display: table-cell;
+}
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover > .SidebarNav-menu-item-link > .SidebarNav-menu-item-label {
+  padding-left: 4px;
+}
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover .SidebarNav-menu--level2 {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 40px;
+  width: 258px;
+  border: 1px solid #e0e0e0;
+  border-top-style: dotted;
+  margin-top: -1px;
+}
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover .SidebarNav-menu--level2 > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
+  padding-left: 0;
+}
+.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover .SidebarNav-menu--level3 > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
+  padding-left: 36px;
 }
 
 .Page {
   box-sizing: border-box;
   padding-left: 32px;
   padding-right: 32px;
-  width: 100%;
 }
 
 .Page-header {
-  border-bottom: 1px dotted #ccc;
+  border-bottom: 1px dotted #bdbdbd;
   margin-top: 54px;
   margin-bottom: 32px;
-  padding-bottom: 8px;
+  padding-bottom: 7px;
   display: table;
   vertical-align: bottom;
   width: 100%;
@@ -1604,53 +1847,11 @@ body {
 }
 
 .Page-title {
+  color: #212121;
   margin: 0;
-  font-size: 32px;
+  font-weight: 600;
+  font-size: 28px;
   line-height: 36px;
-}
-
-.Page-actions > * + * {
-  margin-left: 4px;
-}
-
-.Panel-header {
-  display: table;
-  vertical-align: bottom;
-  width: 100%;
-}
-
-.Panel-header-main {
-  display: table-cell;
-  vertical-align: bottom;
-}
-
-.Panel-title {
-  font-size: 18px;
-  line-height: 36px;
-  margin: 0;
-}
-
-.Panel-title > h1 {
-  font: inherit;
-}
-
-.Panel-header-actions {
-  display: table-cell;
-  vertical-align: bottom;
-  text-align: right;
-}
-
-.Pagination {
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-
-.DataGrid-paginationSummary {
-  font-size: 14px;
-}
-
-.Pagination-totalResults {
-  opacity: .5;
 }
 
 .Page-breadcrumbs {

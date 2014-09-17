@@ -73,12 +73,7 @@ class ProjectsController extends AbstractController
             )
         )->add(
             'search',
-            'submit',
-            array(
-                'attr' => array(
-                    'class' => 'Button Button--default'
-                )
-            )
+            'submit'
         );
 
         $projectSearchForm->handleRequest($request);

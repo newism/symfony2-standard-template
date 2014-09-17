@@ -1,0 +1,42 @@
+.Panel-header {
+    display: table;
+    vertical-align: bottom;
+    width: 100%;
+}
+
+.Panel-header-main {
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+.Panel-title {
+    font-size: 16px;
+    line-height: 36px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.Panel-header-actions {
+    display: table-cell;
+    vertical-align: bottom;
+    text-align: right;
+}
+
+.Panel--search {
+    background: palette("yellow", "50");
+    border: 1px solid palette("black", "divider");
+    margin-bottom: 32px;
+
+    .Panel-header{
+        border-bottom: 1px dotted palette("black", "divider");
+    }
+    .Panel-header-main {
+        padding-left: 12px;
+    }
+    .Panel-header-actions .Button-icon {
+        opacity: .25;
+    }
+    .Panel-body {
+        padding: 12px;
+    }
+}

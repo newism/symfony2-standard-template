@@ -10,7 +10,6 @@ Table
 
 Styleguide Table
 */
-$table-border-secondary-colour: #ddd;
 
 td, th {
     text-align: left;
@@ -174,54 +173,51 @@ TableCell
 
 Styleguide TableCell
 */
-.Table {
+.TableCell {
+}
 
-    .TableCell {
-    }
+.TableCell--info {
+    background: palette("lightBlue", "50") !important;
+}
 
-    .TableCell--info {
-        background: palette("lightBlue", "50") !important;
-    }
+.TableCell--success {
+    background: palette("lightGreen", "50") !important;
+}
 
-    .TableCell--success {
-        background: palette("lightGreen", "50") !important;
-    }
+.TableCell--warning {
+    background: palette("orange", "50") !important;
+}
 
-    .TableCell--warning {
-        background: palette("orange", "50") !important;
-    }
+.TableCell--danger {
+    background: palette("red", "50") !important;
+}
 
-    .TableCell--danger {
-        background: palette("red", "50") !important;
-    }
+.TableCell--fill {
+    width: 100%;
+}
 
-    .TableCell--fill {
-        width: 100%;
-    }
+.TableCell--tight {
+    text-align: center;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 40px;
+}
 
-    .TableCell--tight {
-        text-align: center;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        width: 40px;
-    }
+.TableCell--icon {
+    text-align: center;
+    padding: 0 !important;
+    width: 1px;
+}
 
-    .TableCell--icon {
-        text-align: center;
-        padding: 0 !important;
-        width: 1px;
-    }
-
-    .TableCell--expanded {
-        background: rgb(245, 245, 245);
-    }
+.TableCell--expanded {
+    background: palette("grey", "100");
 }
 
 .Table--data,
 .Collection--table,
 .ControlGroupCollection--table {
 
-    border: 1px solid black;
+    border: 1px solid $border-primary-colour;
     font-size: 14px;
     line-height: 18px;
     width: 100%;
@@ -230,7 +226,7 @@ Styleguide TableCell
     > tbody > tr,
     > tfoot > tr {
         > th, > td {
-            border-right: 1px solid red;
+            border-right: 1px solid $border-secondary-colour;
             padding: 8px 8px;
             vertical-align: top;
 
@@ -243,17 +239,17 @@ Styleguide TableCell
     > thead {
         > tr {
             > th, > td {
-                border-bottom: 1px solid red;
+                border-bottom: 1px solid $border-secondary-colour;
             }
             > th {
-                background: pink;
+                background: palette("grey", "200");
             }
             > td {
             }
         }
         > tr:last-child {
             > th, > td {
-                border-bottom: 1px solid green;
+                border-bottom: 1px solid $border-primary-colour;
             }
             > th {
             }
@@ -264,12 +260,13 @@ Styleguide TableCell
     > tbody {
         > tr {
             > th, > td {
-                border-bottom: 1px solid blue;
+                border-bottom: 1px solid $border-secondary-colour;
             }
             > th {
-                background: lightblue;
+                background: palette("grey", "100");
             }
             > td {
+
             }
         }
         > tr:last-child {
@@ -286,7 +283,6 @@ Styleguide TableCell
         > tr:first-child {
             > th, > td {
                 border-top: 3px solid green;
-                border-width: 3px;
             }
             > th {
             }

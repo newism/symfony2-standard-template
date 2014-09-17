@@ -161,7 +161,6 @@
     {% set collection_attr = collection_attr|merge({
         'data-collection-prototype': form_row(prototype)
     }) %}
-
     {% set attr = collection_attr %}
     <table {{ block('widget_container_attributes') }}>
         <thead class="Collection-header">
@@ -305,7 +304,7 @@
 
 {% block button_widget %}
     {% spaceless %}
-        {% set attr = attr|merge({'class': (attr.class|default('') ~ ' Button Button--default Button--medium')|trim})  %}
+        {% set attr = attr|merge({'class': 'Button Button--' ~ type|default('button') ~ " " ~ (attr.class|default(''))|trim})  %}
         {% if label is empty %}
             {% set label = name|humanize %}
         {% endif %}

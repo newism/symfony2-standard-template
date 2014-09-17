@@ -1,0 +1,179 @@
+#App-toolbar {
+    background: palette("lightBlue", "500");
+    background-image: linear-gradient(palette("lightBlue", "500"), palette("lightBlue", "600"));
+    border-bottom: 1px solid palette("black", "hintText");
+}
+
+#App-body {
+    position: relative;
+    display: table;
+    width: 100%;
+}
+
+#App-branding {
+    color: #fff;
+    line-height: 36px;
+    font-size: 16px;
+    margin-left: 8px;
+    text-shadow: 0 -1px 0 palette("black", "hintText");
+}
+
+.Page {
+    display: table-cell;
+    vertical-align: top;
+    width: auto;
+}
+
+.SidebarNav {
+
+    display: table-cell;
+    vertical-align: top;
+    width: 300px;
+    border-right: 1px solid $border-secondary-colour;
+
+    .SidebarNav-toggle {
+        padding: 6px;
+        border-bottom: 1px solid $border-secondary-colour;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    ul, li, a, svg {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        display: block;
+    }
+
+    .SidebarNav-menu {
+        &.is-collapsed {
+            display: none !important;
+        }
+    }
+
+    .SidebarNav-menu-item {
+        font-size: 14px;
+        background: white;
+        position: relative;
+    }
+
+    .SidebarNav-menu-item-link {
+        display: table;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid transparent;
+        border-bottom-color: $border-teriary-colour;
+
+        &:last-child {}
+
+        &:hover {
+            background: palette("grey", "100");
+        }
+    }
+
+    .SidebarNav-menu-item-label,
+    .SidebarNav-menu-item-icon,
+    .SidebarNav-menu-item-toggle {
+        vertical-align: top;
+        display: table-cell;
+    }
+
+    .SidebarNav-menu-item-label {
+        line-height: 20px;
+        padding: 8px 8px 8px 0;
+    }
+
+    .SidebarNav-menu-item-icon,
+    .SidebarNav-menu-item-toggle {
+        width: 36px;
+    }
+
+    .SidebarNav-menu-item-icon:before {
+        display: block;
+        content: url("http://www.mademoiselle-dentelle.fr/wp-content/themes/dentelle/assets/img/icon_coeur_hover.svg");
+        width: 24px;
+        height: 24px;
+        padding: 6px;
+    }
+
+    .SidebarNav-menu-item-toggle svg {
+        display: block;
+        padding: 6px;
+        height: 24px;
+        width: 24px;
+    }
+
+    .SidebarNav-menu--level1 {
+    }
+
+    .SidebarNav-menu--level2 {
+        background: white;
+
+        > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
+            padding-left: 36px;
+        }
+    }
+
+    .SidebarNav-menu--level3 {
+        > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
+            padding-left: 72px;
+            padding-right: 36px;
+        }
+    }
+
+    &.is-collapsed,
+    &.is-collapsed .SidebarNav-menu--level1  {
+        width: 36px;
+    }
+
+    &.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item > .SidebarNav-menu-item-link > .SidebarNav-menu-item-label,
+    &.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item > .SidebarNav-menu-item-link > .SidebarNav-menu-item-toggle,
+    &.is-collapsed .SidebarNav-menu--level2 {
+        display: none;
+    }
+
+    &.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover {
+
+        width: 300px;
+        z-index: 1;
+
+        > .SidebarNav-menu-item-link {
+
+            border: 1px solid $border-secondary-colour;
+            border-left-color: transparent;
+
+            > .SidebarNav-menu-item-label,
+            > .SidebarNav-menu-item-toggle {
+                display: table-cell;
+            }
+
+            > .SidebarNav-menu-item-label {
+                padding-left: 4px;
+            }
+        }
+
+        .SidebarNav-menu--level2 {
+            display: block;
+            position: absolute;
+            top: 100%;
+            left: 40px;
+            width: 258px;
+            border: 1px solid $border-secondary-colour;
+            border-top-style: dotted;
+            margin-top: -1px;
+
+            > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
+                padding-left: 0;
+            }
+        }
+
+        .SidebarNav-menu--level3 {
+            > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
+                padding-left: 36px;
+            }
+        }
+    }
+}

@@ -39,11 +39,17 @@
 
                 deleteHeader: '<th class="Collection-headerRowItem">',
                 deleteFooter: '<td />',
-                deleteTrigger: '<td class="ControlGroup"><button class="Button">Delete</button></td>',
+                deleteTrigger: '<td class="ControlGroup ControlGroup--singleControl TableCell--icon">' +
+                                '<button class="Button">' +
+                                '<svg class="Button-icon" viewBox="0 0 24 24"><g id="delete"><path d="M6,19c0,1.1,0.9,2,2,2h8c1.1,0,2-0.9,2-2V7H6V19z M19,4h-3.5l-1-1h-5l-1,1H5v2h14V4z"></path></g></svg>' +
+                                '</button>' +
+                                '</td>',
 
                 sortHeader: '<th/>',
                 sortFooter: '<td/>',
-                sortHandle: '<span>Sort</span>',
+                sortHandle: '<span class="Button">' +
+                            '<svg class="Button-icon" viewBox="0 0 24 24" style="pointer-events: none; width: 24px; height: 24px; display: block;"><g id="swap-vert"><path d="M16,17v-7h-2v7h-3l4,4l4-4H16z M9,3L5,7h3v7h2V7h3L9,3z"></path></g></svg>' +
+                            '</span>',
                 sortHelper: '<tr/>',
                 sortPlaceHolder: '<div />'
             },

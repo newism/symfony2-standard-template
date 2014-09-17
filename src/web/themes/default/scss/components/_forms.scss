@@ -18,12 +18,10 @@
     border-bottom-right-radius: 0;
 }
 
-
-
 %textControl {
-    background-color: white;
+    background-color: transparent;
     background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.30);
+    border: 1px solid palette("black", "hintText");
     border-radius: 0;
     box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.10);
     box-sizing: border-box !important;
@@ -32,7 +30,7 @@
     line-height: 20px;
     margin: 0;
     outline: none;
-    padding: 7px 7px;
+    padding: 7px 11px;
     vertical-align: bottom;
     width: 100%;
     &:focus {
@@ -51,7 +49,7 @@
     padding-right: 30px;
 }
 
-%ghostInput {
+%ghostControlGroup {
 
     padding: 0 !important;
 
@@ -91,6 +89,10 @@ label .required {
 .Form-header {}
 
 .Form-title {}
+
+.Form-body {
+    background: white;
+}
 
 .Form-footer {
     padding-top: 8px;
@@ -133,6 +135,18 @@ label .required {
 //    }
 //}
 //
+
+.ControlGroupCollection--table {
+    > .ControlGroupCollection-body {
+        > .ControlGroup {
+            > .ControlGroup-header {}
+            > .ControlGroup-body {}
+        }
+        > .ControlGroup.ControlGroup--singleControl {
+            @extend %ghostControlGroup;
+        }
+    }
+}
 
 .ControlGroupCollection--stacked {
     display: block;
@@ -178,13 +192,12 @@ label .required {
 }
 
 .ControlGroup-label {
-    color: #333;
     display: block;
     font-weight: bold;
 }
 
 .ControlGroup-help {
-    color: #555;
+    color: palette("grey", "600");
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
@@ -197,6 +210,10 @@ label .required {
 }
 
 .ToolbarForm {
+
+    .Form-body {
+        background: none;
+    }
 
     .ControlGroup,
     .Form-footer{
@@ -226,11 +243,11 @@ label .required {
 }
 
 .Control-label {
-    color: #333;
     display: block;
 }
 
 .Control-help {
+    color: palette("grey", "600");
     font-size: 12px;
     position: absolute;
     top: 0;
@@ -309,10 +326,12 @@ label .required {
 
         > .CollectionItem {
 
-            border: 1px solid #B2B2B2;
+            border: 1px solid $border-secondary-colour;
             display: block;
-            padding: 20px;
+            padding: 19px;
             margin-bottom: 8px;
+            margin-left: 36px;
+            margin-right: 36px;
 
             > .ControlGroup {
 
@@ -332,6 +351,20 @@ label .required {
                         font-size: 14px;
                     }
                 }
+            }
+        }
+    }
+}
+
+.Collection--table {
+    > .Collection-body {
+        > .CollectionItem {
+            > .ControlGroup {
+                > .ControlGroup-header {}
+                > .ControlGroup-body {}
+            }
+            > .ControlGroup.ControlGroup--singleControl {
+                @extend %ghostControlGroup;
             }
         }
     }
@@ -365,3 +398,10 @@ label .required {
     }
 }
 
+.Form--filter {
+    table > tbody > tr > th {
+        border-right: none;
+        text-align: right;
+        vertical-align: middle;
+    }
+}

@@ -1,0 +1,86 @@
+<div id="App-nav" class="SidebarNav SidebarNav--left is-collapsed">
+    <div class="SidebarNav-toggle" onclick="$('#App-nav').toggleClass('is-collapsed');">
+        <svg viewBox="0 0 24 24">
+            <g id="SidebarNav-menu"><path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"></path></g>
+        </svg>
+    </div>
+    <ul class="SidebarNav-menu SidebarNav-menu--level1">
+        {% for item in ['project', 'task', 'activity', 'invitation'] %}
+        <li class="SidebarNav-menu-item">
+            <a class="SidebarNav-menu-item-link" href="{{ path(item~"_browse") }}">
+                <i class="SidebarNav-menu-item-icon"></i>
+                <span class="SidebarNav-menu-item-label">{{ item }}</span>
+            </a>
+        </li>
+        {% endfor %}
+        <li class="SidebarNav-menu-item">
+            <a class="SidebarNav-menu-item-link" href="#">
+                <i class="SidebarNav-menu-item-icon"></i>
+                <span class="SidebarNav-menu-item-label">lorem</span>
+                <span class="SidebarNav-menu-item-toggle" onclick="$('#SubNav1').toggleClass('is-collapsed'); return false;">
+                    <svg viewBox="0 0 24 24"><g id="expand-more"><polygon points="16.6,8.6 12,13.2 7.4,8.6 6,10 12,16 18,10 "></polygon></g></svg>
+                </span>
+            </a>
+            <ul id="SubNav1" class="SidebarNav-menu SidebarNav-menu--level2 is-collapsed">
+                <li class="SidebarNav-menu-item">
+                    <a class="SidebarNav-menu-item-link" href="#">
+                        <i class="SidebarNav-menu-item-icon"></i>
+                        <span class="SidebarNav-menu-item-label">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim venia
+                        </span>
+                    </a>
+                </li>
+                <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                <li class="SidebarNav-menu-item">
+                    <a class="SidebarNav-menu-item-link" href="#">
+                        <i class="SidebarNav-menu-item-icon"></i>
+                        <span class="SidebarNav-menu-item-label">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim venia
+                        </span>
+                        <span class="SidebarNav-menu-item-toggle" onclick="$('#SubNav2').toggleClass('is-collapsed'); return false;">
+                            <svg viewBox="0 0 24 24"><g id="expand-more"><polygon points="16.6,8.6 12,13.2 7.4,8.6 6,10 12,16 18,10 "></polygon></g></svg>
+                        </span>
+                    </a>
+                    <ul class="SidebarNav-menu SidebarNav-menu--level3 is-collapsed" id="SubNav2">
+                        <li class="SidebarNav-menu-item">
+                            <a class="SidebarNav-menu-item-link" href="#">
+                                <i class="SidebarNav-menu-item-icon"></i>
+                                <span class="SidebarNav-menu-item-label">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim venia
+                                </span>
+                            </a>
+                        </li>
+                        <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                        <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                        <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                        <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="SidebarNav-menu-item">
+            <a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a>
+        </li>
+    </ul>
+    <ul class="SidebarNav-menu SidebarNav-menu--level1">
+        <li class="SidebarNav-menu-item">
+            <a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a>
+            <ul class="SidebarNav-menu SidebarNav-menu--level2">
+                <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+                <li class="SidebarNav-menu-item"><a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a></li>
+            </ul>
+        </li>
+        <li class="SidebarNav-menu-item">
+            <a class="SidebarNav-menu-item-link" href="#"><i class="SidebarNav-menu-item-icon"></i> <span class="SidebarNav-menu-item-label">lorem</span></a>
+        </li>
+    </ul>
+</div>
+

@@ -25,7 +25,7 @@ class TaskType extends AbstractType
             'number',
             array(
                 'required' => false,
-                'mapped' => false
+                'mapped' => false,
             )
         );
 

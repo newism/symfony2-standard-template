@@ -17,23 +17,23 @@
             } | json_encode(24)
     }}" >
         <div class="Panel Panel--search">
-            <div class="Panel-header">
-                <div class="Panel-header-main">
-                    {% if searchForm.vars.label %}
-                        <h2 class="Panel-title" style="display: inline-block">
-                            {{ searchForm.vars.label }}
-                        </h2>
-                    {% endif %}
-                    {#<span><a href="#">Advanced Search</a></span>#}
-                </div>
-                <div class="Panel-header-actions">
-                    <button class="Button" data-toggle="DataGrid-filter-toggle-{{ dataGridId }}">
-                        <span class="Button--icon">
-                            <svg viewBox="0 0 24 24" style="pointer-events: none; width: 24px; height: 24px; display: block;"><g id="close"><polygon points="19,6.4 17.6,5 12,10.6 6.4,5 5,6.4 10.6,12 5,17.6 6.4,19 12,13.4 17.6,19 19,17.6 13.4,12 "></polygon></g></svg>
-                        </span>
-                    </button>
-                </div>
-            </div>
+            {#<div class="Panel-header">#}
+                {#<div class="Panel-header-main">#}
+                    {#{% if searchForm.vars.label %}#}
+                        {#<h2 class="Panel-title" style="display: inline-block">#}
+                            {#{{ searchForm.vars.label }}#}
+                        {#</h2>#}
+                    {#{% endif %}#}
+                    {#&#123;&#35;<span><a href="#">Advanced Search</a></span>&#35;&#125;#}
+                {#</div>#}
+                {#<div class="Panel-header-actions">#}
+                    {#<button class="Button" data-toggle="DataGrid-filter-toggle-{{ dataGridId }}">#}
+                        {#<span class="Button-icon">#}
+                            {#<svg viewBox="0 0 24 24" style="pointer-events: none; width: 24px; height: 24px; display: block;"><g id="close"><polygon points="19,6.4 17.6,5 12,10.6 6.4,5 5,6.4 10.6,12 5,17.6 6.4,19 12,13.4 17.6,19 19,17.6 13.4,12 "></polygon></g></svg>#}
+                        {#</span>#}
+                    {#</button>#}
+                {#</div>#}
+            {#</div>#}
             <div class="Panel-body">
                 {{ form(searchForm, {"attr": {"class": "Form", "novalidate": "novalidate"}}) }}
             </div>

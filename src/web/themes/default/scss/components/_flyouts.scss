@@ -1,6 +1,7 @@
 .Flyout {
     @include materialShadow(2);
     background: white;
-    border: 1px solid #eee;
+    background-clip: padding-box;
+    border: 1px solid palette("black", "divider");
     display:none;
 }

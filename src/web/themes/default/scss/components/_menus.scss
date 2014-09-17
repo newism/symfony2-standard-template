@@ -1,26 +1,40 @@
-.Menu {
+.Menu  {
+
     margin: 0;
-    padding: 8px 0;
+    padding: 0;
     list-style-type: none;
-    width: 192px;
-}
-.Menu + .Menu {
-    border-top: 1px solid #ccc;
-}
+    font-size: 14px;
 
-.Menu > * {
-    
-    line-height: 24px;
-    margin: 0;
-    padding: 4px 0;
+    > .Menu-item {
 
-    & > * {
-        display: block;
-        padding-left: 24px;
-        padding-right: 24px;
+        line-height: 24px;
+        margin: 0;
+        padding: 0;
+
+        &:hover {
+            background: palette("grey", "50");
+        }
+
+        > .Menu-item-link {
+
+            display: block;
+
+            > .Menu-item-link-icon {
+                display: block;
+                width: 24px;
+                height: 24px;
+                padding: 12px;
+                background: lightpink;
+            }
+
+            > .Menu-item-link-label {
+                display: none;
+            }
+        }
     }
 
-    &:hover {
-        background: #eee;
+    + .Menu {
+        border-top: 1px solid palette("grey", "200");
     }
 }
+

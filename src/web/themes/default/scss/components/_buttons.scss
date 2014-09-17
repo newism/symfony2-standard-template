@@ -1,3 +1,4 @@
+%Button,
 .Button {
     -webkit-appearance: none;
     color: inherit;
@@ -5,7 +6,6 @@
     user-select: none;
     white-space: normal;
     background: transparent;
-//    background: lightPink;
     cursor: pointer;
     border-width: 1px;
     border-style: solid;
@@ -17,22 +17,16 @@
     text-decoration: none;
     display: inline-flex;
     vertical-align: middle;
-}
+    font-weight: bold;
 
-.Button:active,
-.Button.bordered {
-    border-color: #ccc;
-    &:hover {
-        border-color: #999
+    &:focus,
+    &:active {
+//        outline:1px solid palette("lightBlue", "500");
     }
 }
 
-.Button.rounded {
-    border-radius: 3px;
-}
-
+%Button-label,
 .Button-label {
-//    background: rgba(0,0,0,.10);
     display: inline-block;
     vertical-align: bottom;
     line-height: 24px;
@@ -40,41 +34,90 @@
     padding-right: 2px;
 }
 
+%Button-icon,
 .Button-icon {
-//    background: rgba(0,0,0,.20);
     vertical-align: bottom;
     display: inline-block;
     height: 24px;
     width: auto;
 }
 
-.Button--small {
-    padding: 2px;
-}
-.Button--small .Button-label {
-    line-height: 18px;
-//    font-size: 14px;
-}
-.Button--small .Button-icon {
-    height: 18px;
-}
-.Button--medium {}
-.Button--medium .Button-label {}
-.Button--medium .Button-icon {}
+// Bordered Button
+%Button--bordered,
+.Button--bordered{
+    border: 1px solid $border-primary-colour;
 
-.Button--large {
+    &:focus,
+    &:active{
+//        outline:none;
+//        border-color: palette("lightBlue", "500");
+    }
+
+    &:hover {
+    }
+    .Button-label {
+    }
+    .Button-icon {
+    }
+}
+
+// Link Button
+%Button--link,
+.Button--link{
+    background: white;
+    .Button-label {
+    }
+    .Button-icon {
+    }
+    :hover {
+    }
+}
+
+// Rounded Button
+%Button--rounded,
+.Button--rounded{
+    border-radius: 5px;
+}
+
+%Button--small,
+.Button--small{
+
+    padding: 2px;
+
+    .Button-label {
+        line-height: 18px;
+    }
+    .Button-icon {
+        height: 18px;
+    }
+}
+
+%Button--large,
+.Button--large{
+
     line-height: 24px;
     padding: 11px;
-}
-.Button--large .Button-label {
-//    font-size: 20px;
-}
-.Button--large .Button-icon {
-    height: 24px;
-    margin-top: 0;
-    margin-bottom: 0;
+
+    .Button-label {
+    }
+
+    .Button-icon {
+        height: 24px;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
 }
 
+%Button--submit,
+.Button--submit {
+    @extend %Button--bordered;
+    @extend %Button--rounded;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background: white;
+    background-image: linear-gradient(palette("grey", "100"), palette("grey", "300"));
+    box-shadow: inset 0 1px 1px white;
+}
 
 .ButtonGroup {
     display: inline-flex;
@@ -89,7 +132,7 @@
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
-.ButtonGroup .Button:first-child {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+.ButtonGroup .Button:hover {
+    position: relative;
+    z-index: 1;
 }

@@ -11,7 +11,7 @@
     {% block stylesheets %}
 
     {# https://www.google.com/fonts#UsePlace:use/Collection:Open+Sans #}
-    <link href='http://fonts.googleapis.com/css?family=Roboto:900,400,700,500,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
 
     <!-- build:css /themes/default/styles/vendor.css -->
     <!-- bower:css -->
@@ -34,72 +34,13 @@
 <div id="App">
 
     <div id="App-header">
-        <div id="Appbar" class="Toolbar">
-            <div id="App-branding" class="ToolbarGroup">
-                <div class="Button Button--icon" style="background: lightpink" onclick="$('#App-body').toggleClass('move-left');">
-                    <svg class="Button-icon" viewBox="0 0 24 24">
-                        <g id="menu"><path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"></path></g>
-                    </svg>
-                </div>
-                <div class="Button" style="background: lighblue">
-                    <span class="Button-label">Club Evo</span>
-                </div>
+        <div id="App-toolbar" class="Toolbar">
+            <div id="App-branding">
+                Club Evolution
             </div>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 
-                <div class="ToolbarGroup" style="margin-left: auto;">
-                    <form class="ToolbarForm" style="display:table">
-                        <div class="Form-body">
-                            <div class="ControlGroup ControlGroup--multiControl ControlGroup--birthday ControlGroup--birthday">
-                                <div class="ControlGroup-header"
-                                     style="display:none"
-                                >
-                                    <label class="ControlGroup-label  required">
-                                        Birthday
-                                        <span class="required" title="This field is required">*</span>
-                                    </label>
-                                </div>
-                                <div class="ControlGroup-body">
-                                    <div class="Control Control--birthday Control--birthday"
-                                         data-control-full-name="project[birthday]"
-                                         data-control-name="birthday"
-                                    >
-                                        <div class="Control-body">
-                                            <select id="project_birthday_day"
-                                                    name="project[birthday][day]"
-                                                    class="Control-input Control-input--choice Control-input--day"
-                                            >
-                                                <option value="1">Key Tags</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ControlGroup ControlGroup--singleControl ControlGroup--datetime ControlGroup--datetime-single">
-                                <div class="ControlGroup-header" style="display:none;">
-                                    <label class="ControlGroup-label  required" for="project_datetime-single">
-                                        Datetime-single
-                                        <span class="required" title="This field is required">*</span>
-                                    </label>
-                                </div>
-                                <div class="ControlGroup-body">
-                                    <div class="Control Control--datetime Control--datetime-single" data-control-full-name="project[datetime-single]" data-control-name="datetime-single">
-                                        <div class="Control-body">
-                                            <input type="datetime" id="project_datetime-single" name="project[datetime-single]" required="required" class="Control-input Control-input--datetime Control-input--datetime-single">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Form-footer">
-                            <button type="submit" id="filter_search" name="filter[search]" class="Button">
-                                <span class="Button-label">Search</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <div id="AccountNav" class="ToolbarGroup">
+                <div id="AccountNav" class="ToolbarGroup" style="margin-left: auto">
                     {#<div class="ButtonGroup">#}
                         {#<span class="Button" data-widget="flyoutTrigger" data-flyout-trigger-options='{"flyout": "#AccountNav-flyout"}'>#}
                             {#<img class="Button-icon AccountNav-avatar" src="{{ gravatar(app.user.email) }}" />#}
@@ -157,15 +98,9 @@
 
     <div id="App-body">
 
-        <div id="App-nav" class="SidebarNav SidebarNav--left">
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-            <ul>
-                {% for item in ['project', 'task', 'activity', 'invitation'] %}
-                    <li><a href="{{ path(item~"_browse") }}" style="text-transform: capitalize">{{ item }}</a></li>
-                {% endfor %}
-            </ul>
+            {% include "NsmAppBundle::_partials/appNav.html.twig" %}
         {% endif %}
-        </div>
 
         <div class="Page">
 
