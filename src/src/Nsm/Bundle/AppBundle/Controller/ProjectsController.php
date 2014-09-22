@@ -73,7 +73,12 @@ class ProjectsController extends AbstractController
             )
         )->add(
             'search',
-            'submit'
+            'submit',
+            array(
+                'attr' => array(
+                    'class' => 'Button Button--medium Button--default Button--bordered'
+                )
+            )
         );
 
         $projectSearchForm->handleRequest($request);
@@ -304,18 +309,5 @@ class ProjectsController extends AbstractController
             'form' => $form
         );
 
-    }
-
-    /**
-     * Destroys a Project entity.
-     *
-     * @Delete("/projects/{id}", name="project_delete")
-     * @Get("/projects/{id}/destroy", name="project_destroy")
-     *
-     * @View()
-     * @ApiDoc()
-     */
-    public function loadActionsAction(Request $request, $id)
-    {
     }
 }

@@ -1,15 +1,12 @@
 .DataGrid{}
 .DataGrid-results-header {
     font-size: 14px;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
-.DataGrid-paginationSummary{}
+.DataGrid-paginationSummary{
+    line-height: 36px;
+}
 
 .DataGrid-exportButton{
-    @extend %Button;
-    @extend %Button--small;
-    @extend %Button--link;
-
-    vertical-align: baseline;
 }

@@ -31,12 +31,13 @@
 
 </head>
 <body>
+<div id="loading" style="display:none; position: absolute; top: 0; right: 0; background: red; z-index: 2">Loading…</div>
 <div id="App">
 
     <div id="App-header">
         <div id="App-toolbar" class="Toolbar">
             <div id="App-branding">
-                Club Evolution
+                <img src="http://www.clubevolution.com.au.do.newismdev.com/theme/images/icons/1c18b2c8.club-evolution-239x63.png" style="height: 36px;" />
             </div>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 
@@ -102,7 +103,7 @@
             {% include "NsmAppBundle::_partials/appNav.html.twig" %}
         {% endif %}
 
-        <div class="Page">
+        <div class="Page" id="Page">
 
             <div class="Page-alerts">
                 {% for type, messages in app.session.flashbag.all() %}
@@ -164,6 +165,7 @@
     <script src="/bower_components/selectize/dist/js/selectize.js"></script>
     <script src="/bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="/bower_components/velocity/jquery.velocity.js"></script>
+    <script src="/bower_components/jquery-pjax/jquery.pjax.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -176,23 +178,13 @@
     <script src="/themes/default/scripts/widgets/overflowNav/src/jquery.nsm.overflowNav.js"></script>
     <script src="/themes/default/scripts/widgets/togglable/src/jquery.nsm.togglable.js"></script>
     <script src="/themes/default/scripts/widgets/dataGrid/src/jquery.nsm.dataGrid.js"></script>
+    <script src="/themes/default/scripts/app.js"></script>
     <!-- endbuild -->
 
     <script>
-        $('body').on('contentcreated', function (event) {
-            // Fire any other events on this element
-            // But don't bubble
-            event.stopPropagation();
-            var $el = $(event.target);
 
-            $el.find('[data-widget~="buttonGroup"]').buttonFlyout();
-            $el.find('[data-widget~="entitySearch"]').entitySearch();
-            $el.find('[data-widget~="collection"]').collection();
-            $el.find('[data-widget~="flyoutTrigger"]').flyoutTrigger();
-            $el.find('[data-widget~="togglable"]').togglable();
-            $el.find('[data-widget~="dataGrid"]').dataGrid();
 
-        }).trigger('contentcreated');
+
     </script>
     {% endblock %}
 

@@ -11,34 +11,36 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <th scope="row"><a href="{{ path('project_read', { 'id': entity.id }) }}">{{ entity.id }}</a></th>
+            <th scope="row"><a href="{{ path('project_read', { 'id': entity.id }) }}" data-pjax>{{ entity.id }}</a></th>
             <td>{{ entity.title }}</td>
             <td>{{ entity.createdAt|localizeddate('full', 'long') }}</td>
             <td>{{ entity.tasks.count }}</td>
             <td class="TableCell--icon">
-                <span class="Button"
+                <span class="Button Button--medium"
                       data-widget="flyoutTrigger"
                       data-flyout-trigger-options="{{ {"flyout": "#CollectionRow-options-flyout-" ~ entity.id}|json_encode(24) }}"
                         >
-                    <svg class="Button-icon" viewBox="0 0 24 24">
-                        <g id="menu">
-                            <path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"></path>
-                        </g>
-                    </svg>
+                    <span class="Button-icon">
+                        <svg viewBox="0 0 24 24">
+                            <g id="menu">
+                                <path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"></path>
+                            </g>
+                        </svg>
+                    </span>
                 </span>
                 <div class="Flyout" id="CollectionRow-options-flyout-{{ entity.id }}">
                     <ul class="Menu">
                         <li>
-                            <a href="{{ path('task_add', { 'projectId': entity.id }) }}">create task</a>
+                            <a href="{{ path('task_add', { 'projectId': entity.id }) }}" data-pjax>create task</a>
                         </li>
                         <li>
-                            <a href="{{ path('project_read', { 'id': entity.id }) }}">show</a>
+                            <a href="{{ path('project_read', { 'id': entity.id }) }}" data-pjax>show</a>
                         </li>
                         <li>
-                            <a href="{{ path('project_edit', { 'id': entity.id }) }}">edit</a>
+                            <a href="{{ path('project_edit', { 'id': entity.id }) }}" data-pjax>edit</a>
                         </li>
                         <li>
-                            <a href="{{ path('project_destroy', { 'id': entity.id }) }}">destroy</a>
+                            <a href="{{ path('project_destroy', { 'id': entity.id }) }}" data-pjax>destroy</a>
                         </li>
                     </ul>
                 </div>

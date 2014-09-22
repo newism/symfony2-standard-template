@@ -8,7 +8,7 @@ body {
 }
 
 a {
-    color: inherit;
+    color: palette("lightBlue", "500");
     text-decoration: none;
 
     &:focus {

@@ -1,5 +1,9 @@
 ;
-(function ($, _, window, document, undefined) {
+(function ($, _, window, document, history, undefined) {
+
+    if(window.history === 'undefined') {
+        window.history = $.noop;
+    }
 
     /**
      * DatGrid Widget
@@ -51,16 +55,19 @@
 
             event.preventDefault();
 
-            var $link = $(event.currentTarget);
+            var $link = $(event.currentTarget),
+                url = $link.data('ajaxHref') || $link.prop('href');
 
             $.ajax({
                 type: 'get',
-                url: $link.data('ajaxHref') || $link.prop('href'),
+                url: url,
                 beforeSend: $.proxy(this._beforeSend, this),
                 error: $.proxy(this._error, this),
                 success: $.proxy(this._success, this),
                 complete: $.proxy(this._complete, this)
             });
+
+            window.history.pushState(null, event.target.textContent, url);
         },
 
         /**

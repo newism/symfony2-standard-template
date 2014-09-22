@@ -47,7 +47,7 @@ module.exports = function (grunt) {
         // Automatically inject Bower components into the HTML file
         wiredep: {
             src: {
-                src: ['src/src/Nsm/Bundle/AppBundle/Resources/views/layout.html.twig'],
+                src: ['src/src/Nsm/Bundle/AppBundle/Resources/views/layout-app.html.twig'],
                 ignorePath: '../../../../../../web',
                 exclude: ['/src/web/bower_components/modernizr/modernizr.js']
             }
@@ -110,7 +110,7 @@ module.exports = function (grunt) {
             },
             // https://github.com/yeoman/grunt-usemin#directories
             html: {
-                src: ['<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout.html.twig']
+                src: ['<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout-app.html.twig']
             }
         },
 
@@ -149,10 +149,10 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            html: '<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout.html.twig',
+            html: '<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout-app.html.twig',
             js: ['<%= target %>/web/themes/default/dist/scripts/{,*/}*.js'],
             css: '<%= target %>/web/themes/default/styles/{,*/}*.css',
-            twig: '<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout.html.twig'
+            twig: '<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout-app.html.twig'
         },
 
         replace: {
@@ -171,7 +171,7 @@ module.exports = function (grunt) {
                 },
                 files:  [{
                     expand: true,
-                    src: ['<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout.html.twig']
+                    src: ['<%= target %>/src/Nsm/Bundle/AppBundle/Resources/views/layout-app.html.twig']
                 }]
             }
         },

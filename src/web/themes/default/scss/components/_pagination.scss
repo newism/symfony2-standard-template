@@ -1,12 +1,10 @@
 .Pagination {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .Pagination-currentPageRange {}
 .Pagination-totalResults { opacity: .5}
 
 .Pagination .Button {
-    @extend %Button--rounded;
-    @extend %Button--bordered;
 }

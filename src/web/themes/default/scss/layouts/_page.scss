@@ -23,10 +23,6 @@
     display: table-cell;
     vertical-align: bottom;
     text-align: right;
-
-    .Button {
-        @extend %Button--link;
-    }
 }
 
 .Page-title {

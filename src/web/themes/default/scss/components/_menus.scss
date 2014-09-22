@@ -4,37 +4,37 @@
     padding: 0;
     list-style-type: none;
     font-size: 14px;
+    min-width: 200px;
 
-    > .Menu-item {
+    > li {
 
         line-height: 24px;
         margin: 0;
         padding: 0;
 
         &:hover {
-            background: palette("grey", "50");
+            background: palette("grey", "100");
         }
 
-        > .Menu-item-link {
+        > a {
 
             display: block;
+            padding: 6px 12px;
 
+            > .Menu-item-link-label {
+
+            };
             > .Menu-item-link-icon {
                 display: block;
                 width: 24px;
                 height: 24px;
-                padding: 12px;
-                background: lightpink;
-            }
-
-            > .Menu-item-link-label {
-                display: none;
+                padding: 6px;
             }
         }
     }
 
     + .Menu {
-        border-top: 1px solid palette("grey", "200");
+        border-top: 1px solid $border-secondary-colour;
     }
 }
 

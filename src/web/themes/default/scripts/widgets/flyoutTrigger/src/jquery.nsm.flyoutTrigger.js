@@ -16,7 +16,7 @@
             showTransition: 'fadeIn',
             hideTransition: 'fadeOut',
             showTransitionDuration: 0,
-            hideTransitionDuration: 250,
+            hideTransitionDuration: 100,
             classes: {
                 flyoutTriggerActive: 'is-active',
                 flyoutVisible: 'is-visible',

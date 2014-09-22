@@ -1,6 +1,5 @@
 #App-toolbar {
-    background: palette("lightBlue", "500");
-    background-image: linear-gradient(palette("lightBlue", "500"), palette("lightBlue", "600"));
+    background: url("http://www.clubevolution.com.au.do.newismdev.com/theme/images/backgrounds/ab965f06.checkerplate-fade-bottom.jpg") top center no-repeat #030e1c;
     border-bottom: 1px solid palette("black", "hintText");
 }
 
@@ -16,6 +15,17 @@
     font-size: 16px;
     margin-left: 8px;
     text-shadow: 0 -1px 0 palette("black", "hintText");
+    vertical-align: middle;
+
+    img {
+        vertical-align: bottom;
+        position: relative;
+        top: 3px;
+    }
+}
+
+#AccountNav {
+    color: white;
 }
 
 .Page {

@@ -1,23 +1,15 @@
 {% extends 'NsmAppBundle::layout.html.twig' %}
 
-{% block content -%}
+{% block page_breadcrumb %}
+    <div class="Page-breadcrumbs">
+        <a href='{{ path('project_browse') }}' data-pjax>Projects</a>
+    </div>
+{% endblock %}
 
-    <p><a href="{{ path('project_browse') }}">Projects</a></p>
-    <h1>{{ entity.title }}</h1>
+{% block page_title -%}
+    <h1 class="Page-title">Project Details</h1>
+{% endblock -%}
 
-    <ul>
-        <li>
-            <a href="{{ path('project_edit', { 'id': entity.id }) }}">
-                Edit
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('project_destroy', { 'id': entity.id }) }}">
-                Destroy
-            </a>
-        </li>
-    </ul>
-
+{% block page_body -%}
     {{ dump(entity) }}
-
 {% endblock %}

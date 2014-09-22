@@ -398,10 +398,10 @@ label .required {
     }
 }
 
-.Form--filter {
-    table > tbody > tr > th {
-        border-right: none;
-        text-align: right;
-        vertical-align: middle;
-    }
+.ControlGroupCollection--table > tbody > tr > th {
+    border-right: none;
+    text-align: right;
+    vertical-align: middle;
+    max-width: 200px;
 }
+
