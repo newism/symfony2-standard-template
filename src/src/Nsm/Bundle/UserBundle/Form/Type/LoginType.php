@@ -28,14 +28,14 @@ class LoginType extends AbstractType
             )
             ->add(
                 '_failure_path',
-                'text',
+                'hidden',
                 array(
                     'required' => false
                 )
             )
             ->add(
                 '_target_path',
-                'text',
+                'hidden',
                 array(
                     'required' => false
                 )
@@ -46,9 +46,11 @@ class LoginType extends AbstractType
                 'invitation',
                 'invitation_code',
                 array(
+                    'label' => 'Invitation Code',
                     'required' => false
                 )
             )
+            ->add('Login', 'submit')
         ;
     }
 

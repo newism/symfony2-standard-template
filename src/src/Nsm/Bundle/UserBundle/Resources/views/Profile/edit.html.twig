@@ -5,5 +5,13 @@
 {% endblock page_title %}
 
 {% block page_body %}
-    {{ form(form) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.localisation) }}
+    {{ form_row(form.current_password) }}
+    {{ form_end(form) }}
+
 {% endblock page_body %}

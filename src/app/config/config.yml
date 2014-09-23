@@ -139,6 +139,9 @@ fos_user:
     registration:
         form:
             type: nsm_user_registration_form
+    profile:
+        form:
+            type: nsm_user_profile_form
 
 #nsm_postmark:
 #    api_key: b2ad7cb0-a326-429b-b307-b794d4dfb458

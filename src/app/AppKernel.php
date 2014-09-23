@@ -36,7 +36,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
 
-            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
+            new Ornicar\GravatarBundle\OrnicarGravatarBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

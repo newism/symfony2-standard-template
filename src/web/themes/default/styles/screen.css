@@ -1850,6 +1850,7 @@ Styleguide TableCell
 #App-toolbar {
   background: url("http://www.clubevolution.com.au.do.newismdev.com/theme/images/backgrounds/ab965f06.checkerplate-fade-bottom.jpg") top center no-repeat #030e1c;
   border-bottom: 1px solid rgba(0, 0, 0, 0.26);
+  color: white;
 }
 
 #App-body {
@@ -1859,7 +1860,6 @@ Styleguide TableCell
 }
 
 #App-branding {
-  color: #fff;
   line-height: 36px;
   font-size: 16px;
   margin-left: 8px;
@@ -1870,10 +1870,6 @@ Styleguide TableCell
   vertical-align: bottom;
   position: relative;
   top: 3px;
-}
-
-#AccountNav {
-  color: white;
 }
 
 .Page {

@@ -13,39 +13,50 @@ class ProfileFormType extends BaseProfileFormType
      */
     protected function buildUserForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add(
-                'username',
-                null,
-                array(
-                    'label' => 'form.username',
-                    'translation_domain' => 'FOSUserBundle'
-                )
-            );
+        $name = $builder->create(
+            'name',
+            'form',
+            array(
+                'inherit_data' => true
+            )
+        )
+            ->add('firstname', 'text')
+            ->add('lastName', 'text');
 
-        $builder->add('firstName', 'text');
-        $builder->add('lastName', 'text');
-
-        $builder->add(
-            $builder->create(
-                'timeZone', // Property
-                'time_zone', // FormType (see Nsm\Bundle\FormBundle\Form\Type\TimeZoneType)
-                array(
-                    'data' => new \DateTimeZone('Australia/Sydney')
-                )
-            )->addModelTransformer(
-                    new DateTimeZoneToStringTransformer(),
-                    true
-                )
+        $localisation = $builder->create(
+            'localisation',
+            'form',
+            array(
+                'inherit_data' => true
+            )
         );
 
-        $builder->add(
+        $timezone = $builder->create(
+            'timeZone', // Property
+            'time_zone', // FormType (see Nsm\Bundle\FormBundle\Form\Type\TimeZoneType)
+            array(
+                'data' => new \DateTimeZone('Australia/Sydney')
+            )
+        )->addModelTransformer(
+            new DateTimeZoneToStringTransformer(),
+            true
+        );
+
+        $locale = $builder->create(
             'locale',
             'locale',
             array(
                 'data' => 'en_AU'
             )
         );
+
+        $localisation->add($locale);
+        $localisation->add($timezone);
+
+        $builder->add($name);
+        $builder->add($localisation);
+
+        $builder->add('Update Account', 'submit');
     }
 
     /**
@@ -54,5 +65,10 @@ class ProfileFormType extends BaseProfileFormType
     public function getName()
     {
         return 'nsm_user_profile_form';
+    }
+
+    public function getParent()
+    {
+        return 'fos_user_profile';
     }
 }

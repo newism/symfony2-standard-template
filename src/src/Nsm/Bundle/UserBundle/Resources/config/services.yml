@@ -32,6 +32,12 @@ services:
         tags:
             - { name: "form.type", alias: "nsm_user_registration_form" }
 
+    nsm_user.form.profile.type:
+        class: %nsm_user.form.profile.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: "form.type", alias: "nsm_user_profile_form" }
+
     nsm_user.event_subscriber.user_subscriber:
         class: %nsm_user.event_subscriber.user_subscriber.class%
         arguments: [@security.context, @database_connection, %locale%]

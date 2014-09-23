@@ -22,7 +22,9 @@ class FileType extends AbstractType
         $builder->add(
             'uploadedFile',
             'file',
-            array('required' => false)
+            array(
+                'required' => false
+            )
         );
     }
 

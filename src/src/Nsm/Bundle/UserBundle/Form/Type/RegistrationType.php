@@ -25,6 +25,14 @@ class RegistrationType extends AbstractType
             ->add('firstname', 'text')
             ->add('lastName', 'text');
 
+        $localisation = $builder->create(
+            'localisation',
+            'form',
+            array(
+                'inherit_data' => true
+            )
+        );
+
         $timezone = $builder->create(
             'timeZone', // Property
             'time_zone', // FormType (see Nsm\Bundle\FormBundle\Form\Type\TimeZoneType)
@@ -44,13 +52,6 @@ class RegistrationType extends AbstractType
             )
         );
 
-        $localisation = $builder->create(
-            'localisation',
-            'form',
-            array(
-                'inherit_data' => true
-            )
-        );
         $localisation->add($locale);
         $localisation->add($timezone);
 
@@ -82,7 +83,8 @@ class RegistrationType extends AbstractType
                         new NotBlank(),
                     ),
                 )
-            );
+            )
+            ->add('Create Account', 'submit');
     }
 
     /**

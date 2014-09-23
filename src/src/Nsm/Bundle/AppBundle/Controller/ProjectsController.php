@@ -240,7 +240,7 @@ class ProjectsController extends AbstractController
 
             switch($form->get('actions')->get('action')->getData()) {
                 case 'save':
-                    $this->generateUrl('project_read', array('id' => $entity->getId()));
+                    $targetPath = $this->generateUrl('project_read', array('id' => $entity->getId()));
                     break;
                 case 'save_add_another':
                     $targetPath = $this->generateUrl('project_add');

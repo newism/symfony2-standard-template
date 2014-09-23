@@ -40,7 +40,7 @@ class SecurityController extends BaseSecurityController
                 ),
                 'method' => 'POST'
             )
-        )->add('Login', 'submit');
+        );
 
         $loginForm->submit(
             array(
