@@ -33,9 +33,9 @@
     padding: 7px 11px;
     vertical-align: bottom;
     width: 100%;
-    &:focus {
-        outline: none;
-        border-color:palette("lightBlue", "600");
+    &:focus,
+    &.focus {
+        border-color: palette("lightBlue", "500");
     }
 }
 
@@ -49,6 +49,18 @@
     padding-right: 30px;
 }
 
+%ghostInput {
+    box-shadow: none;
+    border-color: transparent;
+    margin: 0;
+    position: relative;
+    &:focus,
+    &.focus{
+        outline: 1px solid palette("lightBlue", "500");
+        outline-offset: 0;
+    }
+}
+
 %ghostControlGroup {
 
     padding: 0 !important;
@@ -57,23 +69,14 @@
 
         padding: 0 !important;
 
-        > .Control {
-            input,
-            textarea,
-            select,
-            textarea {
-                box-shadow: none;
-                border-color: transparent;
-                margin: 0;
-                position: relative;
-                &:focus {
-                    outline: 1px solid palette("lightBlue", "500");
-                    outline-offset: 0;
-                }
-            }
+        > .Control > .Control-body > .Control-input,
+        > .Control > .Control-body > .Control-input > .selectize-input{
+            @extend %ghostInput;
         }
     }
 }
+
+
 
 label .required {
     color: palette("red", "500");
@@ -86,9 +89,11 @@ label .required {
     margin: 0;
 }
 
-.Form-header {}
+.Form-header {
+}
 
-.Form-title {}
+.Form-title {
+}
 
 .Form-body {
     background: white;
@@ -99,48 +104,32 @@ label .required {
     text-align: right;
 }
 
+.Form-errors {
+    margin: 4px 0;
+    list-style-type: none;
+    background: palette("red", "50");
+    border: 1px solid palette("red", "100");
+    padding: 0;
+
+    > li {
+        font-size: 14px;
+        margin: 8px;
+    }
+}
+
 /**
  * Control Group Collection
  */
 
-//.ControlGroupCollection--table {
-//    @extend %Table;
-//    @extend %Table--bordered;
-//    > .ControlGroupCollection-body {
-//        @extend %Table-body;
-//        > .ControlGroup {
-//            @extend %TableRow;
-//            > .ControlGroup-header {
-//                @extend %TableCell;
-//                @extend %TableCell--header;
-//                > .ControlGroup-label {
-//                    font-size: 14px;
-//                    line-height: normal;
-//                }
-//                > .ControlGroup-help {
-//                    font-size: 12px;
-//                }
-//            }
-//            > .ControlGroup-body {
-//                @extend %TableCell;
-//                @extend %TableCell--data !optional;
-//            }
-//            &.ControlGroup--singleControl {
-//                @extend %ghostInput;
-//                .ControlGroup-body {
-//                    padding: 0;
-//                }
-//            }
-//        }
-//    }
-//}
-//
-
 .ControlGroupCollection--table {
     > .ControlGroupCollection-body {
         > .ControlGroup {
-            > .ControlGroup-header {}
-            > .ControlGroup-body {}
+            > .ControlGroup-header {
+            }
+            > .ControlGroup-body {
+            }
+        }
+        > .ControlGroup {
         }
         > .ControlGroup.ControlGroup--singleControl {
             @extend %ghostControlGroup;
@@ -193,6 +182,7 @@ label .required {
 
 .ControlGroup-label {
     display: block;
+    color: palette("grey", "800");
     font-weight: bold;
 }
 
@@ -216,7 +206,7 @@ label .required {
     }
 
     .ControlGroup,
-    .Form-footer{
+    .Form-footer {
         display: table-cell;
         padding: 0;
         margin: 0;
@@ -278,7 +268,9 @@ label .required {
 .Control-input--search,
 .Control-input--datetime,
 .Control-input--number,
-.Control-input--textarea {
+.Control-input--textarea,
+.Control-input--email,
+.Control-input--invitation_code{
     @extend %textControl;
 }
 
@@ -306,7 +298,8 @@ label .required {
  * Collection
  */
 
-.Control--nsm_collection > .Control-body{  }
+.Control--nsm_collection > .Control-body {
+}
 
 .Collection {
 }
@@ -360,8 +353,10 @@ label .required {
     > .Collection-body {
         > .CollectionItem {
             > .ControlGroup {
-                > .ControlGroup-header {}
-                > .ControlGroup-body {}
+                > .ControlGroup-header {
+                }
+                > .ControlGroup-body {
+                }
             }
             > .ControlGroup.ControlGroup--singleControl {
                 @extend %ghostControlGroup;
@@ -370,12 +365,13 @@ label .required {
     }
 }
 
-.ChoiceList {  }
+.ChoiceList {
+}
 
 .ChoiceList-choice {
     display: inline-block;
     position: relative;
-    margin-right: 20px;
+    margin-right: 16px;
 
     > input {
         position: absolute;
@@ -405,3 +401,70 @@ label .required {
     max-width: 200px;
 }
 
+.selectize-control {
+    position: relative;
+    cursor: pointer;
+
+    &.single{
+        .selectize-input {
+            @extend %selectControl;
+        }
+    }
+    &.multi{
+        .selectize-input {
+            @extend %textControl;
+
+            &.has-items {
+
+                padding: 4px 0 0 4px;
+
+                > div {
+                    line-height: 20px;
+                    padding: 2px 6px;
+                    margin:0 4px 4px 0;
+                    background: palette("grey", "100");
+                    border: 1px solid palette("grey", "200");
+
+                    &.active {
+                        background: palette("grey", "200");
+                        border-color: palette("grey", "300");
+                    }
+                }
+
+            }
+
+
+        }
+    }
+
+    .selectize-input > input {
+        border: none;
+        display: inline-block;
+        line-height: 20px;
+        -webkit-appearance: none;
+        outline: none;
+        padding:0;
+        margin:0;
+    }
+
+    .selectize-input > div {
+        display: inline-block;
+    }
+
+    .selectize-dropdown {
+        @extend .Flyout;
+        border-radius: 0;
+        position: absolute;
+        box-sizing: border-box;
+        > .selectize-dropdown-content > div {
+            cursor: pointer;
+            line-height: 18px;
+            margin: 0;
+            display: block;
+            padding: 6px 12px;
+            &:hover {
+                background: palette("grey", "100");
+            }
+        }
+    }
+}

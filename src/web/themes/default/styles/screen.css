@@ -55,6 +55,10 @@ a:focus {
   outline: 1px solid #03a9f4;
 }
 
+.quiet {
+  opacity: .75;
+}
+
 .Grid.Grid--withGutters > .Grid-cell {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -894,6 +898,7 @@ https://github.com/suitcss/grid/blob/master/grid.css
   position: relative;
   -webkit-appearance: none;
   vertical-align: bottom;
+  border-radius: 3px;
 }
 
 .Button:hover,
@@ -921,10 +926,6 @@ https://github.com/suitcss/grid/blob/master/grid.css
   height: 100%;
 }
 
-.Button--rounded {
-  border-radius: 5px;
-}
-
 .Button--square {
   border-radius: 0;
 }
@@ -945,19 +946,24 @@ https://github.com/suitcss/grid/blob/master/grid.css
   min-width: 14px;
 }
 
-.Button--medium {
+.Button--medium,
+.Button {
   font-size: 14px;
   line-height: 24px;
-  padding: 6px;
+  padding: 6px 12px;
 }
-.Button--medium.Button--bordered, .Button--medium.Button--link:hover {
+.Button--medium.Button--bordered, .Button--medium.Button--link:hover,
+.Button.Button--bordered,
+.Button.Button--link:hover {
   border-width: 1px;
-  padding: 5px;
+  padding: 5px 11px;
 }
-.Button--medium .Button-label:first-child {
+.Button--medium .Button-label:first-child,
+.Button .Button-label:first-child {
   margin-left: .25em;
 }
-.Button--medium .Button-label:last-child {
+.Button--medium .Button-label:last-child,
+.Button .Button-label:last-child {
   margin-right: .25em;
 }
 
@@ -1088,7 +1094,7 @@ https://github.com/suitcss/grid/blob/master/grid.css
   line-height: 36px;
 }
 
-.Flyout {
+.Flyout, .selectize-control .selectize-dropdown {
   position: relative;
   z-index: 1;
   background: white;
@@ -1098,16 +1104,17 @@ https://github.com/suitcss/grid/blob/master/grid.css
   padding: 4px 0;
   border-radius: 4px;
   margin-top: 0;
+  font-size: 14px;
 }
-.Flyout:before {
+.Flyout:before, .selectize-control .selectize-dropdown:before {
   opacity: 0.16;
   box-shadow: 0px 1px 1.5px transparent, 0px 3px 3px black, 0px 10px 10px transparent, 0px 14px 14px transparent, 0px 19px 19px transparent;
 }
-.Flyout:after {
+.Flyout:after, .selectize-control .selectize-dropdown:after {
   opacity: 0.23;
   box-shadow: 0px 1px 1px transparent, 0px 3px 3px black, 0px 6px 3px transparent, 0px 10px 5px transparent, 0px 15px 6px transparent;
 }
-.Flyout:before, .Flyout:after {
+.Flyout:before, .selectize-control .selectize-dropdown:before, .Flyout:after, .selectize-control .selectize-dropdown:after {
   z-index: -1;
   position: absolute;
   display: block;
@@ -1144,12 +1151,14 @@ https://github.com/suitcss/grid/blob/master/grid.css
   border-bottom-right-radius: 0;
 }
 
-.Control-input--choice, .Control-input--text,
+.Control-input--choice, .selectize-control.single .selectize-input, .Control-input--text,
 .Control-input--password,
 .Control-input--search,
 .Control-input--datetime,
 .Control-input--number,
-.Control-input--textarea, .ChoiceList-choice > label {
+.Control-input--textarea,
+.Control-input--email,
+.Control-input--invitation_code, .ChoiceList-choice > label, .selectize-control.multi .selectize-input {
   background-color: transparent;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.26);
@@ -1165,17 +1174,25 @@ https://github.com/suitcss/grid/blob/master/grid.css
   vertical-align: bottom;
   width: 100%;
 }
-.Control-input--choice:focus, .Control-input--text:focus,
+.Control-input--choice:focus, .selectize-control.single .selectize-input:focus, .Control-input--text:focus,
 .Control-input--password:focus,
 .Control-input--search:focus,
 .Control-input--datetime:focus,
 .Control-input--number:focus,
-.Control-input--textarea:focus, .ChoiceList-choice > label:focus {
-  outline: none;
-  border-color: #039be5;
+.Control-input--textarea:focus,
+.Control-input--email:focus,
+.Control-input--invitation_code:focus, .ChoiceList-choice > label:focus, .selectize-control.multi .selectize-input:focus, .focus.Control-input--choice, .selectize-control.single .focus.selectize-input, .focus.Control-input--text,
+.focus.Control-input--password,
+.focus.Control-input--search,
+.focus.Control-input--datetime,
+.focus.Control-input--number,
+.focus.Control-input--textarea,
+.focus.Control-input--email,
+.focus.Control-input--invitation_code, .ChoiceList-choice > label.focus, .selectize-control.multi .focus.selectize-input {
+  border-color: #03a9f4;
 }
 
-.Control-input--choice {
+.Control-input--choice, .selectize-control.single .selectize-input {
   -moz-appearance: none;
   -webkit-appearance: none;
   background-position: right 50%;
@@ -1184,33 +1201,28 @@ https://github.com/suitcss/grid/blob/master/grid.css
   padding-right: 30px;
 }
 
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl {
-  padding: 0 !important;
-}
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body {
-  padding: 0 !important;
-}
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control input, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control input,
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea,
-.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea,
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control select,
-.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control select,
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea,
-.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea {
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input > .selectize-input,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input > .selectize-input {
   box-shadow: none;
   border-color: transparent;
   margin: 0;
   position: relative;
 }
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control input:focus, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control input:focus,
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea:focus,
-.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea:focus,
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control select:focus,
-.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control select:focus,
-.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea:focus,
-.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control textarea:focus {
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input:focus, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input:focus,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input > .selectize-input:focus,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input > .selectize-input:focus, .ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .focus.Control-input, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .focus.Control-input,
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input > .focus.selectize-input,
+.Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body > .Control > .Control-body > .Control-input > .focus.selectize-input {
   outline: 1px solid #03a9f4;
   outline-offset: 0;
+}
+
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl {
+  padding: 0 !important;
+}
+.ControlGroupCollection--table > .ControlGroupCollection-body > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body, .Collection--table > .Collection-body > .CollectionItem > .ControlGroup.ControlGroup--singleControl > .ControlGroup-body {
+  padding: 0 !important;
 }
 
 label .required {
@@ -1231,6 +1243,18 @@ label .required {
 .Form-footer {
   padding-top: 8px;
   text-align: right;
+}
+
+.Form-errors {
+  margin: 4px 0;
+  list-style-type: none;
+  background: #fde0dc;
+  border: 1px solid #f9bdbb;
+  padding: 0;
+}
+.Form-errors > li {
+  font-size: 14px;
+  margin: 8px;
 }
 
 /**
@@ -1275,6 +1299,7 @@ label .required {
 
 .ControlGroup-label {
   display: block;
+  color: #424242;
   font-weight: bold;
 }
 
@@ -1389,7 +1414,7 @@ label .required {
 .ChoiceList-choice {
   display: inline-block;
   position: relative;
-  margin-right: 20px;
+  margin-right: 16px;
 }
 .ChoiceList-choice > input {
   position: absolute;
@@ -1414,6 +1439,52 @@ label .required {
   max-width: 200px;
 }
 
+.selectize-control {
+  position: relative;
+  cursor: pointer;
+}
+.selectize-control.multi .selectize-input.has-items {
+  padding: 4px 0 0 4px;
+}
+.selectize-control.multi .selectize-input.has-items > div {
+  line-height: 20px;
+  padding: 2px 6px;
+  margin: 0 4px 4px 0;
+  background: #f5f5f5;
+  border: 1px solid #eeeeee;
+}
+.selectize-control.multi .selectize-input.has-items > div.active {
+  background: #eeeeee;
+  border-color: #e0e0e0;
+}
+.selectize-control .selectize-input > input {
+  border: none;
+  display: inline-block;
+  line-height: 20px;
+  -webkit-appearance: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+}
+.selectize-control .selectize-input > div {
+  display: inline-block;
+}
+.selectize-control .selectize-dropdown {
+  border-radius: 0;
+  position: absolute;
+  box-sizing: border-box;
+}
+.selectize-control .selectize-dropdown > .selectize-dropdown-content > div {
+  cursor: pointer;
+  line-height: 18px;
+  margin: 0;
+  display: block;
+  padding: 6px 12px;
+}
+.selectize-control .selectize-dropdown > .selectize-dropdown-content > div:hover {
+  background: #f5f5f5;
+}
+
 .Menu {
   margin: 0;
   padding: 0;
@@ -1431,13 +1502,17 @@ label .required {
 }
 .Menu > li > a {
   display: block;
-  padding: 6px 12px;
+  padding: 4px 12px;
 }
-.Menu > li > a > .Menu-item-link-icon {
+.Menu > li > a > .Menu-item-label {
+  line-height: 20px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.Menu > li > a > .Menu-item-icon {
   display: block;
   width: 24px;
   height: 24px;
-  padding: 6px;
 }
 .Menu + .Menu {
   border-top: 1px solid #e0e0e0;
@@ -1593,6 +1668,10 @@ Styleguide TableCell
   text-align: center;
   padding: 0 !important;
   width: 1px;
+}
+
+.TableCell--number {
+  text-align: right;
 }
 
 .TableCell--expanded {
@@ -1801,6 +1880,7 @@ Styleguide TableCell
   display: table-cell;
   vertical-align: top;
   width: auto;
+  padding-bottom: 200px;
 }
 
 .SidebarNav {
@@ -1835,11 +1915,7 @@ Styleguide TableCell
   display: table;
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid transparent;
-  border-bottom-color: #eeeeee;
-}
-.SidebarNav .SidebarNav-menu-item-link:hover {
-  background: #f5f5f5;
+  border-bottom: 1px solid #eeeeee;
 }
 .SidebarNav .SidebarNav-menu-item-label,
 .SidebarNav .SidebarNav-menu-item-icon,
@@ -1885,35 +1961,32 @@ Styleguide TableCell
   display: none;
 }
 .SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover {
-  width: 300px;
   z-index: 1;
-}
-.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover > .SidebarNav-menu-item-link {
-  border: 1px solid #e0e0e0;
-  border-left-color: transparent;
-}
-.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover > .SidebarNav-menu-item-link > .SidebarNav-menu-item-label,
-.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover > .SidebarNav-menu-item-link > .SidebarNav-menu-item-toggle {
-  display: table-cell;
-}
-.SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover > .SidebarNav-menu-item-link > .SidebarNav-menu-item-label {
-  padding-left: 4px;
 }
 .SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover .SidebarNav-menu--level2 {
   display: block;
   position: absolute;
-  top: 100%;
+  top: 0;
   left: 40px;
   width: 258px;
   border: 1px solid #e0e0e0;
-  border-top-style: dotted;
-  margin-top: -1px;
 }
 .SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover .SidebarNav-menu--level2 > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
   padding-left: 0;
 }
 .SidebarNav.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover .SidebarNav-menu--level3 > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
   padding-left: 36px;
+}
+
+#loading {
+  background: red;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  display: none;
+  z-index: 100;
 }
 
 .Page {

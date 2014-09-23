@@ -8,5 +8,9 @@
                  class="Nsm\Bundle\FormBundle\Form\Extension\LayoutExtension">
             <tag name="form.type_extension" alias="form" priority="-255" />
         </service>
+        <service id="nsm_form.form.extension.repeated_layout"
+                 class="Nsm\Bundle\FormBundle\Form\Extension\RepeatedLayoutExtension">
+            <tag name="form.type_extension" alias="form" priority="-255" />
+        </service>
     </services>
 </container>

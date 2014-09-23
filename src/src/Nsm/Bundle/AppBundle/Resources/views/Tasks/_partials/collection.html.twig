@@ -1,3 +1,5 @@
+{% import '_macros.html.twig' as macros %}
+
 <table class="Table Table--data Table--bordered">
 <thead>
     <tr>
@@ -11,11 +13,19 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td><a href="{{ path('task_read', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.title }}</td>
-            <td>{{ entity.subTasks.count }}</td>
-            <td>{% if entity.project is null %}Foo{% endif %}</td>
+            <th scope="row" class="TableCell--number">
+                {{ entity.id }}
+            </th>
             <td>
+                <a href="{{ path('task_read', { 'id': entity.id }) }}">{{ entity.title }}</a>
+            </td>
+            <td class="TableCell--number">{{ entity.subTasks.count }}</td>
+            <td>
+                {% if entity.project %}
+                    <a href="{{ path('project_read', {'id': entity.project.id}) }}" data-pjax>{{ entity.project }}</a>
+                {% endif %}
+            </td>
+            <td class="TableCell--icon">
                 <span class="Button"
                       data-widget="flyoutTrigger"
                       data-flyout-trigger-options="{{ {"flyout": "#CollectionRow-options-flyout-" ~ entity.id}|json_encode(24) }}"

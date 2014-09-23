@@ -43,6 +43,7 @@ class RegistrationController extends BaseRegistrationController
         }
 
         $form = $formFactory->createForm();
+        $form->add('Register', 'submit');
         $form->setData($user);
 
         // CUSTOM CODE START

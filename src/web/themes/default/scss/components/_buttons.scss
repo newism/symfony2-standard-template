@@ -9,6 +9,7 @@
     position: relative;
     -webkit-appearance: none;
     vertical-align: bottom;
+    border-radius: 3px;
 }
 
 .Button:hover,
@@ -44,7 +45,7 @@
 }
 
 .Button--rounded {
-    border-radius: 5px;
+
 }
 
 .Button--square {
@@ -71,14 +72,15 @@
     }
 }
 
-.Button--medium {
+.Button--medium,
+.Button{
     font-size: 14px;
     line-height: 24px;
-    padding: 6px;
+    padding: 6px 12px;
     &.Button--bordered,
     &.Button--link:hover{
         border-width: 1px;
-        padding: 5px;
+        padding: 5px 11px;
     }
     .Button-label:first-child {
         margin-left: .25em;

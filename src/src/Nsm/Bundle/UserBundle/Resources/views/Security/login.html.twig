@@ -2,12 +2,14 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% block fos_user_content %}
-{% if error %}
-    <div>{{ error|trans }}</div>
-{% endif %}
+{% block page_title %}
+    <h1 class="Page-title">Login</h1>
+{% endblock page_title %}
 
+{% block page_body %}
+    {% if error %}
+        <div>{{ error|trans }}</div>
+    {% endif %}
     {{ form(loginForm) }}
-    <a href="{{ path('fos_user_registration_register', app.request.query.all ) }}">Register</a>
 
-{% endblock fos_user_content %}
+{% endblock page_body %}

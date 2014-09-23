@@ -112,17 +112,19 @@ class LayoutExtension extends AbstractTypeExtension
      */
     private function formIsControl(FormInterface $form = null)
     {
-        if ($this->formIsRoot($form) || $this->formIsControlGroup($form) || $this->formIsCollection(
-                $form
-            ) || $this->formIsCollectionItem($form)
+        if ($this->formIsRoot($form)
+            || $this->formIsControlGroup($form)
+            || $this->formIsCollection($form)
+            || $this->formIsCollectionItem($form)
         ) {
             return false;
         }
-        $formParent = $form->getParent();
 
-        return (null === $formParent) ? false : ($this->formIsControlGroup($formParent) || $this->formIsControl(
-                $formParent
-            ));
+        $formParent = $form->getParent();
+        $formParentIsControlGroup = $this->formIsControlGroup($formParent);
+        $formParentIsControl = $this->formIsControl($formParent);
+
+        return (null === $formParent) ? false : ($formParentIsControlGroup || $formParentIsControl);
     }
 
     /**
@@ -154,7 +156,7 @@ class LayoutExtension extends AbstractTypeExtension
         $isCollectionItem = $this->formIsCollectionItem($form);
         $isCollectionItemControlGroup = $this->formIsCollectionItemControlGroup($form);
         $hasSiblings = $this->formHasSiblings($form);
-        $isCompound = $form->getConfig()->getCompound();;
+        $isCompound = $form->getConfig()->getCompound();
 
         $isControl = $this->formisControl($form);
 

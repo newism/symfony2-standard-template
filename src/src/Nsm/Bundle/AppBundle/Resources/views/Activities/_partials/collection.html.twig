@@ -15,7 +15,7 @@
             <td>{{ entity.title }}</td>
             <td>{{ entity.dateRange.start is defined ? entity.dateRange.start|date('r') }}</td>
             <td>{{ entity.dateRange.end is defined ? entity.dateRange.end|date('r') }}</td>
-            <td>
+            <td class="TableCell--icon">
                 <span class="Button"
                       data-widget="flyoutTrigger"
                       data-flyout-trigger-options="{{ {"flyout": "#CollectionRow-options-flyout-" ~ entity.id}|json_encode(24) }}"

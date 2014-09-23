@@ -16,7 +16,6 @@
     <!-- build:css /themes/default/styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
-    <link rel="stylesheet" href="/bower_components/selectize/dist/css/selectize.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -31,7 +30,7 @@
 
 </head>
 <body>
-<div id="loading" style="display:none; position: absolute; top: 0; right: 0; background: red; z-index: 2">Loading…</div>
+<div id="loading"></div>
 <div id="App">
 
     <div id="App-header">
@@ -61,8 +60,10 @@
                         <ul class="Menu">
                             <li>
                                 <a href="{{ path('fos_user_profile_show') }}">
-                                    {{ app.user.username }}
-                                    <small>{{ 'profile.show'|trans({}, 'FOSUserBundle') }}</small>
+                                    <span class="Menu-item-label">
+                                        {{ app.user.username }}
+                                        <small style="display:block">{{ 'profile.show'|trans({}, 'FOSUserBundle') }}</small>
+                                    </span>
                                 </a>
                             </li>
                             <li>
@@ -181,11 +182,6 @@
     <script src="/themes/default/scripts/app.js"></script>
     <!-- endbuild -->
 
-    <script>
-
-
-
-    </script>
     {% endblock %}
 
 </div>

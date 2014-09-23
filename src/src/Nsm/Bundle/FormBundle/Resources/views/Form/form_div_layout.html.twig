@@ -52,6 +52,18 @@
     </form>
 {% endblock form_end %}
 
+{% block form_widget -%}
+    {% if compound %}
+        <!-- Start: Compound -->
+        {{- block('form_widget_compound') -}}
+        <!-- End: Compound -->
+    {% else %}
+        <!-- Start: Single -->
+        {{- block('form_widget_simple') -}}
+        <!-- End: Single -->
+    {% endif %}
+{%- endblock form_widget %}
+
 {# Form Rest #}
 {% block form_rest %}
     {% for child in form %}
@@ -69,6 +81,15 @@
         {% endif %}
     {% endfor %}
 {% endblock form_rows %}
+
+
+{% block repeated_row -%}
+    {#
+    No need to render the errors here, as all errors are mapped
+    to the first child (see RepeatedTypeValidatorExtension).
+    #}
+    {{- form_row(form) -}}
+{%- endblock repeated_row %}
 
 {# Form Help #}
 {% block form_help %}
@@ -222,7 +243,6 @@
     {{ block('choice_widget') }}
 {% endblock entity_search_widget %}
 
-
 {# Renders a compound widget. Div wrappers are added in the control and control block rows  #}
 {% block form_widget_compound %}
 
@@ -273,7 +293,6 @@
     {% endif %}
 {% endblock date_widget %}
 
-
 {# Time Widget #}
 {% block time_widget %}
     {% if widget == 'single_text' %}
@@ -304,7 +323,7 @@
 
 {% block button_widget %}
     {% spaceless %}
-        {% set attr = attr|merge({'class': 'Button Button--' ~ type|default('button') ~ " " ~ (attr.class|default(''))|trim})  %}
+        {% set attr = attr|merge({'class': 'Button Button--default Button--medium Button--bordered Button--' ~ type|default('button') ~ " " ~ (attr.class|default(''))|trim})  %}
         {% if label is empty %}
             {% set label = name|humanize %}
         {% endif %}
@@ -313,3 +332,14 @@
         </button>
     {% endspaceless %}
 {% endblock button_widget %}
+
+{# Errors #}
+{% block form_errors -%}
+    {% if errors|length > 0 -%}
+        <ul class="Form-errors">
+            {%- for error in errors -%}
+                <li>{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif %}
+{%- endblock form_errors %}

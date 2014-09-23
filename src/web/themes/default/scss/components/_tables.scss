@@ -209,6 +209,10 @@ Styleguide TableCell
     width: 1px;
 }
 
+.TableCell--number {
+    text-align: right;
+}
+
 .TableCell--expanded {
     background: palette("grey", "100");
 }

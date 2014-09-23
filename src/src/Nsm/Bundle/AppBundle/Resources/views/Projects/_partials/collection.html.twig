@@ -1,3 +1,5 @@
+{% import '_macros.html.twig' as macros %}
+
 <table class="Table Table--data Table--bordered">
     <thead>
     <tr>
@@ -11,10 +13,16 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <th scope="row"><a href="{{ path('project_read', { 'id': entity.id }) }}" data-pjax>{{ entity.id }}</a></th>
-            <td>{{ entity.title }}</td>
-            <td>{{ entity.createdAt|localizeddate('full', 'long') }}</td>
-            <td>{{ entity.tasks.count }}</td>
+            <th scope="row" class="TableCell--number">
+                {{ entity.id }}
+            </th>
+            <td>
+                <strong>
+                    <a href="{{ path('project_read', { 'id': entity.id }) }}" data-pjax>{{ entity.title }}</a>
+                </strong>
+            </td>
+            <td>{{ macros.datetime(entity.createdAt) }}</td>
+            <td class="TableCell--number">{{ entity.tasks.count }}</td>
             <td class="TableCell--icon">
                 <span class="Button Button--medium"
                       data-widget="flyoutTrigger"

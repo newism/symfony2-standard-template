@@ -19,16 +19,18 @@
         > a {
 
             display: block;
-            padding: 6px 12px;
+            padding: 4px 12px;
 
-            > .Menu-item-link-label {
-
+            > .Menu-item-label {
+                line-height: 20px;
+                padding-top: 2px;
+                padding-bottom: 2px;
             };
-            > .Menu-item-link-icon {
+
+            > .Menu-item-icon {
                 display: block;
                 width: 24px;
                 height: 24px;
-                padding: 6px;
             }
         }
     }

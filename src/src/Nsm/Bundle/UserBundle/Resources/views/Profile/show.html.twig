@@ -1,5 +1,10 @@
 {% extends "NsmAppBundle::layout.html.twig" %}
 
-{% block fos_user_content %}
-{% include "FOSUserBundle:Profile:show_content.html.twig" %}
-{% endblock fos_user_content %}
+{% block page_title %}
+    <h1 class="Page-title">Your Profile</h1>
+{% endblock page_title %}
+
+{% block page_body %}
+    <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
+    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+{% endblock page_body %}

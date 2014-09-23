@@ -5,3 +5,10 @@
     {% endif %}
     <svg class="{{ class }} {{ class }}--{{ hash }}"><use {{ href|raw }}></use></svg>
 {% endmacro %}
+
+{% macro datetime(value, dateformat = "medium", timeformat="short") %}
+    {{ value|localizeddate(dateformat, 'none') }}
+    {% if timeformat != 'none' %}
+    <span class="quiet">{{ value|localizeddate('none', timeformat) }}</span>
+    {% endif %}
+{% endmacro %}

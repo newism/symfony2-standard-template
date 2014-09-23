@@ -1,3 +1,5 @@
+{% import '_macros.html.twig' as macros %}
+
 {# A layout router / proxy which first checks for an ajax request then a _layout query var #}
 
 {% set layout = app.request.xmlHttpRequest ? "page" : "app" %}

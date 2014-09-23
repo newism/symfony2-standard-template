@@ -32,6 +32,7 @@
     display: table-cell;
     vertical-align: top;
     width: auto;
+    padding-bottom: 200px;
 }
 
 .SidebarNav {
@@ -74,13 +75,13 @@
         display: table;
         width: 100%;
         box-sizing: border-box;
-        border: 1px solid transparent;
-        border-bottom-color: $border-teriary-colour;
+        border-bottom: 1px solid $border-teriary-colour;
+//        border-bottom-color: $border-teriary-colour;
 
         &:last-child {}
 
         &:hover {
-            background: palette("grey", "100");
+//            background: palette("grey", "100");
         }
     }
 
@@ -147,33 +148,33 @@
 
     &.is-collapsed .SidebarNav-menu--level1 > .SidebarNav-menu-item:hover {
 
-        width: 300px;
+//        width: 300px;
         z-index: 1;
 
         > .SidebarNav-menu-item-link {
 
-            border: 1px solid $border-secondary-colour;
-            border-left-color: transparent;
+//            border: 1px solid $border-secondary-colour;
+//            border-left-color: transparent;
 
             > .SidebarNav-menu-item-label,
             > .SidebarNav-menu-item-toggle {
-                display: table-cell;
+//                display: table-cell;
             }
 
             > .SidebarNav-menu-item-label {
-                padding-left: 4px;
+//                padding-left: 4px;
             }
         }
 
         .SidebarNav-menu--level2 {
             display: block;
             position: absolute;
-            top: 100%;
+            top: 0;
             left: 40px;
             width: 258px;
             border: 1px solid $border-secondary-colour;
-            border-top-style: dotted;
-            margin-top: -1px;
+//            border-top-style: dotted;
+//            margin-top: -1px;
 
             > .SidebarNav-menu-item > .SidebarNav-menu-item-link {
                 padding-left: 0;
@@ -186,4 +187,15 @@
             }
         }
     }
+}
+
+#loading {
+    background: red;
+    position: fixed;
+    top: 0;
+    right:0;
+    width: 36px;
+    height: 36px;
+    display: none;
+    z-index: 100;
 }

@@ -19,7 +19,6 @@ class TaskType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder->add(
             'order',
             'number',
@@ -42,6 +41,7 @@ class TaskType extends AbstractType
                     )
                 )
             );
+
         }
 
         $builder->add(
@@ -87,6 +87,7 @@ class TaskType extends AbstractType
         );
 
     }
+
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {

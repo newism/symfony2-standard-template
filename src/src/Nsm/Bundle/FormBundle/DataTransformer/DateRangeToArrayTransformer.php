@@ -100,6 +100,6 @@ class DateRangeToArrayTransformer implements DataTransformerInterface
         }
 
         // Check here if period is custom and calculate dates
-        return new DateRange($start, $end);
+        return new DateRange($period, $start, $end);
     }
 }

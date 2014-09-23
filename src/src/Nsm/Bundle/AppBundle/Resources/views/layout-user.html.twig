@@ -1,0 +1,140 @@
+{% import '_macros.html.twig' as macros %}
+
+<!DOCTYPE html>
+<html prefix="hx: http://purl.org/NET/hinclude">
+<head>
+
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    {% block stylesheets %}
+
+        {# https://www.google.com/fonts#UsePlace:use/Collection:Open+Sans #}
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
+
+        <!-- build:css /themes/default/styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="/bower_components/normalize-css/normalize.css" />
+        <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- build:css /themes/default/styles/screen.css -->
+        <link rel="stylesheet" href="/themes/default/styles/screen.css" media="screen, projection" type="text/css" />
+        <!-- endbuild -->
+
+        <!-- build:css /themes/default/styles/print.css -->
+        <link rel="stylesheet" href="/themes/default/styles/print.css" media="print" type="text/css" />
+        <!-- endbuild -->
+    {% endblock %}
+
+</head>
+<body>
+<div id="loading"></div>
+<div id="App">
+
+    <div id="App-header">
+        <div id="App-toolbar" class="Toolbar">
+            <div id="App-branding">
+                <img src="http://www.clubevolution.com.au.do.newismdev.com/theme/images/icons/1c18b2c8.club-evolution-239x63.png" style="height: 36px;" />
+            </div>
+            <div id="GuestNav" class="ToolbarGroup" style="margin-left: auto;">
+                <a class="Button" href="{{ path('fos_user_security_login') }}">
+                    <span class="Button-label">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</span>
+                </a>
+                <a class="Button" href="{{ path('fos_user_registration_register') }}">
+                    <span class="Button-label">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</span>
+                </a>
+                <a class="Button" href="{{ path('hwi_oauth_connect') }}">
+                    <span class="Button-label">Connect</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="App-body">
+
+        <div class="Page" id="Page">
+
+            <div class="Page-alerts">
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="flash-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <div class="Page-tips">
+                    {{ render_hinclude(url('tip_browse', {
+                    'filter': {'route': app.request.get('_route')},
+                    '_template': 'embed'
+                    })) }}
+                </div>
+            {% endif %}
+
+            <div class="Page-header">
+                <div class="Page-header-main">
+                    {% block page_breadcrumb %}{% endblock %}
+                    {% block page_title %}{% endblock %}
+                </div>
+                <div class="Page-header-actions">
+                    {% block page_actions %}{% endblock %}
+                </div>
+            </div>
+
+            <div class="Page-body">
+                {% block page_body %}{% endblock %}
+                {% block fos_user_content %}{% endblock %}
+                {% block hwi_oauth_content %}{% endblock %}
+            </div>
+
+            <div class="Page-footer">
+                {% block page_footer %}{% endblock %}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="App-footer"></div>
+
+    {% block javascripts %}
+        <!-- build:js /themes/default/scripts/vendor.js -->
+        <!-- bower:js -->
+        <script src="/bower_components/jquery/dist/jquery.js"></script>
+        <script src="/bower_components/console-polyfill/index.js"></script>
+        <script src="/bower_components/jquery-ui/ui/core.js"></script>
+        <script src="/bower_components/jquery-ui/ui/widget.js"></script>
+        <script src="/bower_components/jquery-ui/ui/mouse.js"></script>
+        <script src="/bower_components/jquery-ui/ui/sortable.js"></script>
+        <script src="/bower_components/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="/bower_components/sifter/sifter.js"></script>
+        <script src="/bower_components/microplugin/src/microplugin.js"></script>
+        <script src="/bower_components/selectize/dist/js/selectize.js"></script>
+        <script src="/bower_components/lodash/dist/lodash.compat.js"></script>
+        <script src="/bower_components/velocity/jquery.velocity.js"></script>
+        <script src="/bower_components/jquery-pjax/jquery.pjax.js"></script>
+        <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- build:js /themes/default/scripts/app.js -->
+        <script src="/themes/default/scripts/widgets/flyoutTrigger/src/jquery.nsm.flyoutTrigger.js"></script>
+        <script src="/themes/default/scripts/widgets/buttonFlyout/src/jquery.nsm.buttonFlyout.js"></script>
+        <script src="/themes/default/scripts/widgets/collection/src/jquery.nsm.collection.js"></script>
+        <script src="/themes/default/scripts/widgets/entitySearch/src/jquery.nsm.entitySearch.js"></script>
+        <script src="/themes/default/scripts/widgets/multiCheckboxes/src/jquery.nsm.multiCheckboxes.js"></script>
+        <script src="/themes/default/scripts/widgets/overflowNav/src/jquery.nsm.overflowNav.js"></script>
+        <script src="/themes/default/scripts/widgets/togglable/src/jquery.nsm.togglable.js"></script>
+        <script src="/themes/default/scripts/widgets/dataGrid/src/jquery.nsm.dataGrid.js"></script>
+        <script src="/themes/default/scripts/app.js"></script>
+        <!-- endbuild -->
+
+    {% endblock %}
+
+</div>
+</body>
+</html>
+

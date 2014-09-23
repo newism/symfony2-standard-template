@@ -28,6 +28,11 @@
                 "ui/mouse.js",
                 "ui/sortable.js"
             ]
+        },
+        "selectize": {
+            "main": [
+                "dist/js/selectize.js"
+            ]
         }
     }
 }
