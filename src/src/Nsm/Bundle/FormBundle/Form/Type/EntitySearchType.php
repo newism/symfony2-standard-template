@@ -85,7 +85,7 @@ class EntitySearchType extends AbstractType
         $widgetOptions = array(
             'remote' => $options['remote'],
             'entityName' => $options['class'],
-            'selectedOptions' => (array)$view->vars['value'],
+            'selectedOptions' => (array) $view->vars['value'],
             'selectizeOptions' => array(
                 'valueField' => 'id',
                 'labelField' => 'title',
@@ -169,6 +169,9 @@ class EntitySearchType extends AbstractType
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
         return 'entity';
@@ -181,4 +184,4 @@ class EntitySearchType extends AbstractType
     {
         return 'entity_search';
     }
-} 
+}

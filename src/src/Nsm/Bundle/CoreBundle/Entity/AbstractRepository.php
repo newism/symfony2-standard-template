@@ -17,7 +17,7 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
 {
 
     /**
-     * @param $className
+     * @param string $className
      *
      * @return mixed
      */
@@ -36,7 +36,7 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
      */
     public function createQueryBuilder($alias = null, $indexBy = null)
     {
-        if(null === $alias) {
+        if (null === $alias) {
             $alias = $this->getEntityAlias($this->getClassName());
         }
 
@@ -46,7 +46,7 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
         $qb = new $class($this->getEntityManager(), $this);
         $qb->select($alias)
             ->from($this->_entityName, $alias, $indexBy)
-            ->orderBy($alias.'.id');
+            ->orderBy($alias . '.id');
 
         return $qb;
     }
@@ -70,7 +70,7 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
             }
 
             // If not an empty value or a zero value
-            if (false == empty($value) || 0 === $value || "0" === $value) {
+            if (false === empty($value) || 0 === $value || "0" === $value) {
                 $sanitisedCriteria[$key] = $value;
             }
         }
@@ -80,24 +80,20 @@ class AbstractRepository extends EntityRepository implements RepositoryInterface
 
     /**
      * Take a collection and remap the collection to the id
-     * 
-     * @param $collection
-     * @return array
-     * @throws \Exception
+     *
+     * @param \IteratorAggregate $collection
+     *
+     * @return array|mixed
      */
-    public function transformCollectionToIdArray($collection)
+    public function transformCollectionToIdArray(\IteratorAggregate $collection)
     {
-        if(!$collection instanceof \IteratorAggregate) {
-            throw new \Exception('Collection is not instance of IteratorAggregate');
-        }
-
         $ids = array();
 
-        foreach($collection as $value) {
-            $ids[] = is_array($value) ?  $value['id'] : $value->getId();
+        foreach ($collection as $value) {
+            $ids[] = is_array($value) ? $value['id'] : $value->getId();
         }
 
         return array_unique($ids);
     }
-    
+
 }

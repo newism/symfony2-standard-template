@@ -54,7 +54,7 @@ class Project extends AbstractEntity
     public function getTaskIds()
     {
         return $this->getTasks()->map(
-            function ($task) {
+            function (Task $task) {
                 return $task->getId();
             }
         );
@@ -119,7 +119,7 @@ class Project extends AbstractEntity
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -143,7 +143,7 @@ class Project extends AbstractEntity
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -167,7 +167,7 @@ class Project extends AbstractEntity
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -203,7 +203,7 @@ class Project extends AbstractEntity
     /**
      * Get tasks
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTasks()
     {
@@ -232,7 +232,7 @@ class Project extends AbstractEntity
     /**
      * Get contactCard
      *
-     * @return \Nsm\Bundle\ContactCardBundle\Entity\ContactCard 
+     * @return \Nsm\Bundle\ContactCardBundle\Entity\ContactCard
      */
     public function getContactCard()
     {

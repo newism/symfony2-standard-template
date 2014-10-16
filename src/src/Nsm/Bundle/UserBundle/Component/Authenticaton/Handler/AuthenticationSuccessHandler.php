@@ -40,7 +40,15 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler i
      */
     private $doctrine;
 
-
+    /**
+     * @param Registry          $doctrine
+     * @param HttpUtils         $httpUtils
+     * @param array             $options
+     * @param RouterInterface   $router
+     * @param Session           $session
+     * @param SecurityContext   $securityContext
+     * @param InvitationManager $invitationManager
+     */
     public function __construct(
         Registry $doctrine,
         HttpUtils $httpUtils,
@@ -49,7 +57,8 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler i
         Session $session,
         SecurityContext $securityContext,
         InvitationManager $invitationManager
-    ) {
+    )
+    {
         $this->doctrine = $doctrine;
         $this->router = $router;
         $this->session = $session;

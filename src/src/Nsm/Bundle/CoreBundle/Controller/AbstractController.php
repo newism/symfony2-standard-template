@@ -18,10 +18,9 @@ class AbstractController extends FOSRestController
 
     /**
      * @param $template
-     *
      * @return string
      */
-    public function getTemplate($template)
+    protected function getTemplate($template)
     {
         $templatePath = sprintf("%s:%s.html.twig", $this->templateGroup, $template);
 
@@ -33,7 +32,7 @@ class AbstractController extends FOSRestController
      *
      * @return \FOS\RestBundle\View\ViewHandler
      */
-    public function getViewHandler()
+    protected function getViewHandler()
     {
         return $this->get('fos_rest.view_handler');
     }
@@ -47,7 +46,7 @@ class AbstractController extends FOSRestController
      *
      * @return Paginator
      */
-    public function paginateQuery(QueryBuilder $qb, $perPage = null, $pageNo = null)
+    protected function paginateQuery(QueryBuilder $qb, $perPage = null, $pageNo = null)
     {
         $paginator = new Paginator($qb, false);
 
@@ -55,12 +54,11 @@ class AbstractController extends FOSRestController
     }
 
     /**
-     * @param Paginator $pager
-     * @param           $route
-     *
-     * @return \Hateoas\Representation\PaginatedRepresentation
+     * @param DoctrinePaginatorDecorator $pager
+     * @param $route
+     * @return mixed
      */
-    public function createPaginatedCollection(DoctrinePaginatorDecorator $pager, $route)
+    protected function createPaginatedCollection(DoctrinePaginatorDecorator $pager, $route)
     {
         $pagerFactory = new HateosPaginatorFactory();
         $paginatedCollection = $pagerFactory->createRepresentation(

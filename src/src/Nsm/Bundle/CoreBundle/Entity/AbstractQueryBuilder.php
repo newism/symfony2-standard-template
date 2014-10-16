@@ -119,8 +119,8 @@ class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
                 break;
 
             case(true === is_array($value) || $value instanceof \Iterator) :
-                $comparison = (true == $inclusive) ? "in" : "notIn";
-                // Todo: $value may be an array of entitues.
+                $comparison = (true === $inclusive) ? "in" : "notIn";
+                // Todo: $value may be an array of entitites.
                 // array_unique returns the string value which is probably not an integer
                 $clause = $this->expr()->$comparison($columnName, array_unique($value, SORT_REGULAR));
                 break;
@@ -130,7 +130,7 @@ class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
                 break;
 
             default:
-                $comparison = (true == $inclusive) ? "=" : "<>";
+                $comparison = (true === $inclusive) ? "=" : "<>";
                 $clause = sprintf('%s %s %s', $columnName, $comparison, "?" . $parameterCount);
                 $this->setParameter($parameterCount, $value);
         }
@@ -141,8 +141,8 @@ class AbstractQueryBuilder extends QueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * @param $method
-     * @param $arguments
+     * @param string $method
+     * @param array $arguments
      *
      * @return $this
      */
